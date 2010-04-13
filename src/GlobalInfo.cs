@@ -14,11 +14,12 @@ using System.Resources;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyCompany("Your Company Name")]
-[assembly: AssemblyProduct("GenerateFilter")]
-[assembly: AssemblyCopyright("Copyright (c) Your Company Name (Year)")]
+[assembly: AssemblyCompany("Living Consultoria")]
+[assembly: AssemblyProduct("Simple.Net Telerik Extensions")]
+[assembly: AssemblyCopyright("Copyright (c) Living Consultoria 2010")]
 [assembly: ComVisible(false)]
-[assembly: AssemblyVersion("1.0.1004.506")]
-[assembly: AssemblyFileVersion("1.0.1004.506")]
+[assembly: CLSCompliant(false)]
+[assembly: AssemblyVersion("1.0.1004.1312")]
+[assembly: AssemblyFileVersion("1.0.1004.1312")]
 
 
