@@ -1,0 +1,83 @@
+﻿<p>
+    This example shows the client-side events supported by Telerik TreeView for ASP.NET
+    MVC.
+</p>
+<p>
+    The treeview has the following events:
+</p>
+<ul>
+    <li><strong>OnLoad</strong> - raised when the component is initialized</li>
+    <li><strong>OnSelect <span class="cancellable">(cancellable)</span></strong> - raised
+        when a node gets selected</li>
+    <li><strong>OnExpand <span class="cancellable">(cancellable)</span></strong> - raised
+        when the child group of a node gets expanded</li>
+    <li><strong>OnCollapse <span class="cancellable">(cancellable)</span></strong> - raised
+        when the child group of a node gets collapsed</li>
+    <li><strong>OnDataBinding <span class="cancellable">(cancellable)</span></strong> -
+        raised a request for data has been made (load on demand)</li>
+    <li><strong>OnDataBound</strong> - raised a request for data has finished</li>
+</ul>
+<p>
+    In addition, the following events are raised when the drag&amp;drop mode is enabled:</p>
+<ul>
+    <li><strong>OnNodeDragStart <span class="cancellable">(cancellable)</span></strong>
+        - raised when an attempt to drag a node has been made. Used to deny dragging of
+        nodes.</li>
+    <li><strong>OnNodeDragging</strong> - raised while the user drags a node. Used for providing
+        clues whether the drag will be successful, thus enhancing user experience. <em>This
+            event is not logged in the current example, because it gets fired too many times.</em></li>
+    <li><strong>OnNodeDrop <span class="cancellable">(cancellable)</span></strong> - raised
+        when a node is dropped. Used for processing of the drop result.</li>
+    <li><strong>OnNodeDropped</strong> - raised when a node has been dropped on the treeview.
+        Used when saving the treeview state.</li>
+    <li><strong>OnNodeDragCancelled</strong> - raised when the user cancels a drag by hitting
+        the Esc key. Used for cleaning up any artifacts from the dragging.</li>
+</ul>
+
+<p>You can subscribe to each of the events in the following ways:</p>
+<ul>
+    <li>With a pre-defined javascript function
+<pre class="prettyprint">
+&lt;%= Html.Telerik().TreeView()
+        .Name("TreeView")
+        .ClientEvents(events => events
+            <em>.OnSelect("onSelect")</em>
+        )
+%&gt;
+
+&lt;script type="text/javascript"&gt;
+    function onSelect(e) {
+        // your code
+    }
+&lt;/script&gt;
+</pre>
+    </li>
+    <li>With an inline function, serialized from the server
+<pre class="prettyprint">
+&lt;% Html.Telerik().TreeView()
+       .Name("TreeView")
+       .ClientEvents(events => events
+       <em>.OnLoad(() => 
+       {%&gt;
+            function(e) {
+                // your code
+            }
+       &lt;%})</em>
+       .Render();
+%&gt;
+</pre>
+    </li>
+    <li>Purely client-side event registration
+<pre class="prettyprint">
+&lt;%= Html.Telerik().TreeView().Name("TreeView") %&gt;
+
+&lt;script type="text/javascript"&gt;
+    $(document).ready(function() {
+        <em>$('#TreeView').bind('select', function(e) {
+            // your code
+        });</em>
+    });
+&lt;/script&gt;
+</pre>
+    </li>
+</ul>

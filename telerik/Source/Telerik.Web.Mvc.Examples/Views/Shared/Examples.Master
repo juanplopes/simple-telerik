@@ -1,0 +1,24 @@
+﻿<%@ Master Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewMasterPage" %>
+
+<%-- Examples-specific markup, applied to the Site.Master --%>
+
+<asp:Content runat="server" contentPlaceHolderID="HeadContent">
+    <asp:ContentPlaceHolder runat="server" ID="HeadContent" />
+</asp:Content>
+
+<asp:Content runat="server" contentPlaceHolderID="MainContent">
+	<h2><%= Html.ExampleTitle() %></h2>
+	<div id="theming">Theme: <a href="#" class="t-drop-down"><%= Html.GetCurrentTheme() %></a></div>
+	<script type="text/javascript">
+	    var themePreviewsLocation = '<%= ResolveUrl(String.Format("~/Content/Images/Themes/{0}/", ViewContext.RouteData.Values["Controller"])) %>';
+	</script>
+	
+	<div class="example <%= "t-" + Html.GetCurrentTheme() %>">
+		<asp:ContentPlaceHolder ID="MainContent" runat="server" />
+		
+		<% Html.RenderPartial("CodeViewer"); %>
+		
+		<div class="example-rc-left"></div>
+		<div class="example-rc-right"></div>
+	</div>
+</asp:Content>

@@ -1,0 +1,17 @@
+﻿<p>
+This example shows how to use a custom route when using server binding with Telerik Grid for ASP.NET MVC. The custom route
+prevents adding query string parameters and makes prettier URLs. Here is the route used for this example:
+</p>
+<pre class="prettyprint">
+routes.MapRoute(
+    "CustomRoute", 
+    "{controller}/CustomRoute/{page}/{orderBy}/{filter}", 
+    new 
+    { 
+        controller = "Grid", 
+        action = "CustomRoute", 
+        page = 1, 
+        orderBy = string.Empty, 
+        filter = string.Empty 
+    });
+</pre>

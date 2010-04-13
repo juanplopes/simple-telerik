@@ -1,0 +1,3 @@
+<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl" %>
+   
+<ul class="resources-menu"><li><a href="http://www.telerik.com/community/license-agreement.aspx?pId=697">Download</a></li><li><a href="http://tv.telerik.com/search?q=mvc">Videos</a></li><li><a href="http://www.telerik.com/help/aspnet-mvc/">Help</a></li><li class="last"><a href="http://www.telerik.com/community/forums/aspnet-mvc/general.aspx">Forums</a></li></ul>

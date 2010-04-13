@@ -1,0 +1,63 @@
+﻿<p>
+    This example shows the client-side events supported by Telerik PanelBar for ASP.NET MVC.
+</p>
+<p>
+    The panelbar has the following events:
+</p>
+<ul>
+    <li><strong>OnLoad</strong> - raised when the component is initialized</li>
+    <li><strong>OnSelect <span class="cancellable">(cancellable)</span></strong> - raised
+        when an item gets selected</li>
+    <li><strong>OnExpand <span class="cancellable">(cancellable)</span></strong> - raised
+        when the child group of an item gets expanded</li>
+    <li><strong>OnCollapse <span class="cancellable">(cancellable)</span></strong> - raised
+        when the child group of an item gets collapsed</li>
+</ul>
+
+<p>You can subscribe to each of the events in the following ways:</p>
+<ul>
+    <li>With a pre-defined javascript function
+<pre class="prettyprint">
+&lt;%= Html.Telerik().PanelBar()
+        .Name("PanelBar")
+        .ClientEvents(events => events
+            <em>.OnSelect("onSelect")</em>
+        )
+%&gt;
+
+&lt;script type="text/javascript"&gt;
+    function onSelect(e) {
+        // your code
+    }
+&lt;/script&gt;
+</pre>
+    </li>
+    <li>With an inline function, serialized from the server
+<pre class="prettyprint">
+&lt;% Html.Telerik().PanelBar()
+       .Name("PanelBar")
+       .ClientEvents(events => events
+       <em>.OnLoad(() => 
+       {%&gt;
+            function(e) {
+                // your code
+            }
+       &lt;%})</em>
+       .Render();
+%&gt;
+</pre>
+    </li>
+    <li>Purely client-side event registration
+<pre class="prettyprint">
+&lt;%= Html.Telerik().PanelBar().Name("PanelBar") %&gt;
+
+&lt;script type="text/javascript"&gt;
+    $(document).ready(function() {
+        <em>$('#PanelBar').bind('select', function(e) {
+            // your code
+        });</em>
+    });
+&lt;/script&gt;
+</pre>
+    </li>
+</ul>

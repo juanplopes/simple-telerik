@@ -1,0 +1,40 @@
+﻿<p>
+    This example shows how to bind Telerik Grid for ASP.NET MVC to web services.
+</p>
+<p>
+    You need to configure the grid via the <code>DataBinding</code> method
+</p>
+<pre class="prettyprint">
+&lt;%= Html.Telerik().Grid&lt;Order&gt;()
+        .Name("AsmxGrid")
+        <em>.DataBinding(dataBinding => dataBinding.WebService().Select("~/Models/Orders.asmx/GetOrders"))</em>
+        .Columns(columns =>
+        {
+           columns.Bound(o => o.OrderID).Width(81);
+           columns.Bound(o => o.Customer.ContactName).Width(200);
+           columns.Bound(o => o.ShipAddress);
+           columns.Bound(o => o.OrderDate).Format("{0:MM/dd/yyyy}").Width(100);
+        })
+        .Sortable()
+        .Pageable()
+        .Filterable()
+        .Scrollable()
+%&gt;
+</pre>
+<p>
+    The web service method should have a parameter of type <code>GridState</code> which represents the current grid state - page,
+    sort, filter and group expressions.
+</p>    
+<p>    
+    The web service method may return the <code>GridModel</code> object or any other object which has a <code>Data</code> and <code>Total</code>
+    properties. To benefit from the built-in Linq expression engine you can use the <code>ToGridModel</code> extension method:
+<pre class="prettyprint">
+[WebMethod]
+public <em>GridModel</em> GetOrders(<em>GridState</em> state)
+{
+    NorthwindDataContext northwind = new NorthwindDataContext();
+
+    return northwind.Orders.<em>ToGridModel</em>(state);
+}
+</pre>
+</p>

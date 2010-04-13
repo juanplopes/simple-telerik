@@ -1,0 +1,10 @@
+﻿<p>Telerik Grid for ASP.NET MVC supports <a href="http://en.wikipedia.org/wiki/Right-to-left">right-to-left languages</a>.</p>
+
+<p>The only necessary change to enable this mode is to add a <strong>t-grid-rtl</strong> class to the grid:</p>
+
+<pre class="prettyprint">
+&lt;%= Html.Telerik().Grid&lt;Order&gt;()
+        .Name("Grid")
+        .HtmlAttributes(new { @class = "t-grid-rtl" })
+%&gt;
+</pre>

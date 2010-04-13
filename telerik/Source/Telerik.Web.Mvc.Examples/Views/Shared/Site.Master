@@ -1,0 +1,39 @@
+﻿<%@ Master Language="C#" Inherits="System.Web.Mvc.ViewMasterPage" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Telerik Extensions for ASP.NET MVC Demos</title>
+    <%= Html.Telerik().StyleSheetRegistrar()
+                      .DefaultGroup(group => group
+                          .Add("telerik.examples.css")
+                          .Add("telerik.common.css")
+                          .Add("telerik." + Html.GetCurrentTheme() + ".css")
+                          .Combined(true)
+                          .Compress(true))
+                     %>
+    <asp:ContentPlaceHolder runat="server" ID="HeadContent" />
+	<% Html.RenderPartial("Header"); %>
+</head>
+<body>
+	<div id="page">
+		<h1 id="title"><%= Html.ActionLink("Telerik Extensions for ASP.NET MVC", "FirstLook", "Home") %></h1>
+	        
+		<div id="main">
+			<asp:ContentPlaceHolder ID="MainContent" runat="server" />
+		</div>
+		<% Html.RenderPartial("Navigation"); %>
+		<% Html.RenderPartial("Resources"); %>
+		<% Html.RenderPartial("ProductLines"); %>
+		<% Html.RenderPartial("Footer"); %>
+    </div>
+    <% Html.Telerik().ScriptRegistrar()
+                     .DefaultGroup(group => group
+                         .Add("telerik.examples.js")
+                         
+                         .Compress(true))
+					 .OnDocumentReady(() => { %>prettyPrint();<% })
+                     .Render(); %>
+    <% Html.RenderPartial("GoogleAnalytics"); %>
+</body>
+</html>

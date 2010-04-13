@@ -1,34 +1,61 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{91DCC91C-3439-4064-B79D-A8FAFDE78983}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simple.Web.Mvc.Telerik.Sample", "Simple.Web.Mvc.Telerik.Sample\Simple.Web.Mvc.Telerik.Sample.csproj", "{48D3123B-0725-4C12-93F6-54123FA59E28}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simple.Web.Mvc.Telerik", "Simple.Web.Mvc.Telerik\Simple.Web.Mvc.Telerik.csproj", "{B0FC3A15-B440-4D28-B935-C19FE190BB5D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simple.Web.Mvc.Telerik.Tests", "Simple.Web.Mvc.Telerik.Tests\Simple.Web.Mvc.Telerik.Tests.csproj", "{0DB5D643-5FBC-4500-8ACE-AB243096724B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Telerik", "Telerik", "{D048AA7A-650D-4151-9CA2-FFA5DCC75C6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telerik.Web.Mvc", "..\telerik\Source\Telerik.Web.Mvc\Telerik.Web.Mvc.csproj", "{A7F7C110-D7F0-49B7-8DDA-FD2D1CC6F3B1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug MVC2 NET35|Any CPU = Debug MVC2 NET35|Any CPU
 		Debug|Any CPU = Debug|Any CPU
+		Release MVC2 NET35|Any CPU = Release MVC2 NET35|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{48D3123B-0725-4C12-93F6-54123FA59E28}.Debug MVC2 NET35|Any CPU.ActiveCfg = Debug|Any CPU
+		{48D3123B-0725-4C12-93F6-54123FA59E28}.Debug MVC2 NET35|Any CPU.Build.0 = Debug|Any CPU
 		{48D3123B-0725-4C12-93F6-54123FA59E28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{48D3123B-0725-4C12-93F6-54123FA59E28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48D3123B-0725-4C12-93F6-54123FA59E28}.Release MVC2 NET35|Any CPU.ActiveCfg = Release|Any CPU
+		{48D3123B-0725-4C12-93F6-54123FA59E28}.Release MVC2 NET35|Any CPU.Build.0 = Release|Any CPU
 		{48D3123B-0725-4C12-93F6-54123FA59E28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48D3123B-0725-4C12-93F6-54123FA59E28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0FC3A15-B440-4D28-B935-C19FE190BB5D}.Debug MVC2 NET35|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0FC3A15-B440-4D28-B935-C19FE190BB5D}.Debug MVC2 NET35|Any CPU.Build.0 = Debug|Any CPU
 		{B0FC3A15-B440-4D28-B935-C19FE190BB5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B0FC3A15-B440-4D28-B935-C19FE190BB5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0FC3A15-B440-4D28-B935-C19FE190BB5D}.Release MVC2 NET35|Any CPU.ActiveCfg = Release|Any CPU
+		{B0FC3A15-B440-4D28-B935-C19FE190BB5D}.Release MVC2 NET35|Any CPU.Build.0 = Release|Any CPU
 		{B0FC3A15-B440-4D28-B935-C19FE190BB5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0FC3A15-B440-4D28-B935-C19FE190BB5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DB5D643-5FBC-4500-8ACE-AB243096724B}.Debug MVC2 NET35|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DB5D643-5FBC-4500-8ACE-AB243096724B}.Debug MVC2 NET35|Any CPU.Build.0 = Debug|Any CPU
 		{0DB5D643-5FBC-4500-8ACE-AB243096724B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0DB5D643-5FBC-4500-8ACE-AB243096724B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DB5D643-5FBC-4500-8ACE-AB243096724B}.Release MVC2 NET35|Any CPU.ActiveCfg = Release|Any CPU
+		{0DB5D643-5FBC-4500-8ACE-AB243096724B}.Release MVC2 NET35|Any CPU.Build.0 = Release|Any CPU
 		{0DB5D643-5FBC-4500-8ACE-AB243096724B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0DB5D643-5FBC-4500-8ACE-AB243096724B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7F7C110-D7F0-49B7-8DDA-FD2D1CC6F3B1}.Debug MVC2 NET35|Any CPU.ActiveCfg = Debug MVC2 NET35|Any CPU
+		{A7F7C110-D7F0-49B7-8DDA-FD2D1CC6F3B1}.Debug MVC2 NET35|Any CPU.Build.0 = Debug MVC2 NET35|Any CPU
+		{A7F7C110-D7F0-49B7-8DDA-FD2D1CC6F3B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7F7C110-D7F0-49B7-8DDA-FD2D1CC6F3B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7F7C110-D7F0-49B7-8DDA-FD2D1CC6F3B1}.Release MVC2 NET35|Any CPU.ActiveCfg = Release MVC2 NET35|Any CPU
+		{A7F7C110-D7F0-49B7-8DDA-FD2D1CC6F3B1}.Release MVC2 NET35|Any CPU.Build.0 = Release MVC2 NET35|Any CPU
+		{A7F7C110-D7F0-49B7-8DDA-FD2D1CC6F3B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7F7C110-D7F0-49B7-8DDA-FD2D1CC6F3B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A7F7C110-D7F0-49B7-8DDA-FD2D1CC6F3B1} = {D048AA7A-650D-4151-9CA2-FFA5DCC75C6A}
 	EndGlobalSection
 EndGlobal

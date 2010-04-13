@@ -1,0 +1,25 @@
+﻿<p>
+    This example shows how to configure Telerik Menu for ASP.NET MVC to use sprites.
+</p>
+<p>
+    Use <strong>SpriteCssClasses</strong> method to set the css class name. The menu will render &lt;span&gt; tag with provided css class
+    before item's text:
+</p>
+<pre class="prettyprint">
+&lt;%= Html.Telerik().Menu()
+        .Name("Menu")
+        .Items(items => 
+        {
+            items.Add()
+                 .Text("Telerik Extensions for ASP.NET MVC")
+                 .<strong>SpriteCssClasses("icon-mvc")</strong>
+                 .Items(parent =>
+                 {
+                     parent.Add().Text("Grid")
+                           .<strong>SpriteCssClasses("icon-mvc-grid")</strong>;
+                 ...
+                 }
+        ...
+        });
+%&gt;
+</pre>

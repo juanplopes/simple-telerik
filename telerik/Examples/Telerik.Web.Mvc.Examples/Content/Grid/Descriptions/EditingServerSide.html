@@ -1,0 +1,74 @@
+﻿<p>
+This example shows the in-line data editing feature of Telerik Grid for ASP.NET MVC. In this example the grid is using server binding.
+</p>
+<p>
+    To enable editing you need perform the following:
+</p>
+<ol>
+    <li>
+        Define a command column for the "Edit" and "Delete" commands:
+<pre class="prettyprint">
+&lt;%= Html.Telerik().Grid(Model)
+        .Name("Grid")
+        .Columns(columns =>
+        {
+            columns.Bound(c => c.ContactName).Width(360);
+            columns.Bound(c => c.Country).Width(120);
+            columns.Bound(c => c.Address).Width(200);
+            columns.Bound(c => c.BirthDay).Width(130).Format("{0:d}");
+            <em>columns.Command(commands =>
+            {
+                commands.Edit();
+                commands.Delete();
+            }).Width(200);
+            </em>
+        })
+%&gt;
+</pre>
+    </li>
+    <li>
+    If you want to enable inserting of new records configure the grid toolbar:
+<pre class="prettyprint">
+&lt;%= Html.Telerik().Grid(Model)
+        .Name("Grid")
+        <em>.ToolBar(commands => commands.Insert())</em>
+        .Columns(columns =>
+        {
+            //omitted for brevity
+        })
+%&gt;
+</pre>    
+    </li>
+    <li>
+        Specify the property which uniquely identifies the data record. In this case it is CustomerID:
+<pre class="prettyprint">
+&lt;%= Html.Telerik().Grid(Model)
+        .Name("Grid")
+        .ToolBar(commands => commands.Insert())
+        <em>.DataKeys(keys => keys.Add(c => c.CustomerID))</em>
+        .Columns(columns =>
+        {
+            //omitted for brevity
+        })
+</pre>
+    </li>
+    <li>
+        Specify the action methods which will delete, insert or save data records.
+<pre class="prettyprint">
+&lt;%= Html.Telerik().Grid(Model)
+        .Name("Grid")
+        .ToolBar(commands => commands.Insert())
+        .DataKeys(keys => keys.Add(c => c.CustomerID))
+        <em>.DataBinding(dataBinding => dataBinding
+            .Server()
+               .Select("EditingServerSide", "Grid")
+               .Insert("Insert", "Grid")
+               .Update("Save", "Grid")
+               .Delete("Delete", "Grid"))</em>
+        .Columns(columns =>
+        {
+            //omitted for brevity
+        })
+</pre>        
+    </li>
+</ol>

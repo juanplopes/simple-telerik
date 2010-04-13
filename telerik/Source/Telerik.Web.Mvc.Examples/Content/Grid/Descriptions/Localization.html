@@ -1,0 +1,30 @@
+﻿<p>
+This example shows the localize Telerik Grid for ASP.NET MVC. 
+</p>
+<p>
+    To localize grid you have two options:
+</p>
+<ul>
+    <li>
+        You can use <b>UICulture</b> property of the <b>Page</b> server tag, which is placed in the begging of the page 
+        <pre class="prettyprint">
+        &lt;%@ Page Language="C#" Inherits="System.Web.Mvc.ViewPage" UICulture="en-US" %&gt;
+        </pre>
+        or through the <em>System.Threading.Thread.CurrentThread.CurrentUICulture</em> in the Action method, which returns the View.
+    <pre class="prettyprint">
+        public ActionResult Index()
+       {
+            System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en-US");
+       }
+    </pre>
+    </li>
+    <li>
+        Use <em>Localizable(...)</em> method to localize the grid to a specific culture.
+        <pre class="prettyprint">
+        &lt;%= Html.Telerik().Grid(Model)
+                .Name("Grid")
+                .Localizable("fr-FR")
+        %&gt;
+        </pre>
+    </li>
+</ul>

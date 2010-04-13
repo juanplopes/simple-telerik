@@ -1,0 +1,36 @@
+﻿<p>
+    This example shows how to configure Telerik Grid for ASP.NET MVC to perform Ajax
+    requests for paging, sorting and filtering. This operation mode is referred to as "Ajax binding".
+</p>
+<p>
+    The required steps are:
+</p>
+<ol>
+    <li>Configure the Grid to use Ajax binding via the <code>DataBinding</code> method:
+        <pre class="prettyprint">
+&lt;%= Html.Telerik().Grid&lt;Order&gt;()
+        <em>.DataBinding(dataBinding => dataBinding.Ajax().Select("_AjaxBinding", "Grid"))</em>
+        .Name("Grid")
+        .Columns(columns =>
+        {
+            columns.Bound(o => o.OrderID).Width(81);
+            columns.Bound(o => o.Customer.ContactName).Width(200);
+            columns.Bound(o => o.ShipAddress);
+            columns.Bound(o => o.OrderDate).Format("{0:MM/dd/yyyy}").Width(100);
+        })
+%&gt;</pre>
+    </li>
+    <li>
+        The action specified by the <code>Select</code> method should be decorated with the <code>GridAction</code> attribute.
+        It also should use the <code>GridModel</code> class as a model. Those are required to process the model data using the
+        built-in Linq expression engine and return the result in JSON format. If the <code>GridAction</code> attribute is missing
+        the regular view will be rendered instead of JSON.
+        <pre class="prettyprint">
+<em>[GridAction]</em>
+public ActionResult _AjaxBinding()
+{
+    return View(<em>new GridModel(GetOrders())</em>);
+}
+        </pre>
+    </li>
+</ol>

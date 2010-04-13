@@ -1,0 +1,34 @@
+﻿<p>
+    This example shows how to use the client-side API of Telerik DatePicker for ASP.NET MVC.
+</p>
+<p>
+    To use the client-side API you should first retrieve the datepicker client-side object.
+    The following code snippet shows how to do this:
+</p>
+<pre class="prettyprint">
+&lt;script type=&quot;text/javascript&quot;&gt;
+function getDatePicker(){
+    //"DatePicker" is the value specified by the Name() method.
+    var datePicker = $("#DatePicker").data("tDatePicker");
+    return datePicker;
+}
+&lt;/script&gt;
+</pre>
+<p>
+    Available client-side methods:
+</p>
+<ul>
+    <li>
+        You can set selected date with the <strong>value(...)</strong> method. This method accepts <strong>Date</strong> object or string.
+    </li>
+    <li>
+        You can retrieve selected date with <strong>value()</strong> method. This method returns <strong>Date</strong> object 
+        or <i>null</i>.
+    </li>
+    <li>
+        You can show pop-up calendar with the <strong>showPopup(...)</strong> method.
+    </li>
+    <li>
+        You can hide pop-up calendar with the <strong>hidePopup(...)</strong> method.
+    </li>
+</ul>

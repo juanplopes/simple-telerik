@@ -1,0 +1,47 @@
+﻿<p>
+    This example shows how to configure Telerik TabStrip for ASP.NET MVC to bind to a <strong>SiteMap</strong>.
+</p>
+<p>
+    The required steps are:
+</p>
+<ol>
+    <li>Define a sitemap and add it to the ViewData. This example is using the <strong>SiteMapManager</strong> which allows you to create sitemaps.
+        The <strong>PopulateSiteMap</strong> attribute adds a registered sitemap to the <strong>ViewData</strong> with a key specified by the <em>ViewDataKey</em> property:
+<pre class="prettyprint">
+[PopulateSiteMap(SiteMapName = "sample", ViewDataKey = "sample")]
+[SourceCodeFile("Sitemap", "~/sample.sitemap")]
+public ActionResult SiteMapBinding()
+{
+    if (!SiteMapManager.SiteMaps.ContainsKey("sample"))
+    {
+        SiteMapManager.SiteMaps.Register&lt;XmlSiteMap&gt;("sample", sitmap => sitmap.LoadFrom("~/sample.sitemap"));
+    }
+
+    return View();
+}
+        </pre>
+    </li>
+    <li>
+        Use one of the overloads of the <strong>BindTo</strong> method to bind the TabStrip. The first overload requires only the sitemap's name. 
+        The second overload requires the sitemap name and an <strong>Action&lt;TabStripItem&gt;</strong>, which
+        you can use to set properties for each databound item.<br />
+        Both overloads will set the <em>RouteName</em>, <em>ControllerName</em>, <em>ActionName</em>, <em>Url</em> properties of the tabstrip item, if they are set for 
+        the corresponding <strong>SiteMapNode</strong> object.
+        <pre class="prettyprint">
+&lt;%= Html.Telerik().TabStrip()
+       .Name("TabStrip")
+       <em>.BindTo("SiteMapName")</em>
+%&gt;
+        </pre>
+        or ...
+        <pre class="prettyprint">
+&lt;%= Html.Telerik().TabStrip()
+        .Name("TabStrip")
+        <em>.BindTo("SiteMapName", (item, siteMapNode) =>
+        {
+            item.Selected = siteMapNode.Action == "Index";
+        })</em>
+%&gt;
+        </pre>
+    </li>
+</ol>

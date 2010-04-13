@@ -1,0 +1,50 @@
+﻿<p>
+    This example shows how to configure Telerik Grid for ASP.NET MVC to use custom binding. By default the Grid
+    is using the built-in Linq expression engine. However in some cases you may want to perform the paging, sorting and 
+    filtering by yourself. This examples shows how.
+</p>
+<p>
+    The required steps are:
+</p>
+<ol>
+    <li>
+        Configure the grid to use custom binding
+<pre class="prettyprint">
+&lt%= Html.Telerik().Grid(Model)
+        .Name("Grid")
+        <em>.EnableCustomBinding(true)</em>
+%&gt;
+</pre>
+    </li>
+    <li>
+        If using paging you need to set the <strong>Total</strong> specifying the total number of records the grid is going to display.
+        This is required for the proper pager configuration.
+<pre class="prettyprint">
+&lt%= Html.Telerik().Grid(Model)
+        .Name("Grid")
+        .EnableCustomBinding(true)
+        <em>.Pageable(paging => paging.Total((int)ViewData["total"]))</em>
+%&gt;
+</pre>
+    </li>
+    <li>
+        The action method which returns data for the grid accepts an argument of type <strong>GridCommand</strong>. The
+        command object contains all required information to data bind the grid - current page, sorted columns and filter.
+        The action method must be decorated with the <strong>GridAction</strong> attribute and its <strong>EnableCustomBinding</strong>
+        property must be set to <strong>true</strong>.
+<pre class="prettyprint">
+<em>[GridAction(EnableCustomBinding = true)]</em>
+public ActionResult _CustomBinding(<em>GridCommand command</em>)
+{
+    IEnumerable&lt;Order&gt; data = <em>GetData(command)</em>;
+
+    var dataContext = new NorthwindDataContext();
+    <em>return View(new GridModel { Data = data, Total = dataContext.Orders.Count() });</em>
+}
+</pre>
+    </li>
+    <li>
+        The <strong>GetData</strong> method from the previous step performs the actual paging and sorting based on the data
+        in the <strong>command</strong> argument. Check the controller code for the implementation.
+    </li>
+</ol>

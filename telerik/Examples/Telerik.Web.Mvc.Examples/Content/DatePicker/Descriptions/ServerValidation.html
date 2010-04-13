@@ -1,0 +1,15 @@
+﻿<p>
+    This example shows how Telerik DatePicker for ASP.NET MVC is being validated through the built-in server-side validation capabilities of ASP.NET MVC.
+</p>
+<pre class="prettyprint">
+
+&lt%= Html.ValidationSummary() %&gt;
+&lt% using (Html.BeginForm("Action", "Controller")) { %&gt
+    &lt%= Html.Telerik()
+            .DatePicker()
+            .Name("deliveryDate")
+    %>
+    &lt%= Html.ValidationMessage("deliveryDate", "*") %&gt
+    &lt;input type="submit" value="Post" /&gt
+<% } %>
+</pre>

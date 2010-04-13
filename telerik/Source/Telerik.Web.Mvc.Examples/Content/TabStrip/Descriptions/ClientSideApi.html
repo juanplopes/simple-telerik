@@ -1,0 +1,33 @@
+﻿<p>
+    This example shows how to use the client-side API of Telerik TabStrip for ASP.NET MVC.
+</p>
+<p>
+    To use the client-side API you should first retrieve the TabStrip client-side object.
+    The following code snippet shows how to do this:
+</p>
+<pre class="prettyprint">
+&lt;script type=&quot;text/javascript&quot;&gt;
+function getTabStrip(){
+    //"TabStrip" is the value specified by the Name() method.
+    var menu = $("#TabStrip").data("tTabStrip");
+    return menu;
+}
+&lt;/script&gt;
+</pre>
+<p>
+    Available client-side methods:
+</p>
+<ul>
+    <li>
+        You can select a tabstrip item with the <strong>select(...)</strong> method. This method accepts a DOM element representing an existing
+        tabstrip item, a collection of DOM elements or a jQuery selector.
+    </li>
+    <li>
+        You can enable an item with the <strong>enable(...)</strong>. This method accepts a DOM element representing an existing
+        tabstrip item, a collection of DOM elements or a jQuery selector.
+    </li>
+    <li>
+        You can disable an item with the <strong>disable(...)</strong> method. This method accepts a DOM element representing an existing
+        tabstrip item, a collection of DOM elements or a jQuery selector.
+    </li>
+</ul>

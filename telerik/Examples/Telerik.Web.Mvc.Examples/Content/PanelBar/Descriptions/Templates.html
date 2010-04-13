@@ -1,0 +1,25 @@
+﻿<p>
+This example shows how to configure pre-set content for Telerik PanelBar for ASP.NET MVC. The panelbar allows you to render regular HTML
+mark-up code as a content of the corresponding item, instead of child items.
+</p>
+<p>
+    To set the content use the <strong>Content</strong> method which accepts an <strong>Action</strong>.
+	Html should be added between %&gt; and &lt;% as in the example.
+</p>
+<pre class="prettyprint">
+&lt;% Html.Telerik().PanelBar()
+       .Name("PanelBar")
+       .Items(items => 
+       {
+            items.Add()
+                 .Text("Products > Books")
+                 .Content(() => 
+                 { 
+                 %&gt;
+                    &lt;!-- Content --&gt;
+                 &lt;% 
+                 });
+       })
+       .Render();
+%&gt;
+</pre>

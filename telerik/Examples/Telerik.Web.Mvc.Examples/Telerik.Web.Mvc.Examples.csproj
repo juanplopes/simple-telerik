@@ -1,0 +1,847 @@
+﻿<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{6E626551-89A5-4625-8429-B442634725C0}</ProjectGuid>
+    <ProjectTypeGuids>{F85E285D-A4E0-4152-9332-AB1D724D3325};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Telerik.Web.Mvc.Examples</RootNamespace>
+    <AssemblyName>Telerik.Web.Mvc.Examples</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+     
+     
+     
+     
+    <TargetFrameworkSubset>Full</TargetFrameworkSubset>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;MVC1</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE;MVC1</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug MVC2 NET35|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;MVC2</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release MVC2 NET35|AnyCPU' ">
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE;MVC2</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.ServiceModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.ServiceModel.Web">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Mvc, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controllers\Calendar\ClientSideApiController.cs" />
+    <Compile Include="Controllers\Calendar\ClientSideEventsController.cs" />
+    <Compile Include="Controllers\Calendar\GlobalizationController.cs" />
+    <Compile Include="Controllers\Calendar\SelectActionController.cs" />
+    <Compile Include="Controllers\Calendar\FirstLookController.cs" />
+    <Compile Include="Controllers\CalendarController.cs" />
+    <Compile Include="Controllers\DatePicker\AnimationEffectsController.cs" />
+    <Compile Include="Controllers\DatePicker\ClientSideApiController.cs" />
+    <Compile Include="Controllers\DatePicker\ClientValidationController.cs" />
+    <Compile Include="Controllers\DatePicker\DateParsingController.cs" />
+    <Compile Include="Controllers\DatePicker\EditTemplateController.cs" />
+    <Compile Include="Controllers\DatePicker\GlobalizationController.cs" />
+    <Compile Include="Controllers\Grid\CheckBoxesServerSideController.cs" />
+    <Compile Include="Controllers\Grid\CheckBoxesAjaxController.cs" />
+    <Compile Include="Controllers\Grid\CustomCommandController.cs" />
+    <Compile Include="Controllers\Grid\DisplayAndEditTemplatesController.cs" />
+    <Compile Include="Controllers\Grid\LocalizationController.cs" />
+    <Compile Include="Controllers\Grid\TemplatesClientSideController.cs" />
+    <Compile Include="Controllers\Grid\EditingAjaxController.cs" />
+    <Compile Include="Controllers\Grid\GroupingController.cs" />
+    <Compile Include="Controllers\Grid\EditingWebServiceController.cs" />
+    <Compile Include="Controllers\NumericTextBoxController.cs" />
+    <Compile Include="Controllers\NumericTextBox\ClientSideApiController.cs" />
+    <Compile Include="Controllers\NumericTextBox\ClientSideEventsController.cs" />
+    <Compile Include="Controllers\NumericTextBox\ClientValidationController.cs" />
+    <Compile Include="Controllers\NumericTextBox\EditTemplateController.cs" />
+    <Compile Include="Controllers\NumericTextBox\FirstLookController.cs" />
+    <Compile Include="Controllers\NumericTextBox\GlobalizationController.cs" />
+    <Compile Include="Controllers\NumericTextBox\ServerValidationController.cs" />
+    <Compile Include="Controllers\DatePicker\ClientSideEventsController.cs" />
+    <Compile Include="Controllers\Grid\SelectionServerSideController.cs" />
+    <Compile Include="Controllers\TreeViewController.cs" />
+    <Compile Include="Controllers\DatePickerController.cs" />
+    <Compile Include="Controllers\DatePicker\FirstLookController.cs" />
+    <Compile Include="Controllers\DatePicker\ServerValidationController.cs" />
+    <Compile Include="Controllers\Grid\AutoGenerateColumnsController.cs" />
+    <Compile Include="Controllers\Grid\AjaxBindingController.cs" />
+    <Compile Include="Controllers\Grid\ClientSideEventsController.cs" />
+    <Compile Include="Controllers\Grid\RtlSupportController.cs" />
+    <Compile Include="Controllers\Grid\ExternalServiceFacebookController.cs" />
+    <Compile Include="Controllers\Grid\FilteringController.cs" />
+    <Compile Include="Controllers\Grid\CustomBindingController.cs" />
+    <Compile Include="Controllers\Grid\CustomFormattingController.cs" />
+    <Compile Include="Controllers\Grid\CustomRouteController.cs" />
+    <Compile Include="Controllers\Grid\EditingServerSideController.cs" />
+    <Compile Include="Controllers\Grid\TemplatesServerSideController.cs" />
+    <Compile Include="Controllers\Grid\SelectionClientSideController.cs" />
+    <Compile Include="Controllers\Grid\ExternalServiceTwitterController.cs" />
+    <Compile Include="Controllers\Grid\WebServiceController.cs" />
+    <Compile Include="Controllers\Menu\AnimationEffectsController.cs" />
+    <Compile Include="Controllers\Menu\ClientSideApiController.cs" />
+    <Compile Include="Controllers\Menu\ClientSideEventsController.cs" />
+    <Compile Include="Controllers\Menu\RtlSupportController.cs" />
+    <Compile Include="Controllers\Menu\DataBindingToModelController.cs" />
+    <Compile Include="Controllers\Menu\OrientationController.cs" />
+    <Compile Include="Controllers\Menu\FirstLookController.cs" />
+    <Compile Include="Controllers\Menu\SiteMapBindingController.cs" />
+    <Compile Include="Controllers\Menu\SpritesController.cs" />
+    <Compile Include="Controllers\Menu\TemplatesController.cs" />
+    <Compile Include="Controllers\PanelBar\AjaxLoadingController.cs" />
+    <Compile Include="Controllers\PanelBar\ClientSideApiController.cs" />
+    <Compile Include="Controllers\PanelBar\RtlSupportController.cs" />
+    <Compile Include="Controllers\PanelBar\TemplatesController.cs" />
+    <Compile Include="Controllers\PanelBar\SiteMapBindingController.cs" />
+    <Compile Include="Controllers\PanelBar\AnimationEffectsController.cs" />
+    <Compile Include="Controllers\PanelBar\ClientSideEventsController.cs" />
+    <Compile Include="Controllers\PanelBar\DataBindingToModelController.cs" />
+    <Compile Include="Controllers\PanelBar\FirstLookController.cs" />
+    <Compile Include="Controllers\PanelBar\SpritesController.cs" />
+    <Compile Include="Controllers\Grid\ServerBindingController.cs" />
+    <Compile Include="Controllers\Grid\SortingController.cs" />
+    <Compile Include="Controllers\Grid\PagingController.cs" />
+    <Compile Include="Controllers\Grid\FirstLookController.cs" />
+    <Compile Include="Controllers\PanelBarController.cs" />
+    <Compile Include="Controllers\TabStripController.cs" />
+    <Compile Include="Controllers\GridController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MenuController.cs" />
+    <Compile Include="Controllers\TabStrip\AjaxLoadingController.cs" />
+    <Compile Include="Controllers\TabStrip\AnimationEffectsController.cs" />
+    <Compile Include="Controllers\TabStrip\ClientSideApiController.cs" />
+    <Compile Include="Controllers\TabStrip\ClientSideEventsController.cs" />
+    <Compile Include="Controllers\TabStrip\RtlSupportController.cs" />
+    <Compile Include="Controllers\TabStrip\DataBindingToModelController.cs" />
+    <Compile Include="Controllers\TabStrip\FirstLookController.cs" />
+    <Compile Include="Controllers\TabStrip\SiteMapBindingController.cs" />
+    <Compile Include="Controllers\TabStrip\SpritesController.cs" />
+    <Compile Include="Controllers\TreeView\AnimationEffectsController.cs" />
+    <Compile Include="Controllers\TreeView\ClientSideApiController.cs" />
+    <Compile Include="Controllers\TreeView\ClientSideEventsController.cs" />
+    <Compile Include="Controllers\TreeView\ClientSideBindingController.cs" />
+    <Compile Include="Controllers\TreeView\DragAndDropController.cs" />
+    <Compile Include="Controllers\TreeView\TemplatesController.cs" />
+    <Compile Include="Controllers\TreeView\AjaxLoadingController.cs" />
+    <Compile Include="Controllers\TreeView\CheckBoxSupportController.cs" />
+    <Compile Include="Controllers\TreeView\DataBindingToModelController.cs" />
+    <Compile Include="Controllers\TreeView\FirstLookController.cs" />
+    <Compile Include="Controllers\TreeView\SiteMapBindingController.cs" />
+    <Compile Include="Extensions\HtmlHelpersExtensions.cs" />
+    <Compile Include="Extensions\DictionaryExtensions.cs" />
+    <Compile Include="Filters\AutoPopulateSourceCodeAttribute.cs" />
+    <Compile Include="Filters\CultureAwareActionAttribute.cs" />
+    <Compile Include="Filters\PopulateProductSiteMapAttribute.cs" />
+    <Compile Include="Filters\SourceCodeFileAttribute.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\EditableOrder.cs" />
+    <Compile Include="Models\EditableProduct.cs" />
+    <Compile Include="Models\Customers.asmx.cs">
+      <DependentUpon>Customers.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Models\Customers.svc.cs">
+      <DependentUpon>Customers.svc</DependentUpon>
+    </Compile>
+    <Compile Include="Models\EditableCustomer.cs" />
+    <Compile Include="Models\Employee.cs" />
+    <Compile Include="Models\SessionCustomerRepository.cs" />
+    <Compile Include="Models\Employees.asmx.cs">
+      <DependentUpon>Employees.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Models\Employees.svc.cs">
+      <DependentUpon>Employees.svc</DependentUpon>
+    </Compile>
+    <Compile Include="Models\NavigationData.cs" />
+    <Compile Include="Models\CustomerDto.cs" />
+    <Compile Include="Models\Northwind.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Northwind.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OrderDto.cs" />
+    <Compile Include="Models\Orders.asmx.cs">
+      <DependentUpon>Orders.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Models\Orders.svc.cs">
+      <DependentUpon>Orders.svc</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SessionOrderRepository.cs" />
+    <Compile Include="Models\TwitterItem.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Default.aspx" />
+    <Content Include="Global.asax" />
+    <Content Include="Views\Menu\FirstLook.aspx" />
+    <Content Include="Content\telerik.examples.min.css" />
+    <Content Include="Views\Home\FirstLook.aspx" />
+    <Content Include="Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Data\Northwind.mdf">
+    </Content>
+    <Content Include="App_Data\Northwind_log.ldf">
+      <DependentUpon>Northwind.mdf</DependentUpon>
+    </Content>
+    <Content Include="Content\Images\background.jpg" />
+    <Content Include="Content\Images\logos.png" />
+    <Content Include="Content\Images\sprite.png" />
+    <Content Include="Content\Images\suitesSprite.png" />
+    <Content Include="Views\Grid\CustomRoute.aspx" />
+    <Content Include="Views\Grid\FirstLook.aspx" />
+    <Content Include="Views\Menu\SiteMapBinding.aspx" />
+    <Content Include="Web.sitemap" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Models\Northwind.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>Northwind.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Calendar\Descriptions\ClientSideApi.html" />
+    <Content Include="Content\Calendar\Descriptions\ClientSideEvents.html" />
+    <Content Include="Content\Calendar\Descriptions\FirstLook.html" />
+    <Content Include="Content\Calendar\Descriptions\Globalization.html" />
+    <Content Include="Content\Calendar\Descriptions\SelectAction.html" />
+    <Content Include="Content\Common\Icons\Ajax\Editor.png" />
+    <Content Include="Content\Common\Icons\Ajax\Grid.png" />
+    <Content Include="Content\Common\Icons\Ajax\Scheduler.png" />
+    <Content Include="Content\Common\Icons\delete.png" />
+    <Content Include="Content\Common\Icons\edit.png" />
+    <Content Include="Content\Common\Icons\folder.png" />
+    <Content Include="Content\Common\Icons\Mvc\Grid.png" />
+    <Content Include="Content\Common\Icons\Mvc\Menu.png" />
+    <Content Include="Content\Common\Icons\Mvc\PanelBar.png" />
+    <Content Include="Content\Common\Icons\Mvc\TabStrip.png" />
+    <Content Include="Content\Common\Icons\page_white_text.png" />
+    <Content Include="Content\Common\Icons\Sl\Chart.gif" />
+    <Content Include="Content\Common\Icons\Sl\Docking.gif" />
+    <Content Include="Content\Common\Icons\Sl\GridView.gif" />
+    <Content Include="Content\Common\Icons\Sl\Scheduler.gif" />
+    <Content Include="Content\Common\Icons\Suites\ajax.png" />
+    <Content Include="Content\Common\Icons\Suites\mvc.png" />
+    <Content Include="Content\Common\Icons\Suites\orm.png" />
+    <Content Include="Content\Common\Icons\Suites\rep.png" />
+    <Content Include="Content\Common\Icons\Suites\sitefinity.png" />
+    <Content Include="Content\Common\Icons\Suites\sl.png" />
+    <Content Include="Content\Common\Icons\Suites\test.png" />
+    <Content Include="Content\Common\Icons\Suites\win.png" />
+    <Content Include="Content\Common\Icons\Suites\wpf.png" />
+    <Content Include="Content\Common\Icons\Suites_32\AJAX.png" />
+    <Content Include="Content\Common\Icons\Suites_32\CMS.png" />
+    <Content Include="Content\Common\Icons\Suites_32\JustCode.png" />
+    <Content Include="Content\Common\Icons\Suites_32\MVC.png" />
+    <Content Include="Content\Common\Icons\Suites_32\ORM.png" />
+    <Content Include="Content\Common\Icons\Suites_32\PD.png" />
+    <Content Include="Content\Common\Icons\Suites_32\REP.png" />
+    <Content Include="Content\Common\Icons\Suites_32\SL.png" />
+    <Content Include="Content\Common\Icons\Suites_32\Test.png" />
+    <Content Include="Content\Common\Icons\Suites_32\TFS.png" />
+    <Content Include="Content\Common\Icons\Suites_32\WinForms.png" />
+    <Content Include="Content\Common\Icons\Suites_32\WPF.png" />
+    <Content Include="Content\Common\orm-comparison.png" />
+    <Content Include="Content\Common\sprite.png" />
+    <Content Include="Content\Common\validation-error-message.png" />
+    <Content Include="Content\DatePicker\Descriptions\ClientSideApi.html" />
+    <Content Include="Content\DatePicker\Descriptions\ClientSideEvents.html" />
+    <Content Include="Content\DatePicker\Descriptions\ClientValidation.html" />
+    <Content Include="Content\DatePicker\Descriptions\Globalization.html" />
+    <Content Include="Content\DatePicker\Descriptions\DateParsing.html" />
+    <Content Include="Content\DatePicker\Descriptions\FirstLook.html" />
+    <Content Include="Content\DatePicker\Descriptions\ServerValidation.html" />
+    <Content Include="Content\Grid\Descriptions\TemplatesClientSide.html" />
+    <Content Include="Content\Grid\Descriptions\EditingWebService.html" />
+    <Content Include="Content\Grid\Descriptions\EditingAjax.html" />
+    <Content Include="Content\Grid\Descriptions\EditingServerSide.html" />
+    <Content Include="Content\Grid\Descriptions\Filtering.html" />
+    <Content Include="Content\Grid\Descriptions\SelectionServerSide.html" />
+    <Content Include="Content\Images\Themes\Calendar\Black.png" />
+    <Content Include="Content\Images\Themes\Calendar\Default.png" />
+    <Content Include="Content\Images\Themes\Calendar\Forest.png" />
+    <Content Include="Content\Images\Themes\Calendar\Hay.png" />
+    <Content Include="Content\Images\Themes\Calendar\Office2007.png" />
+    <Content Include="Content\Images\Themes\Calendar\Outlook.png" />
+    <Content Include="Content\Images\Themes\Calendar\Simple.png" />
+    <Content Include="Content\Images\Themes\Calendar\Sitefinity.png" />
+    <Content Include="Content\Images\Themes\Calendar\Sunset.png" />
+    <Content Include="Content\Images\Themes\Calendar\Telerik.png" />
+    <Content Include="Content\Images\Themes\Calendar\Vista.png" />
+    <Content Include="Content\Images\Themes\Calendar\Web20.png" />
+    <Content Include="Content\Images\Themes\Calendar\WebBlue.png" />
+    <Content Include="Content\Images\Themes\Calendar\Windows7.png" />
+    <Content Include="Content\Images\Themes\DatePicker\Black.png" />
+    <Content Include="Content\Images\Themes\DatePicker\Default.png" />
+    <Content Include="Content\Images\Themes\DatePicker\Forest.png" />
+    <Content Include="Content\Images\Themes\DatePicker\Hay.png" />
+    <Content Include="Content\Images\Themes\DatePicker\Office2007.png" />
+    <Content Include="Content\Images\Themes\DatePicker\Outlook.png" />
+    <Content Include="Content\Images\Themes\DatePicker\Simple.png" />
+    <Content Include="Content\Images\Themes\DatePicker\Sitefinity.png" />
+    <Content Include="Content\Images\Themes\DatePicker\Sunset.png" />
+    <Content Include="Content\Images\Themes\DatePicker\Telerik.png" />
+    <Content Include="Content\Images\Themes\DatePicker\Vista.png" />
+    <Content Include="Content\Images\Themes\DatePicker\Web20.png" />
+    <Content Include="Content\Images\Themes\DatePicker\WebBlue.png" />
+    <Content Include="Content\Images\Themes\DatePicker\Windows7.png" />
+    <Content Include="Content\Images\Themes\NumericTextBox\Black.png" />
+    <Content Include="Content\Images\Themes\NumericTextBox\Default.png" />
+    <Content Include="Content\Images\Themes\NumericTextBox\Forest.png" />
+    <Content Include="Content\Images\Themes\NumericTextBox\Hay.png" />
+    <Content Include="Content\Images\Themes\NumericTextBox\Office2007.png" />
+    <Content Include="Content\Images\Themes\NumericTextBox\Outlook.png" />
+    <Content Include="Content\Images\Themes\NumericTextBox\Simple.png" />
+    <Content Include="Content\Images\Themes\NumericTextBox\Sitefinity.png" />
+    <Content Include="Content\Images\Themes\NumericTextBox\Sunset.png" />
+    <Content Include="Content\Images\Themes\NumericTextBox\Telerik.png" />
+    <Content Include="Content\Images\Themes\NumericTextBox\Vista.png" />
+    <Content Include="Content\Images\Themes\NumericTextBox\Web20.png" />
+    <Content Include="Content\Images\Themes\NumericTextBox\WebBlue.png" />
+    <Content Include="Content\Images\Themes\NumericTextBox\Windows7.png" />
+    <Content Include="Content\NumericTextBox\Descriptions\ClientSideApi.html" />
+    <Content Include="Content\NumericTextBox\Descriptions\ClientSideEvents.html" />
+    <Content Include="Content\NumericTextBox\Descriptions\ClientValidation.html" />
+    <Content Include="Content\NumericTextBox\Descriptions\FirstLook.html" />
+    <Content Include="Content\NumericTextBox\Descriptions\Globalization.html" />
+    <Content Include="Content\NumericTextBox\Descriptions\ServerValidation.html" />
+    <Content Include="Content\TreeView\Descriptions\FirstLook.html" />
+    <Content Include="Content\TreeView\Descriptions\SiteMapBinding.html" />
+    <Content Include="Content\Grid\Descriptions\AjaxBinding.html" />
+    <Content Include="Content\Grid\Descriptions\AutoGenerateColumns.html" />
+    <Content Include="Content\Grid\Descriptions\ClientSideEvents.html" />
+    <Content Include="Content\Grid\Descriptions\RtlSupport.html" />
+    <Content Include="Content\Grid\Descriptions\CustomFormatting.html" />
+    <Content Include="Content\Grid\Descriptions\CustomRoute.html" />
+    <Content Include="Content\Grid\Descriptions\TemplatesServerSide.html" />
+    <Content Include="Content\Grid\Descriptions\SelectionClientSide.html" />
+    <Content Include="Content\Grid\Descriptions\CustomBinding.html" />
+    <Content Include="Content\Grid\Descriptions\FirstLook.html" />
+    <Content Include="Content\Grid\Descriptions\Paging.html" />
+    <Content Include="Content\Grid\Descriptions\ServerBinding.html" />
+    <Content Include="Content\Grid\Descriptions\Sorting.html" />
+    <Content Include="Content\Grid\Descriptions\WebService.html" />
+    <Content Include="Content\Grid\ExternalServiceFacebook\background.png" />
+    <Content Include="Content\Grid\ExternalServiceFacebook\fb_connect.png" />
+    <Content Include="Content\Grid\ExternalServiceFacebook\fb_silhouette.png" />
+    <Content Include="Content\Grid\ExternalServiceFacebook\loading.gif" />
+    <Content Include="Content\Grid\ExternalServiceFacebook\xd_receiver.htm" />
+    <Content Include="Content\Grid\ExternalServiceTwitter\twitter-logo.png" />
+    <Content Include="Content\Images\background-repeat.png" />
+    <Content Include="Content\Grid\Customers\ALFKI.jpg" />
+    <Content Include="Content\Grid\Customers\ANATR.jpg" />
+    <Content Include="Content\Grid\Customers\ANTON.jpg" />
+    <Content Include="Content\Grid\Customers\AROUT.jpg" />
+    <Content Include="Content\Grid\Customers\BERGS.jpg" />
+    <Content Include="Content\Grid\Customers\BLAUS.jpg" />
+    <Content Include="Content\Grid\Customers\BLONP.jpg" />
+    <Content Include="Content\Grid\Customers\BOLID.jpg" />
+    <Content Include="Content\Grid\Customers\BONAP.jpg" />
+    <Content Include="Content\Grid\Customers\BOTTM.jpg" />
+    <Content Include="Content\Grid\Customers\BSBEV.jpg" />
+    <Content Include="Content\Grid\Customers\CACTU.jpg" />
+    <Content Include="Content\Grid\Customers\CENTC.jpg" />
+    <Content Include="Content\Grid\Customers\CHOPS.jpg" />
+    <Content Include="Content\Grid\Customers\COMMI.jpg" />
+    <Content Include="Content\Grid\Customers\CONSH.jpg" />
+    <Content Include="Content\Grid\Customers\DRACD.jpg" />
+    <Content Include="Content\Grid\Customers\DUMON.jpg" />
+    <Content Include="Content\Grid\Customers\EASTC.jpg" />
+    <Content Include="Content\Grid\Customers\ERNSH.jpg" />
+    <Content Include="Content\Grid\Customers\FAMIA.jpg" />
+    <Content Include="Content\Grid\Customers\FISSA.jpg" />
+    <Content Include="Content\Grid\Customers\FOLIG.jpg" />
+    <Content Include="Content\Grid\Customers\FOLKO.jpg" />
+    <Content Include="Content\Grid\Customers\FRANK.jpg" />
+    <Content Include="Content\Grid\Customers\FRANR.jpg" />
+    <Content Include="Content\Grid\Customers\FRANS.jpg" />
+    <Content Include="Content\Grid\Customers\FURIB.jpg" />
+    <Content Include="Content\Grid\Customers\GALED.jpg" />
+    <Content Include="Content\Grid\Customers\GODOS.jpg" />
+    <Content Include="Content\Grid\Customers\GOURL.jpg" />
+    <Content Include="Content\Grid\Customers\GREAL.jpg" />
+    <Content Include="Content\Grid\Customers\GROSR.jpg" />
+    <Content Include="Content\Grid\Customers\HANAR.jpg" />
+    <Content Include="Content\Grid\Customers\HILAA.jpg" />
+    <Content Include="Content\Grid\Customers\HUNGC.jpg" />
+    <Content Include="Content\Grid\Customers\HUNGO.jpg" />
+    <Content Include="Content\Grid\Customers\ISLAT.jpg" />
+    <Content Include="Content\Grid\Customers\KOENE.jpg" />
+    <Content Include="Content\Grid\Customers\LACOR.jpg" />
+    <Content Include="Content\Grid\Customers\LAMAI.jpg" />
+    <Content Include="Content\Grid\Customers\LAUGB.jpg" />
+    <Content Include="Content\Grid\Customers\LAZYK.jpg" />
+    <Content Include="Content\Grid\Customers\LEHMS.jpg" />
+    <Content Include="Content\Grid\Customers\LETSS.jpg" />
+    <Content Include="Content\Grid\Customers\LILAS.jpg" />
+    <Content Include="Content\Grid\Customers\LINOD.jpg" />
+    <Content Include="Content\Grid\Customers\LONEP.jpg" />
+    <Content Include="Content\Grid\Customers\MAGAA.jpg" />
+    <Content Include="Content\Grid\Customers\MAISD.jpg" />
+    <Content Include="Content\Grid\Customers\MEREP.jpg" />
+    <Content Include="Content\Grid\Customers\MORGK.jpg" />
+    <Content Include="Content\Grid\Customers\NORTS.jpg" />
+    <Content Include="Content\Grid\Customers\OCEAN.jpg" />
+    <Content Include="Content\Grid\Customers\OLDWO.jpg" />
+    <Content Include="Content\Grid\Customers\OTTIK.jpg" />
+    <Content Include="Content\Grid\Customers\PARIS.jpg" />
+    <Content Include="Content\Grid\Customers\PERIC.jpg" />
+    <Content Include="Content\Grid\Customers\PICCO.jpg" />
+    <Content Include="Content\Grid\Customers\PRINI.jpg" />
+    <Content Include="Content\Grid\Customers\QUEDE.jpg" />
+    <Content Include="Content\Grid\Customers\QUEEN.jpg" />
+    <Content Include="Content\Grid\Customers\QUICK.jpg" />
+    <Content Include="Content\Grid\Customers\RANCH.jpg" />
+    <Content Include="Content\Grid\Customers\RATTC.jpg" />
+    <Content Include="Content\Grid\Customers\REGGC.jpg" />
+    <Content Include="Content\Grid\Customers\RICAR.jpg" />
+    <Content Include="Content\Grid\Customers\RICSU.jpg" />
+    <Content Include="Content\Grid\Customers\ROMEY.jpg" />
+    <Content Include="Content\Grid\Customers\SANTG.jpg" />
+    <Content Include="Content\Grid\Customers\SAVEA.jpg" />
+    <Content Include="Content\Grid\Customers\SEVES.jpg" />
+    <Content Include="Content\Grid\Customers\SIMOB.jpg" />
+    <Content Include="Content\Grid\Customers\SPECD.jpg" />
+    <Content Include="Content\Grid\Customers\SPLIR.jpg" />
+    <Content Include="Content\Grid\Customers\SUPRD.jpg" />
+    <Content Include="Content\Grid\Customers\THEBI.jpg" />
+    <Content Include="Content\Grid\Customers\THECR.jpg" />
+    <Content Include="Content\Grid\Customers\TOMSP.jpg" />
+    <Content Include="Content\Grid\Customers\TORTU.jpg" />
+    <Content Include="Content\Grid\Customers\TRADH.jpg" />
+    <Content Include="Content\Grid\Customers\TRAIH.jpg" />
+    <Content Include="Content\Grid\Customers\VAFFE.jpg" />
+    <Content Include="Content\Grid\Customers\VICTE.jpg" />
+    <Content Include="Content\Grid\Customers\VINET.jpg" />
+    <Content Include="Content\Grid\Customers\WANDK.jpg" />
+    <Content Include="Content\Grid\Customers\WARTH.jpg" />
+    <Content Include="Content\Grid\Customers\WELLI.jpg" />
+    <Content Include="Content\Grid\Customers\WHITC.jpg" />
+    <Content Include="Content\Grid\Customers\WILMK.jpg" />
+    <Content Include="Content\Grid\Customers\WOLZA.jpg" />
+    <Content Include="Content\Images\product-first-glance.jpg" />
+    <Content Include="Content\Images\Themes\TreeView\Black.png" />
+    <Content Include="Content\Images\Themes\TreeView\Default.png" />
+    <Content Include="Content\Images\Themes\TreeView\Forest.png" />
+    <Content Include="Content\Images\Themes\TreeView\Hay.png" />
+    <Content Include="Content\Images\Themes\TreeView\Office2007.png" />
+    <Content Include="Content\Images\Themes\TreeView\Outlook.png" />
+    <Content Include="Content\Images\Themes\TreeView\Simple.png" />
+    <Content Include="Content\Images\Themes\TreeView\Sitefinity.png" />
+    <Content Include="Content\Images\Themes\TreeView\Sunset.png" />
+    <Content Include="Content\Images\Themes\TreeView\Telerik.png" />
+    <Content Include="Content\Images\Themes\TreeView\Vista.png" />
+    <Content Include="Content\Images\Themes\TreeView\Web20.png" />
+    <Content Include="Content\Images\Themes\TreeView\WebBlue.png" />
+    <Content Include="Content\Images\Themes\TreeView\Windows7.png" />
+    <Content Include="Content\Images\Themes\Grid\Black.png" />
+    <Content Include="Content\Images\Themes\Grid\WebBlue.png" />
+    <Content Include="Content\Images\Themes\Grid\Web20.png" />
+    <Content Include="Content\Images\Themes\Grid\Hay.png" />
+    <Content Include="Content\Images\Themes\Grid\Office2007.png" />
+    <Content Include="Content\Images\Themes\Grid\Outlook.png" />
+    <Content Include="Content\Images\Themes\Grid\Simple.png" />
+    <Content Include="Content\Images\Themes\Grid\Sitefinity.png" />
+    <Content Include="Content\Images\Themes\Grid\Sunset.png" />
+    <Content Include="Content\Images\Themes\Grid\Telerik.png" />
+    <Content Include="Content\Images\Themes\Grid\Forest.png" />
+    <Content Include="Content\Images\Themes\Grid\Default.png" />
+    <Content Include="Content\Images\Themes\Grid\Vista.png" />
+    <Content Include="Content\Images\Themes\Grid\Windows7.png" />
+    <Content Include="Content\Images\Themes\Menu\Black.png" />
+    <Content Include="Content\Images\Themes\Menu\Default.png" />
+    <Content Include="Content\Images\Themes\Menu\Forest.png" />
+    <Content Include="Content\Images\Themes\Menu\Hay.png" />
+    <Content Include="Content\Images\Themes\Menu\Office2007.png" />
+    <Content Include="Content\Images\Themes\Menu\Outlook.png" />
+    <Content Include="Content\Images\Themes\Menu\Simple.png" />
+    <Content Include="Content\Images\Themes\Menu\Sitefinity.png" />
+    <Content Include="Content\Images\Themes\Menu\Sunset.png" />
+    <Content Include="Content\Images\Themes\Menu\Telerik.png" />
+    <Content Include="Content\Images\Themes\Menu\Vista.png" />
+    <Content Include="Content\Images\Themes\Menu\Web20.png" />
+    <Content Include="Content\Images\Themes\Menu\WebBlue.png" />
+    <Content Include="Content\Images\Themes\Menu\Windows7.png" />
+    <Content Include="Content\Images\Themes\PanelBar\Black.png" />
+    <Content Include="Content\Images\Themes\PanelBar\Default.png" />
+    <Content Include="Content\Images\Themes\PanelBar\Forest.png" />
+    <Content Include="Content\Images\Themes\PanelBar\Hay.png" />
+    <Content Include="Content\Images\Themes\PanelBar\Office2007.png" />
+    <Content Include="Content\Images\Themes\PanelBar\Outlook.png" />
+    <Content Include="Content\Images\Themes\PanelBar\Simple.png" />
+    <Content Include="Content\Images\Themes\PanelBar\Sitefinity.png" />
+    <Content Include="Content\Images\Themes\PanelBar\Sunset.png" />
+    <Content Include="Content\Images\Themes\PanelBar\Telerik.png" />
+    <Content Include="Content\Images\Themes\PanelBar\Vista.png" />
+    <Content Include="Content\Images\Themes\PanelBar\Web20.png" />
+    <Content Include="Content\Images\Themes\PanelBar\WebBlue.png" />
+    <Content Include="Content\Images\Themes\PanelBar\Windows7.png" />
+    <Content Include="Content\Images\Themes\TabStrip\Black.png" />
+    <Content Include="Content\Images\Themes\TabStrip\Default.png" />
+    <Content Include="Content\Images\Themes\TabStrip\Forest.png" />
+    <Content Include="Content\Images\Themes\TabStrip\Hay.png" />
+    <Content Include="Content\Images\Themes\TabStrip\Office2007.png" />
+    <Content Include="Content\Images\Themes\TabStrip\Outlook.png" />
+    <Content Include="Content\Images\Themes\TabStrip\Simple.png" />
+    <Content Include="Content\Images\Themes\TabStrip\Sitefinity.png" />
+    <Content Include="Content\Images\Themes\TabStrip\Sunset.png" />
+    <Content Include="Content\Images\Themes\TabStrip\Telerik.png" />
+    <Content Include="Content\Images\Themes\TabStrip\Vista.png" />
+    <Content Include="Content\Images\Themes\TabStrip\Web20.png" />
+    <Content Include="Content\Images\Themes\TabStrip\WebBlue.png" />
+    <Content Include="Content\Images\Themes\TabStrip\Windows7.png" />
+    <Content Include="Content\Menu\Descriptions\AnimationEffects.html" />
+    <Content Include="Content\Menu\Descriptions\ClientSideApi.html" />
+    <Content Include="Content\Menu\Descriptions\ClientSideEvents.html" />
+    <Content Include="Content\Menu\Descriptions\DataBindingToModel.html" />
+    <Content Include="Content\Menu\Descriptions\FirstLook.html" />
+    <Content Include="Content\Menu\Descriptions\Orientation.html" />
+    <Content Include="Content\Menu\Descriptions\RtlSupport.html" />
+    <Content Include="Content\Menu\Descriptions\SiteMapBinding.html" />
+    <Content Include="Content\Menu\Descriptions\Sprites.html" />
+    <Content Include="Content\Menu\Descriptions\Templates.html" />
+    <Content Include="Content\PanelBar\Descriptions\AjaxLoading.html" />
+    <Content Include="Content\PanelBar\Descriptions\AnimationEffects.html" />
+    <Content Include="Content\PanelBar\Descriptions\ClientSideApi.html" />
+    <Content Include="Content\PanelBar\Descriptions\ClientSideEvents.html" />
+    <Content Include="Content\PanelBar\Descriptions\DataBindingToModel.html" />
+    <Content Include="Content\PanelBar\Descriptions\FirstLook.html" />
+    <Content Include="Content\PanelBar\Descriptions\RtlSupport.html" />
+    <Content Include="Content\PanelBar\Descriptions\SiteMapBinding.html" />
+    <Content Include="Content\PanelBar\Descriptions\Sprites.html" />
+    <Content Include="Content\PanelBar\Descriptions\Templates.html" />
+    <Content Include="Content\PanelBar\FirstLook\contacts.gif" />
+    <Content Include="Content\PanelBar\FirstLook\contactsItems.gif" />
+    <Content Include="Content\PanelBar\FirstLook\mail.gif" />
+    <Content Include="Content\PanelBar\FirstLook\mailDeletedItems.gif" />
+    <Content Include="Content\PanelBar\FirstLook\mailfolder.gif" />
+    <Content Include="Content\PanelBar\FirstLook\mailInbox.gif" />
+    <Content Include="Content\PanelBar\FirstLook\mailItems.gif" />
+    <Content Include="Content\PanelBar\FirstLook\mailOutbox.gif" />
+    <Content Include="Content\PanelBar\FirstLook\mailPersonalFolders.gif" />
+    <Content Include="Content\PanelBar\FirstLook\mailSearch.gif" />
+    <Content Include="Content\PanelBar\FirstLook\mailSent.gif" />
+    <Content Include="Content\PanelBar\FirstLook\notes.gif" />
+    <Content Include="Content\PanelBar\FirstLook\notesItems.gif" />
+    <Content Include="Content\PanelBar\FirstLook\tasks.gif" />
+    <Content Include="Content\PanelBar\FirstLook\tasksItems.gif" />
+    <Content Include="Content\PanelBar\Templates\digitalCamera.gif" />
+    <Content Include="Content\PanelBar\Templates\exposure.gif" />
+    <Content Include="Content\PanelBar\Templates\How-to-find-us.gif" />
+    <Content Include="Content\PanelBar\Templates\slr.gif" />
+    <Content Include="Content\PanelBar\Templates\Testimonials.gif" />
+    <Content Include="Content\TabStrip\Descriptions\AjaxLoading.html" />
+    <Content Include="Content\TabStrip\Descriptions\AnimationEffects.html" />
+    <Content Include="Content\TabStrip\Descriptions\ClientSideApi.html" />
+    <Content Include="Content\TabStrip\Descriptions\ClientSideEvents.html" />
+    <Content Include="Content\TabStrip\Descriptions\DataBindingToModel.html" />
+    <Content Include="Content\TabStrip\Descriptions\FirstLook.html" />
+    <Content Include="Content\TabStrip\Descriptions\RtlSupport.html" />
+    <Content Include="Content\TabStrip\Descriptions\SiteMapBinding.html" />
+    <Content Include="Content\TabStrip\Descriptions\Sprites.html" />
+    <Content Include="Content\TreeView\FirstLook\contacts.gif" />
+    <Content Include="Content\TreeView\FirstLook\contactsItems.gif" />
+    <Content Include="Content\TreeView\FirstLook\foldersList.gif" />
+    <Content Include="Content\TreeView\FirstLook\mail.gif" />
+    <Content Include="Content\TreeView\FirstLook\mailDeletedItems.gif" />
+    <Content Include="Content\TreeView\FirstLook\mailfolder.gif" />
+    <Content Include="Content\TreeView\FirstLook\mailInbox.gif" />
+    <Content Include="Content\TreeView\FirstLook\mailItems.gif" />
+    <Content Include="Content\TreeView\FirstLook\mailOutbox.gif" />
+    <Content Include="Content\TreeView\FirstLook\mailPersonalFolders.gif" />
+    <Content Include="Content\TreeView\FirstLook\mailSearch.gif" />
+    <Content Include="Content\TreeView\FirstLook\mailSent.gif" />
+    <Content Include="Content\TreeView\FirstLook\notes.gif" />
+    <Content Include="Content\TreeView\FirstLook\notesItems.gif" />
+    <Content Include="Content\TreeView\FirstLook\tasks.gif" />
+    <Content Include="Content\TreeView\FirstLook\tasksItems.gif" />
+    <Content Include="Models\Customers.asmx" />
+    <Content Include="Models\Customers.svc" />
+    <Content Include="Models\Employees.asmx" />
+    <Content Include="Models\Employees.svc" />
+    <Content Include="Models\Orders.asmx" />
+    <Content Include="Models\Orders.svc" />
+    <Content Include="sample.sitemap" />
+    <None Include="Models\Northwind.dbml.layout">
+      <DependentUpon>Northwind.dbml</DependentUpon>
+    </None>
+    <Content Include="favicon.ico" />
+    <Content Include="Scripts\jquery-1.4.2.min.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\MicrosoftAjax.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
+    <Content Include="Scripts\telerik.examples.min.js" />
+    <Content Include="Views\Calendar\ClientSideApi.aspx" />
+    <Content Include="Views\DatePicker\ClientSideApi.aspx" />
+    <Content Include="Views\Calendar\ClientSideEvents.aspx" />
+    <Content Include="Views\Calendar\Globalization.aspx" />
+    <Content Include="Views\Calendar\SelectAction.aspx" />
+    <Content Include="Views\Calendar\FirstLook.aspx" />
+    <Content Include="Views\DatePicker\ClientSideEvents.aspx" />
+    <Content Include="Views\DatePicker\ClientValidation.aspx" />
+    <Content Include="Views\DatePicker\DateParsing.aspx" />
+    <Content Include="Views\DatePicker\FirstLook.aspx" />
+    <Content Include="Views\DatePicker\Globalization.aspx" />
+    <Content Include="Views\DatePicker\ServerValidation.aspx" />
+    <Content Include="Views\Grid\AjaxBinding.aspx" />
+    <Content Include="Views\Grid\AutoGenerateColumns.aspx" />
+    <Content Include="Views\Grid\ClientSideEvents.aspx" />
+    <Content Include="Views\Grid\TemplatesClientSide.aspx" />
+    <Content Include="Views\Grid\EditingWebService.aspx" />
+    <Content Include="Views\Grid\EditingAjax.aspx" />
+    <Content Include="Views\Grid\EditingServerSide.aspx" />
+    <Content Include="Views\Grid\Grouping.aspx" />
+    <Content Include="Views\Grid\SelectionServerSide.aspx" />
+    <Content Include="Views\Grid\ExternalServiceFacebook.aspx" />
+    <Content Include="Views\Grid\Filtering.aspx" />
+    <Content Include="Views\Grid\CustomFormatting.aspx" />
+    <Content Include="Views\Grid\ExternalServiceTwitter.aspx" />
+    <Content Include="Views\Grid\CustomBinding.aspx" />
+    <Content Include="Views\Grid\Paging.aspx" />
+    <Content Include="Views\Grid\SelectionClientSide.aspx" />
+    <Content Include="Views\Grid\RtlSupport.aspx" />
+    <Content Include="Views\Grid\ServerBinding.aspx" />
+    <Content Include="Views\Grid\Sorting.aspx" />
+    <Content Include="Views\Grid\TemplatesServerSide.aspx" />
+    <Content Include="Views\Grid\WebService.aspx" />
+    <Content Include="Views\Menu\ClientSideApi.aspx" />
+    <Content Include="Views\Menu\ClientSideEvents.aspx" />
+    <Content Include="Views\Menu\AnimationEffects.aspx" />
+    <Content Include="Views\Menu\RtlSupport.aspx" />
+    <Content Include="Views\Menu\DataBindingToModel.aspx" />
+    <Content Include="Views\Menu\Orientation.aspx" />
+    <Content Include="Views\Menu\Sprites.aspx" />
+    <Content Include="Views\Menu\Templates.aspx" />
+    <Content Include="Views\PanelBar\AjaxLoading.aspx" />
+    <Content Include="Views\PanelBar\AjaxView_OpenSource.ascx" />
+    <Content Include="Views\PanelBar\AjaxView_ExceptionalPerformance.ascx" />
+    <Content Include="Views\PanelBar\ClientSideApi.aspx" />
+    <Content Include="Views\PanelBar\AjaxView_BasedOnJQuery.ascx" />
+    <Content Include="Views\PanelBar\AjaxView_CrossBrowser.ascx" />
+    <Content Include="Views\PanelBar\RtlSupport.aspx" />
+    <Content Include="Views\PanelBar\Sprites.aspx" />
+    <Content Include="Views\PanelBar\Templates.aspx" />
+    <Content Include="Views\PanelBar\FirstLook.aspx" />
+    <Content Include="Views\PanelBar\ClientSideEvents.aspx" />
+    <Content Include="Views\PanelBar\DataBindingToModel.aspx" />
+    <Content Include="Views\PanelBar\AnimationEffects.aspx" />
+    <Content Include="Views\PanelBar\SiteMapBinding.aspx" />
+    <Content Include="Views\Shared\CodeViewer.ascx" />
+    <Content Include="Views\Shared\CulturePicker.ascx" />
+    <Content Include="Views\Shared\EditorTemplates\Date.ascx" />
+    <Content Include="Views\Shared\GoogleAnalytics.ascx" />
+    <Content Include="Views\Shared\Header.ascx" />
+    <Content Include="Views\Shared\Footer.ascx" />
+    <Content Include="Views\Shared\Resources.ascx" />
+    <Content Include="Views\Shared\EventLog.ascx" />
+    <Content Include="Views\Shared\Navigation.ascx" />
+    <Content Include="Views\Shared\Examples.Master" />
+    <Content Include="Views\Shared\ProductLines.ascx" />
+    <Content Include="Views\Shared\Site.Master" />
+    <Content Include="Views\TabStrip\AjaxLoading.aspx" />
+    <Content Include="Views\TabStrip\AjaxView_BasedOnJQuery.ascx" />
+    <Content Include="Views\TabStrip\AjaxView_CrossBrowser.ascx" />
+    <Content Include="Views\TabStrip\AjaxView_ExceptionalPerformance.ascx" />
+    <Content Include="Views\TabStrip\AjaxView_OpenSource.ascx" />
+    <Content Include="Views\TabStrip\AnimationEffects.aspx" />
+    <Content Include="Views\TabStrip\ClientSideApi.aspx" />
+    <Content Include="Views\TabStrip\ClientSideEvents.aspx" />
+    <Content Include="Views\TabStrip\DataBindingToModel.aspx" />
+    <Content Include="Views\TabStrip\FirstLook.aspx" />
+    <Content Include="Views\TabStrip\RtlSupport.aspx" />
+    <Content Include="Views\TabStrip\SiteMapBinding.aspx" />
+    <Content Include="Views\TabStrip\Sprites.aspx" />
+    <Content Include="Views\TreeView\AnimationEffects.aspx" />
+    <Content Include="Views\TreeView\ClientSideEvents.aspx" />
+    <Content Include="Views\TreeView\Templates.aspx" />
+    <Content Include="Views\TreeView\AjaxLoading.aspx" />
+    <Content Include="Views\TreeView\CheckBoxSupport.aspx" />
+    <Content Include="Views\TreeView\DataBindingToModel.aspx" />
+    <Content Include="Views\TreeView\FirstLook.aspx" />
+    <Content Include="Views\TreeView\SiteMapBinding.aspx" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Telerik.Web.Mvc" > <HintPath>Bin\Telerik.Web.Mvc.dll</HintPath></Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\GridLocalization.bg-BG.resx">
+      <LastGenOutput>GridLocalization.bg-BG.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="Content\DatePicker\Descriptions\AnimationEffects.html" />
+    <Content Include="Content\DatePicker\Descriptions\EditTemplate.html" />
+    <Content Include="Content\Grid\Descriptions\CheckBoxesServerSide.html" />
+    <Content Include="Content\Grid\Descriptions\CheckBoxesAjax.html" />
+    <Content Include="Content\Grid\Descriptions\Grouping.html" />
+    <Content Include="Content\NumericTextBox\Descriptions\EditTemplate.html" />
+    <Content Include="Content\TreeView\Common\contact.png" />
+    <Content Include="Content\TreeView\Common\file.png" />
+    <Content Include="Content\TreeView\Common\folder.png" />
+    <Content Include="Content\TreeView\Descriptions\AnimationEffects.html" />
+    <Content Include="Views\DatePicker\AnimationEffects.aspx" />
+    <Content Include="Views\DatePicker\EditTemplate.aspx" />
+    <Content Include="Views\Grid\CheckBoxesServerSide.aspx" />
+    <Content Include="Views\Grid\CheckBoxesAjax.aspx" />
+    <Content Include="Views\Grid\CheckedOrders.ascx" />
+    <Content Include="Views\Grid\Localization.aspx" />
+    <Content Include="Views\NumericTextBox\ClientSideApi.aspx" />
+    <Content Include="Views\NumericTextBox\ClientSideEvents.aspx" />
+    <Content Include="Views\NumericTextBox\ClientValidation.aspx" />
+    <Content Include="Views\NumericTextBox\EditTemplate.aspx" />
+    <Content Include="Views\NumericTextBox\FirstLook.aspx" />
+    <Content Include="Views\NumericTextBox\Globalization.aspx" />
+    <Content Include="Views\NumericTextBox\ServerValidation.aspx" />
+    <Content Include="Views\Shared\CodeFile.ascx" />
+    <Content Include="Views\Shared\EditorTemplates\Currency.ascx" />
+    <Content Include="Views\Shared\EditorTemplates\Number.ascx" />
+    <Content Include="Views\TreeView\ClientSideBinding.aspx" />
+    <Content Include="Views\TreeView\DragAndDrop.aspx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\GridLocalization.de-DE.resx">
+      <LastGenOutput>GridLocalization.de-DE.designer.cs</LastGenOutput>
+      <Generator>GlobalResourceProxyGenerator</Generator>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\GridLocalization.fr-FR.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>GridLocalization.fr-FR.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="Content\Grid\Descriptions\DisplayAndEditTemplates.html" />
+    <Content Include="Content\Grid\Descriptions\Localization.html" />
+    <Content Include="Content\Grid\Descriptions\CustomCommand.html" />
+    <Content Include="Content\Grid\Descriptions\ExternalServiceTwitter.html" />
+    <Content Include="Content\TreeView\Descriptions\AjaxLoading.html" />
+    <Content Include="Content\TreeView\Descriptions\ClientSideEvents.html" />
+    <Content Include="Content\TreeView\Descriptions\ClientSideBinding.html" />
+    <Content Include="Content\TreeView\Descriptions\CheckBoxSupport.html" />
+    <Content Include="Content\TreeView\Descriptions\Templates.html" />
+    <Content Include="Content\TreeView\Descriptions\DataBindingToModel.html" />
+    <Content Include="Content\TreeView\Descriptions\DragAndDrop.html" />
+    <Content Include="Views\Grid\CustomCommand.aspx" />
+    <Content Include="Views\Grid\DisplayAndEditTemplates.aspx" />
+    <Content Include="Views\Grid\DisplayTemplates\Employee.ascx" />
+    <Content Include="Views\Grid\EditorTemplates\Employee.ascx" />
+    <Content Include="Views\Shared\EditorTemplates\Integer.ascx" />
+    <Content Include="Views\TreeView\ClientSideApi.aspx" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v9.0\WebApplications\Microsoft.WebApplication.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target> -->
+  <Target Name="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(ProjectDir)\..\$(ProjectName)" />
+  </Target>
+  <Target Name="AfterCompile">
+    <!-- Resources, needed to run tests -->
+    <ItemGroup>
+      <SharedCssResources Include="..\Telerik.Web.Mvc\Content\**\*">
+        <Visible>false</Visible>
+      </SharedCssResources>
+      <SharedJsResources Include="..\Telerik.Web.Mvc\Scripts\**\*.js" Exclude="..\Telerik.Web.Mvc\Scripts\**\jquery*.js">
+        <Visible>false</Visible>
+      </SharedJsResources>
+    </ItemGroup>
+    <Message Importance="high" Text="Copying resources..." />
+    <!-- Copy the CSS files to Scripts -->
+    <Copy SourceFiles="@(SharedJsResources)" DestinationFolder="Scripts\%(RecursiveDir)">
+      <Output TaskParameter="DestinationFiles" ItemName="Resources" />
+    </Copy>
+    <!-- Copy the CSS files to Content -->
+    <Copy SourceFiles="@(SharedCssResources)" DestinationFolder="Content\%(RecursiveDir)">
+      <Output TaskParameter="DestinationFiles" ItemName="Resources" />
+    </Copy>
+    <ItemGroup>
+      <!-- FileWrites is the list of files to delete when performing a Clean -->
+      <FileWrites Include="@(Resources)" />
+    </ItemGroup>
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>False</AutoAssignPort>
+          <DevelopmentServerPort>7777</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

@@ -1,0 +1,37 @@
+﻿<p>
+    This example shows how to use the client-side API of Telerik PanelBar for ASP.NET MVC.
+</p>
+<p>
+    To use the client-side API you should first retrieve the panelbar client-side object.
+    The following code snippet shows how to do this:
+</p>
+<pre class="prettyprint">
+&lt;script type=&quot;text/javascript&quot;&gt;
+function getPanelBar(){
+    //"Panelbar" is the value specified by the Name() method.
+    var panelbar = $("#Panelbar").data("tPanelBar");
+    return panelbar;
+}
+&lt;/script&gt;
+</pre>
+<p>
+    Available client-side methods:
+</p>
+<ul>
+    <li>
+        You can expand a panel item with the <strong>expand(...)</strong> method. This method accepts a DOM element representing an existing
+        panel item, a collection of DOM elements or a jQuery selector.
+    </li>
+    <li>
+        You can collapse an item with the <strong>collapse(...)</strong> method. This method accepts a DOM element representing an existing
+        panel item, a collection of DOM elements or a jQuery selector.
+    </li>
+    <li>
+        You can enable an item with the <strong>enable(...)</strong>. This method accepts a DOM element representing an existing
+        panel item, a collection of DOM elements or a jQuery selector.
+    </li>
+    <li>
+        You can disable an item with the <strong>disable(...)</strong> method. This method accepts a DOM element representing an existing
+        panel item, a collection of DOM elements or a jQuery selector.
+    </li>
+</ul>

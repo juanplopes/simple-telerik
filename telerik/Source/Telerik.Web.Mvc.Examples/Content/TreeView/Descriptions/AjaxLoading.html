@@ -1,0 +1,21 @@
+﻿<p>
+    This example shows how to configure Telerik TreeView for ASP.NET MVC to load its
+    nodes through Ajax requests. The request is performed only once. After that the
+    content is rendered on the page and treeview shows/hides it without performing additional
+    requests.
+</p>
+<p>
+    You can bind the treeview to an ActionMethod that will get requested through AJAX,
+    or to an ASMX / WCF web service, using the <strong>DataBinding</strong> method.
+</p>
+<pre class="prettyprint">
+&lt;%= Html.Telerik().TreeView()
+     .Name("TreeView")
+     <em>.DataBinding(dataBinding => dataBinding
+         .Ajax().Select("_AjaxLoading", "TreeView")
+     )</em>
+ %&gt;
+</pre>
+<p>
+    You can load the whole treeview from scratch, or load the initially visible nodes
+    using the BindTo method, like the root node in this example.</p>

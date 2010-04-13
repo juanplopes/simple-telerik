@@ -1,0 +1,23 @@
+﻿<p>
+    This example shows how Telerik DatePicker for ASP.NET MVC 
+    can be used to edit <em>Model property</em>.
+</p>
+<p>
+    To use specific editor template, you should first decorate the edited property of your <em>Model</em>
+    with <strong>System.ComponentModel.DataAnnotations.DateType</strong> attribute:
+</p>
+<pre class="prettyprint">
+    [DataType(DataType.Date)]
+    public DateTime LastSupply
+    {
+        get;
+        set;
+    }
+</pre>
+<p>
+    You can review <strong>EditableProduct.cs</strong> file for more information.
+</p>
+<p>
+    The next step is to create user control, which will be used to edit the Model property.
+    In this demo <strong>Date.ascx</strong> is used to edit the <em>LastSupply</em> property.
+</p>

@@ -1,0 +1,20 @@
+﻿<p>
+    This example shows how to configure Telerik PanelBar for ASP.NET MVC to load the
+    templated contents with Ajax requests. The request is performed only once. After
+    that the content is rendered on the page and panelbar shows/hides it without performing
+    additional Ajax requests.
+</p>
+<p>
+    To set the item content you should use the <strong>LoadContentFrom</strong> method.
+</p>
+<pre class="prettyprint">
+&lt;%= Html.Telerik().PanelBar()
+     .Name("PanelBar")
+     .Items(items => 
+     {
+            items.Add()
+                 .Text("Completely Open Source")
+                 <em>.LoadContentFrom("AjaxView_OpenSource", "PanelBar");</em>
+     })
+ %&gt;
+</pre>

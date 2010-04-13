@@ -1,0 +1,58 @@
+﻿<p>
+This example shows how to implement related grids. The first grid is bound to the Customers table from the Northwind database.
+The second shows the orders for the selected customer from the first grid.
+</p>
+<p>
+    This example is implemented by using the <code>OnRowSelected</code> client-side event. In order to enable client-side selection
+    the <code>Selectable()</code> method should be used when configuring the grid.
+</p>
+<pre class="prettyprint">
+&lt;%= Html.Telerik().Grid((IEnumerable&lt;Customer&gt;)ViewData["Customers"])
+        .Name("Customers")
+        .Columns(columns =&gt;
+        {
+            columns.Bound(c =&gt; c.CustomerID).Width(130);
+            columns.Bound(c =&gt; c.CompanyName).Width(250);
+            columns.Bound(c =&gt; c.ContactName);
+            columns.Bound(c =&gt; c.Country).Width(200);
+        })
+        .Pageable()
+        .Sortable()
+        .Selectable()
+        .ClientEvents(events =&gt; events.OnRowSelected("onRowSelected"))
+        .DataBinding(dataBinding =&gt; dataBinding
+            .Ajax()
+                .Select("_SelectionClientSide_Customers", "Grid"))
+%&gt;
+&lt;%= Html.Telerik().Grid((IEnumerable&lt;Order&gt;)ViewData["Orders"])
+        .Name("Orders")
+        .Columns(columns=&gt;
+        {
+            columns.Bound(c =&gt; c.OrderID).Width(100);
+            columns.Bound(c =&gt; c.OrderDate).Width(200).Format("{0:dd/MM/yyyy}");
+            columns.Bound(c =&gt; c.ShipAddress);
+            columns.Bound(c =&gt; c.ShipCity).Width(200);
+        })
+        .Pageable()
+        .Sortable()
+        .DataBinding(dataBinding =&gt; dataBinding
+            .Ajax()
+                .Select("_SelectionClientSide_Orders", "Grid", new { customerID = "ALFKI" }))
+%&gt;
+</pre>
+<pre class="prettyprint">
+&lt;script type="text/javascript"&gt;
+    function onRowSelected(e) {
+        var ordersGrid = $('#Orders').data('tGrid');
+        customerID = e.row.cells[0].innerHTML; 
+        
+        // update ui text
+        $('#customerID').text(customerID);
+
+        // rebind the related grid
+        ordersGrid.rebind({
+            customerID: customerID
+        });
+    }
+&lt;/script&gt;
+</pre>

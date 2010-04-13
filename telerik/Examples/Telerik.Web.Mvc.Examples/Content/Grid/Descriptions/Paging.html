@@ -1,0 +1,22 @@
+﻿<p>
+This example shows the various pager styles supported by Telerik Grid for ASP.NET MVC:
+</p>
+<ul>
+    <li>Page input</li>
+    <li>Next and previous buttons</li>
+    <li>Numeric pager buttons</li>
+</ul>
+<p>
+You can customize the pager style, pager position and page size by using the <strong>Pageable</strong> method:
+</p>
+<pre class="prettyprint">
+&lt;%= Html.Telerik().Grid(Model)
+        .Name("Grid")
+        <em>.Pageable(paging => 
+            paging.PageSize(20)
+                  .Style(GridPagerStyles.NextPreviousAndNumeric)
+                  .Position(GridPagerPosition.Bottom)
+        )
+        </em>
+ %&gt;
+</pre>

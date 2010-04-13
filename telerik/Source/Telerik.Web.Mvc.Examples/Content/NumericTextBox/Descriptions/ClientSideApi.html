@@ -1,0 +1,31 @@
+﻿<p>
+    This example shows how to use the client-side API of Telerik Numeric TextBox for ASP.NET MVC.
+</p>
+<p>
+    To use the client-side API you should first retrieve the textbox client-side object.
+    The following code snippet shows how to do this:
+</p>
+<pre class="prettyprint">
+&lt;script type=&quot;text/javascript&quot;&gt;
+function getNumericTextBox(){
+    //"NumericTextBox" is the value specified by the Name() method.
+    var NumericTextBox = $("#NumericTextBox").data("tTextBox");
+    return NumericTextBox;
+}
+&lt;/script&gt;
+</pre>
+<p>
+    The same approach can be used when you need to get the client-object of the CurrencyTextBox or of the PercentTextBox.
+</p>
+<p>
+    Available client-side methods:
+</p>
+<ul>
+    <li>
+        You can set value with <strong>value(...)</strong> method. This method accepts <strong>Numeric</strong> object or string.
+    </li>
+    <li>
+        You can retrieve selected date with <strong>value()</strong> method with no parameters. This method returns <strong>Numeric</strong> object 
+        or <i>null</i>.
+    </li>
+</ul>

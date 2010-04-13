@@ -1,0 +1,50 @@
+﻿<p>
+    This example shows how to use display and edit templates with Telerik Grid for ASP.NET MVC. There are a few built-in templates for Date, Currency and Number editing
+    which can be found in the <strong>EditorTemplates</strong> folder in the installation.
+</p>
+<p>
+    It is important to know that display templates are supported only in server binding scenarios. Editor templates are supported in client binding scenarios
+    provided that there is an HTML element whose <code>name</code> attribute is the same as the property name of the bound field.
+</p>
+<p>
+    To use custom edit and display templates you should do the following:
+</p>
+<ol>
+    <li>
+        Decorate your model with metadata attributes to specify its data type, UI hint (name of the ASCX to use) etc:
+<pre class="prettyprint">
+    public class EditableOrder
+    {
+        [ReadOnly(true)]
+        public int OrderID { get; set; }
+
+        // DisplayTemplates/Employee.ascx will be used as display template.
+        // EditorTemplates/Employee.ascx will be used as editor template
+        <em>[UIHint("Employee"), Required]</em>
+        public Employee Employee { get; set; }
+
+        // EditorTemplates/Date.ascx will be used as display template.
+        [DataType(DataType.Date), Required]
+        public DateTime OrderDate { get; set; }
+
+        [DataType(DataType.Currency), Required]
+        public decimal Freight { get; set; }
+    }
+</pre>
+    </li>
+    <li>
+        Create a <strong>DisplayTemplates</strong> and <strong>EditorTemplates</strong> folders in under your <strong>Views</strong> and create
+        the required ASCX files. Here is how the Employee.ascx editor and display templates look like:
+        <div>DisplayTemplates/Employee.ascx</div>
+<pre class="prettyprint">
+&lt;%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl&lt;Employee&gt;" %&gt;
+&lt;%= Html.Encode(Model.FirstName) %&gt; &lt;%= Html.Encode(Model.LastName) %&gt;
+</pre>
+        <div>EditorTemplates/Employee.ascx</div>
+<pre class="prettyprint">
+&lt;%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl&lt;Employee&gt;" %&gt;
+&lt;%= Html.DropDownList(null, new SelectList((IEnumerable) ViewData["employees"], 
+            "Id", "Name", Model.EmployeeID.ToString()))%&gt;
+</pre>        
+    </li>
+</ol>

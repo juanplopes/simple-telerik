@@ -1,0 +1,53 @@
+﻿<p>
+    This example shows how to bind Telerik Grid for ASP.NET MVC to external web service which returns JSON (Twitter in this case).
+</p>
+<p>
+    The example shows how to use the <strong>OnDataBinding</strong> and <strong>OnRowDataBound</strong> client-side events as 
+    well as the <strong>dataBind</strong> JavaScript method.
+</p>
+<ol>
+    <li>
+        In this example we are using the name of the fields returned by the Twitter service:
+<pre class="prettyprint">
+&lt;%= Html.Telerik().Grid&lt;TwitterItem&gt;()
+        .Name("Grid")
+        .Columns(columns =>
+        {
+            columns.Template(o => { }).Title("Author").Width(100); 
+            columns.Template(o => { }).Title("Avatar").Width(80);  
+            //A column bound to the "text" field defined by the anonymous type
+            columns.Bound(o => o.text).Title("Post"); //
+        })
+%&gt;
+</pre>        
+    </li>
+    <li>
+        The <strong>OnDataBinding</strong> event is raised every time the grid needs data - on initial load, and after paging, sorting or filtering.
+        Here is how to subscribe to that event:
+<pre class="prettyprint">
+&lt;%= Html.Telerik().Grid(new { text = "" })
+        <em>.ClientEvents(events => events.OnDataBinding("onDataBinding"))</em>
+%&gt;
+</pre>
+    </li>
+    <li>
+        The <strong>onDataBinding</strong> JavaScript method of this example handles the <strong>OnDataBinding</strong> 
+        event and requests the external service and data binds the grid with the result.
+        Check the "View" tab for the implementation.
+    </li>
+    <li>
+        The <strong>OnRowDataBound</strong> event is raised every time the grid populates a row from the data source. You can use
+        this event to control the way data is presented - insert HTML for example.
+        Here is how to subscribe to that event.
+<pre class="prettyprint">
+&lt;%= Html.Telerik().Grid(new { text = "" })
+        <em>.ClientEvents(events => events.OnRowDataBound("onRowDataBound"))</em>
+%&gt;
+</pre>
+    </li>
+    <li>
+        The <strong>onRowDataBound</strong> JavaScript method of this example handles the <strong>OnRowDataBound</strong> 
+        event and inserts the HTML required to show the avatar of the tweet author and a link to his twitter page.
+        Check the "View" tab for the implementation.
+    </li>
+</ol>
