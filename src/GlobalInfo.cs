@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright (c) Living Consultoria 2010")]
 [assembly: ComVisible(false)]
 [assembly: CLSCompliant(false)]
-[assembly: AssemblyVersion("1.0.1004.1312")]
-[assembly: AssemblyFileVersion("1.0.1004.1312")]
+[assembly: AssemblyVersion("1.0.1004.1407")]
+[assembly: AssemblyFileVersion("1.0.1004.1407")]
 
 

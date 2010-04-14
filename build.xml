@@ -1,0 +1,100 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <GCProjectName>simple-telerik-extensions</GCProjectName>
+
+    <BuildTarget>MVC1</BuildTarget>
+
+    <BuildDir>build\$(BuildTarget)\</BuildDir>
+    <BuildDir2>$(MSBuildProjectDirectory)\$(BuildDir)</BuildDir2>
+
+    <SourceDir>src\</SourceDir>
+    <KeyFilePath>$(SourceDir)\Simple.Web.Mvc.Telerik.snk</KeyFilePath>
+
+    <PackageDir>pkg\</PackageDir>
+
+    <ProductVersion>1.0</ProductVersion>
+
+    <TestAssembly>$(BuildDir)\Simple.Web.Mvc.Telerik.Tests.dll</TestAssembly>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(BuildTarget)' == 'MVC1' ">
+    <Configuration>Release</Configuration>
+    <Platform>Any CPU</Platform>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(BuildTarget)' == 'MVC2' ">
+    <Configuration>Release MVC2 NET35</Configuration>
+    <Platform>Any CPU</Platform>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <SolutionFile Include="$(SourceDir)\Simple.Web.Mvc.Telerik.sln" />
+  </ItemGroup>
+
+  <Import Project="util\msbuild\MSBuild.Community.Tasks.Targets"/>
+  <Import Project="util\msbuild\Simple.Tools.MsBuild.Targets"/>
+
+  <Target Name="Clean">
+    <MSBuild Projects="@(SolutionFile)" Targets="Clean" Properties="Configuration=$(Configuration);Platform=$(Platform);OutputPath=$(BuildDir2)"/>
+    <DeleteTree Directories="$(BuildDir)" ContinueOnError="true"/>
+    <DeleteTree Directories="$(PackageDir)" ContinueOnError="true"/>
+  </Target>
+
+  <Target Name="GenerateTag">
+    <Time Format="yMM.dhh">
+      <Output TaskParameter="FormattedTime" PropertyName="BuildTag" />
+    </Time>
+
+    <Message Text="Build tag: $(BuildTag)"/>
+  </Target>
+
+  <Target Name="GenerateAssemblyInfo" DependsOnTargets="GenerateTag">
+    <AssemblyInfo CodeLanguage="CS"
+               OutputFile="$(SourceDir)\GlobalInfo.cs"
+               AssemblyCompany="Living Consultoria"
+               AssemblyProduct="Simple.Net Telerik Extensions"
+               AssemblyCopyright="Copyright (c) Living Consultoria 2010"
+               AssemblyTrademark=""
+               ComVisible="false"
+               CLSCompliant="false"
+               AssemblyVersion="$(ProductVersion).$(BuildTag)"
+               AssemblyFileVersion="$(ProductVersion).$(BuildTag)" />
+  </Target>
+
+  <Target Name="Build" DependsOnTargets ="GenerateAssemblyInfo">
+    <MSBuild Projects="@(SolutionFile)" Properties="Configuration=$(Configuration);Platform=$(Platform);OutputPath=$(BuildDir2)"/>
+  </Target>
+
+  <Target Name="Rebuild">
+    <CallTarget Targets="Clean; Build"></CallTarget>
+  </Target>
+
+  <Target Name="Test" DependsOnTargets="Build">
+    <Nunit Assemblies="$(TestAssembly)" ToolPath="util\nunit"/>
+  </Target>
+
+  <Target Name="Package" DependsOnTargets="Build;Test">
+    <ItemGroup>
+      <PackageItems Include="$(BuildDir)\Simple.Web.Mvc.Telerik.dll"/>
+      <PackageItems Include="$(BuildDir)\Telerik.Web.Mvc.dll"/>
+      <PackageItems Include="$(BuildDir)\Scripts\**" Exclude="$(BuildDir)\_svn\**;$(BuildDir)\.svn\**"/>
+      <PackageItems Include="$(BuildDir)\Content\**" Exclude="$(BuildDir)\_svn\**;$(BuildDir)\.svn\**"/>
+    </ItemGroup>
+
+    <MakeDir Directories="$(PackageDir)"/>
+    <Zip Files="@(PackageItems)" ZipFileName="$(PackageDir)\TelerikExtensions$(BuildTarget).zip" WorkingDirectory="$(BuildDir)"/>
+  </Target>
+
+  <Target Name="Publish" DependsOnTargets="Test;Package">
+    <UploadToGoogleCode
+     UserName="$(GCUsername)"
+     Password="$(GCPassword)"
+     ProjectName="$(GCProjectName)"
+     LocalFile="$(PackageDir)\TelerikExtensions$(BuildTarget).zip"
+     TargetFileName="TelerikExtensions$(BuildTarget)-Nightly.zip"
+     Summary="Simple.Net Telerik Extensions v$(ProductVersion).$(BuildTag)"
+     Labels="Nightly;Type-Package"
+      />
+  
+  </Target>
+</Project>
