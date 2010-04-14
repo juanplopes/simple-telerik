@@ -30,6 +30,22 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release MVC2 NET35|AnyCPU' ">
+    <OutputPath>bin\Release MVC2 NET35\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug MVC2 NET35|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug MVC2 NET35\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework, Version=2.5.0.9122, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -47,10 +63,6 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Telerik.Web.Mvc, Version=2010.1.309.135, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Telerik.Web.Mvc.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompositeFiltersFixture.cs" />
@@ -64,6 +76,10 @@
     <Compile Include="SortVisitorFixture.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\telerik\Source\Telerik.Web.Mvc\Telerik.Web.Mvc.csproj">
+      <Project>{A7F7C110-D7F0-49B7-8DDA-FD2D1CC6F3B1}</Project>
+      <Name>Telerik.Web.Mvc</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Simple.Web.Mvc.Telerik\Simple.Web.Mvc.Telerik.csproj">
       <Project>{B0FC3A15-B440-4D28-B935-C19FE190BB5D}</Project>
       <Name>Simple.Web.Mvc.Telerik</Name>

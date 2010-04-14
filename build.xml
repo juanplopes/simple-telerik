@@ -77,8 +77,8 @@
     <ItemGroup>
       <PackageItems Include="$(BuildDir)\Simple.Web.Mvc.Telerik.dll"/>
       <PackageItems Include="$(BuildDir)\Telerik.Web.Mvc.dll"/>
-      <PackageItems Include="$(BuildDir)\Scripts\**" Exclude="$(BuildDir)\_svn\**;$(BuildDir)\.svn\**"/>
-      <PackageItems Include="$(BuildDir)\Content\**" Exclude="$(BuildDir)\_svn\**;$(BuildDir)\.svn\**"/>
+      <PackageItems Include="$(BuildDir)\Scripts\**" Exclude="$(BuildDir)\**\_svn\**;$(BuildDir)\**\.svn\**"/>
+      <PackageItems Include="$(BuildDir)\Content\**" Exclude="$(BuildDir)\**\_svn\**;$(BuildDir)\**\.svn\**"/>
     </ItemGroup>
 
     <MakeDir Directories="$(PackageDir)"/>
