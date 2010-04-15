@@ -114,6 +114,16 @@
 
   <Target Name="Publish" DependsOnTargets="Test;Package">
     <UploadToGoogleCode
+    UserName="$(GCUsername)"
+    Password="$(GCPassword)"
+    ProjectName="$(GCProjectName)"
+    LocalFile="$(PackageDir)\$(PackageSrcZipFile)"
+    TargetFileName="$(PackageSrcZipFile)"
+    Summary="Simple.Net Telerik Extensions v$(ProductVersion).$(BuildTag) for $(BuildTarget) (Source)"
+    Labels="Nightly;Type-Package"
+        />
+
+    <UploadToGoogleCode
      UserName="$(GCUsername)"
      Password="$(GCPassword)"
      ProjectName="$(GCProjectName)"
@@ -122,17 +132,5 @@
      Summary="Simple.Net Telerik Extensions v$(ProductVersion).$(BuildTag) for $(BuildTarget)"
      Labels="Nightly;Type-Package"
       />
-
-    <UploadToGoogleCode
-     UserName="$(GCUsername)"
-     Password="$(GCPassword)"
-     ProjectName="$(GCProjectName)"
-     LocalFile="$(PackageDir)\$(PackageSrcZipFile)"
-     TargetFileName="$(PackageSrcZipFile)"
-     Summary="Simple.Net Telerik Extensions v$(ProductVersion).$(BuildTag) for $(BuildTarget) (Source)"
-     Labels="Nightly;Type-Package"
-        />
-
-
   </Target>
 </Project>
