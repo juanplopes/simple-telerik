@@ -12,7 +12,7 @@
 
     <PackageDir>pkg\</PackageDir>
     <PackageBinZipFile>TelerikExtensions$(BuildTarget)-Bin.zip</PackageBinZipFile>
-    <PackageSrcZipFile>TelerikExtensions$(BuildTarget)-Src.zip</PackageSrcZipFile>
+    <PackageSrcZipFile>TelerikExtensions-Src.zip</PackageSrcZipFile>
 
     <ProductVersion>1.0</ProductVersion>
 
@@ -83,6 +83,17 @@
       <PackageItems Include="$(BuildDir)\Content\**" Exclude="$(BuildDir)\**\_svn\**;$(BuildDir)\**\.svn\**"/>
     </ItemGroup>
 
+    <MakeDir Directories="$(PackageDir)"/>
+
+    <Delete Files="$(PackageDir)\$(PackageBinZipFile)"/>
+    <Zip Files="@(PackageItems)" ZipFileName="$(PackageDir)\$(PackageBinZipFile)" WorkingDirectory="$(BuildDir)"/>
+
+
+    <Delete Files="$(PackageDir)\$(PackageSrcZipFile)"/>
+    <Zip Files="@(ZipSrcDir)" ZipFileName="$(PackageDir)\$(PackageSrcZipFile)" WorkingDirectory="$(MSBuildProjectDirectory)"/>
+  </Target>
+
+  <Target Name="PackageSource">
     <ItemGroup>
       <ExcludeSrcDir Include=".\**\pkg\**"/>
       <ExcludeSrcDir Include=".\**\bin\**"/>
@@ -97,32 +108,13 @@
       <ZipSrcDir Include=".\**\*" Exclude="@(ExcludeSrcDir)" />
     </ItemGroup>
 
-    <PropertyGroup>
-      <ZipSrcFile>$(BuildDir)\lstester-$(ProductVersion).$(BuildTag)-source.zip</ZipSrcFile>
-    </PropertyGroup>
-
-
     <MakeDir Directories="$(PackageDir)"/>
 
-    <Delete Files="$(PackageDir)\$(PackageBinZipFile)"/>
-    <Zip Files="@(PackageItems)" ZipFileName="$(PackageDir)\$(PackageBinZipFile)" WorkingDirectory="$(BuildDir)"/>
-
-
-  <Delete Files="$(PackageDir)\$(PackageSrcZipFile)"/>
-    <Zip Files="@(PackageItems)" ZipFileName="$(PackageDir)\$(PackageSrcZipFile)" WorkingDirectory="$(MSBuildProjectDirectory)"/>
+    <Delete Files="$(PackageDir)\$(PackageSrcZipFile)"/>
+    <Zip Files="@(ZipSrcDir)" ZipFileName="$(PackageDir)\$(PackageSrcZipFile)" WorkingDirectory="$(MSBuildProjectDirectory)"/>
   </Target>
 
   <Target Name="Publish" DependsOnTargets="Test;Package">
-    <UploadToGoogleCode
-    UserName="$(GCUsername)"
-    Password="$(GCPassword)"
-    ProjectName="$(GCProjectName)"
-    LocalFile="$(PackageDir)\$(PackageSrcZipFile)"
-    TargetFileName="$(PackageSrcZipFile)"
-    Summary="Simple.Net Telerik Extensions v$(ProductVersion).$(BuildTag) for $(BuildTarget) (Source)"
-    Labels="Nightly;Type-Package"
-        />
-
     <UploadToGoogleCode
      UserName="$(GCUsername)"
      Password="$(GCPassword)"
@@ -132,5 +124,18 @@
      Summary="Simple.Net Telerik Extensions v$(ProductVersion).$(BuildTag) for $(BuildTarget)"
      Labels="Nightly;Type-Package"
       />
+  </Target>
+
+  <Target Name="PublishSource" DependsOnTargets="PackageSource">
+    <UploadToGoogleCode
+      UserName="$(GCUsername)"
+      Password="$(GCPassword)"
+      ProjectName="$(GCProjectName)"
+      LocalFile="$(PackageDir)\$(PackageSrcZipFile)"
+      TargetFileName="$(PackageSrcZipFile)"
+      Summary="Simple.Net Telerik Extensions v$(ProductVersion).$(BuildTag) for $(BuildTarget) (Source)"
+      Labels="Nightly;Type-Package"
+              />
+
   </Target>
 </Project>
