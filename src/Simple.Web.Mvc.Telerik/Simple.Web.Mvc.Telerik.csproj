@@ -71,7 +71,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\telerik\Source\Telerik.Web.Mvc\Telerik.Web.Mvc.csproj">
+    <ProjectReference Include="..\..\telerik\Telerik.Web.Mvc\Telerik.Web.Mvc.csproj">
       <Project>{A7F7C110-D7F0-49B7-8DDA-FD2D1CC6F3B1}</Project>
       <Name>Telerik.Web.Mvc</Name>
     </ProjectReference>

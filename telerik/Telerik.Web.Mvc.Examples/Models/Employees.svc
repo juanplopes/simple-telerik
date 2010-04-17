@@ -1,1 +1,0 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="Telerik.Web.Mvc.Examples.Models.EmployeesWcf" CodeBehind="Employees.svc.cs" %>

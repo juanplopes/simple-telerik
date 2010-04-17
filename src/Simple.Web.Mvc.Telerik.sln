@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simple.Web.Mvc.Telerik.Test
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Telerik", "Telerik", "{D048AA7A-650D-4151-9CA2-FFA5DCC75C6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telerik.Web.Mvc", "..\telerik\Source\Telerik.Web.Mvc\Telerik.Web.Mvc.csproj", "{A7F7C110-D7F0-49B7-8DDA-FD2D1CC6F3B1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telerik.Web.Mvc", "..\telerik\Telerik.Web.Mvc\Telerik.Web.Mvc.csproj", "{A7F7C110-D7F0-49B7-8DDA-FD2D1CC6F3B1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

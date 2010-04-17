@@ -1,2 +1,0 @@
-<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl" %>
-<p>The client-side code of the Telerik Extensions for ASP.NET MVC is based on the open source and Microsoft-supported jQuery JavaScript library.  By using jQuery, the Telerik Extensions minimize their client-side footprint and draw on the power of jQuery for advanced visual effects as well as for an easy and reliable way to work with HTML elements.</p>
