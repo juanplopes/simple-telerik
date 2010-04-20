@@ -49,7 +49,10 @@ namespace Simple.Web.Mvc.Telerik.Sample
                 exp.Create(true, true);
 
                 using (Simply.Do.EnterContext())
+                {
                     UserSample.Init();
+                    GroupSample.Init();
+                }
             }
 
             RegisterRoutes(RouteTable.Routes);

@@ -22,6 +22,7 @@ namespace Simple.Web.Mvc.Telerik.Sample.Controllers
         [GridAction(EnableCustomBinding = true)]
         public ActionResult Index(GridCommand command)
         {
+            var user = TUser.List(x => x.Groups.Any(y => y.Name == "grupo0"));
             return View(command.List<TUser>(30));
         }
 
@@ -37,5 +38,5 @@ namespace Simple.Web.Mvc.Telerik.Sample.Controllers
         }
 
     }
-   
+
 }

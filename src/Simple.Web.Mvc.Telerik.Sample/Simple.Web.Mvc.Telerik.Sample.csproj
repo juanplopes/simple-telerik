@@ -129,6 +129,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\HtmlHelperExtensions.cs" />
+    <Compile Include="Model\GroupSample.cs" />
+    <Compile Include="Model\TGroupService.cs" />
+    <Compile Include="Model\ITGroupService.cs" />
+    <Compile Include="Model\TGroup.cs" />
     <Compile Include="Model\ITUserService.cs" />
     <Compile Include="Model\TUser.cs" />
     <Compile Include="Model\TUserService.cs" />

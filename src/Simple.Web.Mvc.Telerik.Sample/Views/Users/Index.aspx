@@ -22,8 +22,10 @@
             columns.Bound(o => o.BirthDate).Title("Data de Nascimento").Format("{0:dd/MM/yyyy}");
             columns.Bound(o => o.Wage).Title("Salário").Format("{0:C2}");
             columns.Bound(o => o.Height).Title("Altura").Format("{0:F2}");
-            columns.Bound(o => o.Weight).Title("Peso").Format("{0:F2}");            
+            columns.Bound(o => o.Weight).Title("Peso").Format("{0:F2}");
+            columns.Bound(o => o.Groups).Title("Grupos");    
         })
+            
 
     %>
 </asp:Content>
