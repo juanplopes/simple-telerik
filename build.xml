@@ -87,10 +87,6 @@
 
     <Delete Files="$(PackageDir)\$(PackageBinZipFile)"/>
     <Zip Files="@(PackageItems)" ZipFileName="$(PackageDir)\$(PackageBinZipFile)" WorkingDirectory="$(BuildDir)"/>
-
-
-    <Delete Files="$(PackageDir)\$(PackageSrcZipFile)"/>
-    <Zip Files="@(ZipSrcDir)" ZipFileName="$(PackageDir)\$(PackageSrcZipFile)" WorkingDirectory="$(MSBuildProjectDirectory)"/>
   </Target>
 
   <Target Name="PackageSource">
