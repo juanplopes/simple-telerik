@@ -11,19 +11,22 @@ using FluentNHibernate.Cfg.Db;
 
 namespace Simple.Web.Mvc.Telerik.Sample.Config
 {
-    public class Default : ConfigDef
+    public class Configurator : ConfigDef
     {
-        public Default() : base(Development) { }
+        public Configurator() : base(Development) { }
 
-        public override void ConfigClient()
+
+        public override ConfigDef ConfigClient()
         {
             Config(x => x.DefaultHost());
+            return this;
         }
 
-        public override void ConfigServer()
+        public override ConfigDef ConfigServer()
         {
             Config(x => x.NHibernate().FromXmlString(ConfigSource.NHibernate));
-            Config(x => x.MappingFromAssemblyOf<Default>());
+            Config(x => x.MappingFromAssemblyOf<Configurator>());
+            return this;
         }
 
         protected override void InitLocations(FileLocator paths)

@@ -118,7 +118,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ConfigSource.resx</DependentUpon>
     </Compile>
-    <Compile Include="Config\Default.cs" />
+    <Compile Include="Config\Configurator.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Default.aspx.cs">

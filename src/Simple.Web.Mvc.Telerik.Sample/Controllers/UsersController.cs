@@ -6,7 +6,6 @@ using System.Web.Mvc;
 using System.Web.Mvc.Ajax;
 using Telerik.Web.Mvc;
 using Simple.Web.Mvc.Telerik;
-using Simple.DataAccess;
 using Simple.Entities;
 using Simple;
 using NHibernate.Linq;

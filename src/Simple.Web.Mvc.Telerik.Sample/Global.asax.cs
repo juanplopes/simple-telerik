@@ -32,7 +32,7 @@ namespace Simple.Web.Mvc.Telerik.Sample
 
         protected void Application_Start()
         {
-            new Default().StartServer<Default>();
+            new Configurator().StartServer<Configurator>();
 
             var cfg = Simply.Do.GetNHibernateConfig();
 
