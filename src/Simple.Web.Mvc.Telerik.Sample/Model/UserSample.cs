@@ -19,13 +19,14 @@ namespace Simple.Web.Mvc.Telerik.Sample.Model
                 decimal wage = Convert.ToDecimal(random.Next(0, 6001));
                 double height = Convert.ToDouble((random.Next(120, 210))) / Convert.ToDouble(100);
                 double weight = (random.Next(500, 1500)) / 10;
+                UserSex sex = (UserSex)(random.Next(1, 3));
 
-                AddUser(name, birthdate, wage, height, weight);
+                AddUser(name, birthdate, wage, height, weight, sex);
             }
 
         }
 
-        public static void AddUser(string name, DateTime birthDate, decimal wage, double height, double weight)
+        public static void AddUser(string name, DateTime birthDate, decimal wage, double height, double weight, UserSex sex)
         {
             TUser user = new TUser();
             user.BirthDate = birthDate;
@@ -33,6 +34,7 @@ namespace Simple.Web.Mvc.Telerik.Sample.Model
             user.Name = name;
             user.Wage = wage;
             user.Weight = weight;
+            user.Sex = sex;
 
             user.SaveOrUpdate();
         }

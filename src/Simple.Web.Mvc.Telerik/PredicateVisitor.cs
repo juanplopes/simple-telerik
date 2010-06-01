@@ -115,6 +115,10 @@ namespace Simple.Web.Mvc.Telerik
                     type = type.GetGenericArguments().First();
                     value = property.Type.GetConstructor(new[] { type }).Invoke(new[] { Convert.ChangeType(value, type) });
                 }
+                else if (type.IsEnum)
+                {
+                    value = Enum.ToObject(type, int.Parse(value.ToString()));
+                }
                 else
                 {
                     value = Convert.ChangeType(value, type);

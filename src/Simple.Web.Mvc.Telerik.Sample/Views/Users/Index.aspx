@@ -23,6 +23,7 @@
             columns.Bound(o => o.Wage).Title("Salário").Format("{0:C2}");
             columns.Bound(o => o.Height).Title("Altura").Format("{0:F2}");
             columns.Bound(o => o.Weight).Title("Peso").Format("{0:F2}");
+            columns.Bound(o => o.Sex).Title("Sexo");
             columns.Bound(o => o.Groups).Title("Grupos");    
         })
             

@@ -128,6 +128,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\EnumHelpers.cs" />
     <Compile Include="Helpers\HtmlHelperExtensions.cs" />
     <Compile Include="Model\GroupSample.cs" />
     <Compile Include="Model\TGroupService.cs" />
@@ -137,6 +138,7 @@
     <Compile Include="Model\TUser.cs" />
     <Compile Include="Model\TUserService.cs" />
     <Compile Include="Model\UserSample.cs" />
+    <Compile Include="Model\UserSex.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
