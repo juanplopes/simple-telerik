@@ -18,7 +18,6 @@ namespace Simple.Web.Mvc.Telerik.Sample.Model
         public virtual Double? Height { get; set; }
         public virtual Double? Weight { get; set; }
         public virtual UserSex Sex { get; set; }
-        public virtual IList<TGroup> Groups { get; set; }
 
 
         static TUser()
@@ -44,7 +43,6 @@ namespace Simple.Web.Mvc.Telerik.Sample.Model
                 Map(x => x.Height);
                 Map(x => x.Weight);
                 Map(x => x.Sex);
-                HasManyToMany(x => x.Groups);
             }
         }
 
