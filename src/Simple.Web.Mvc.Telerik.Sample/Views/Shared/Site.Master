@@ -8,8 +8,8 @@
     </title>
     <link href="../../Content/Site.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/SystemPage.css" rel="stylesheet" type="text/css" />
-    <%= Html.Stylesheet("Telerik/telerik.common.min.css")%>
-    <%= Html.Stylesheet("Telerik/telerik.windows7.min.css")%>
+    <%= Html.Stylesheet("2010.2.825/telerik.common.min.css")%>
+    <%= Html.Stylesheet("2010.2.825/telerik.windows7.min.css")%>
 </head>
 <body>
     <div class="page">

@@ -32,7 +32,7 @@ public static class HtmlHelperExtensions
         TagBuilder builder = new TagBuilder("link");
         builder.MergeAttribute("rel", "stylesheet");
         builder.MergeAttribute("type", "text/css");
-        builder.MergeAttribute("href", GetAbsolutePath(HttpContext.Current, "Content/StyleSheets/{0}".FormatWith(fileName)));
+        builder.MergeAttribute("href", GetAbsolutePath(HttpContext.Current, "Content/{0}".FormatWith(fileName)));
         return builder.ToString();
     }
 
