@@ -56,11 +56,11 @@
 
   <Target Name="Build" DependsOnTargets ="GenerateAssemblyInfo">
     <MSBuild Projects="@(SolutionFile)" Properties="Configuration=$(Configuration);Platform=$(Platform);OutputPath=$(BuildDir2)"/>
-    <ItemGroup>
-      <DeleteItems Include="$(BuildDir)\**\_svn"/>
-      <DeleteItems Include="$(BuildDir)\**\.svn"/>
-    </ItemGroup>
-	<DeleteTree Directories="@(DeleteItems)" />
+    <CallTarget Targets="DeleteOthers"/>
+  </Target>
+
+  <Target Name="DeleteOthers">
+    <DeleteTree Directories="$(BuildDir)\**\?svn" />
   </Target>
 
   <Target Name="Rebuild">
