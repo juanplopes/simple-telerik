@@ -17,7 +17,7 @@ namespace Simple.Web.Mvc.Telerik.Tests
             var cmd = GridCommand.Parse(0, 0, null, null, filter);
             var expr = GridParser.Parse<ClassA>(cmd, 50);
 
-            Assert.AreEqual("q => q.Where(x => (x.PropString.ToUpper().StartsWith(\"A\") && (x.PropB.PropDateTimeNullable > 12/6/1984 12:00:00 AM)))", expr.Map.ToString());
+            Assert.AreEqual("q => q.Where(x => (x.PropString.ToUpper().StartsWith(\"A\") && (x.PropB.PropDateTimeNullable > 12/6/1984 12:00:00 PM)))", expr.Map.ToString());
             Assert.AreEqual("q => q.Take(50)", expr.Reduce.ToString());
         }
 
@@ -45,12 +45,12 @@ namespace Simple.Web.Mvc.Telerik.Tests
         public void CanGenerateExpresionWithSortAndFilter()
         {
             var sort = "PropInt-asc~PropB.PropDateTimeNullable-desc";
-            var filter = "startswith(PropString,'a')~and~PropB.PropDateTimeNullable~gt~datetime'1984-12-06T12-00-00'";
+            var filter = "startswith(PropString,'a')~and~PropB.PropDateTimeNullable~gt~datetime'1984-12-06T11-00-00'";
 
             var cmd = GridCommand.Parse(0, 0, sort, null, filter);
             var expr = GridParser.Parse<ClassA>(cmd, 50);
 
-            Assert.AreEqual("q => q.Where(x => (x.PropString.ToUpper().StartsWith(\"A\") && (x.PropB.PropDateTimeNullable > 12/6/1984 12:00:00 AM))).OrderBy(x => x.PropInt).ThenByDescending(x => x.PropB.PropDateTimeNullable)", expr.Map.ToString());
+            Assert.AreEqual("q => q.Where(x => (x.PropString.ToUpper().StartsWith(\"A\") && (x.PropB.PropDateTimeNullable > 12/6/1984 11:00:00 AM))).OrderBy(x => x.PropInt).ThenByDescending(x => x.PropB.PropDateTimeNullable)", expr.Map.ToString());
             Assert.AreEqual("q => q.Take(50)", expr.Reduce.ToString());
         }
 

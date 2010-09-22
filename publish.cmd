@@ -8,6 +8,5 @@ set GC_PASS=%~2
 if "%GC_PASS%"=="" set /p GC_PASS="Password: "
 
 call build PublishSource "/p:GCUsername=%GC_USER%" "/p:GCPassword=%GC_PASS%"
-call build Publish "/p:BuildTarget=MVC2" "/p:GCUsername=%GC_USER%" "/p:GCPassword=%GC_PASS%"
-call build Publish "/p:BuildTarget=MVC1" "/p:GCUsername=%GC_USER%" "/p:GCPassword=%GC_PASS%"
+call build Publish "/p:GCUsername=%GC_USER%" "/p:GCPassword=%GC_PASS%"
 endlocal

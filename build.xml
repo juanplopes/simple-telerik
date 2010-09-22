@@ -2,31 +2,22 @@
   <PropertyGroup>
     <GCProjectName>simple-telerik-extensions</GCProjectName>
 
-    <BuildTarget>MVC1</BuildTarget>
-
-    <BuildDir>build\$(BuildTarget)\</BuildDir>
+    <BuildDir>build\</BuildDir>
     <BuildDir2>$(MSBuildProjectDirectory)\$(BuildDir)</BuildDir2>
 
     <SourceDir>src\</SourceDir>
     <KeyFilePath>$(SourceDir)\Simple.Web.Mvc.Telerik.snk</KeyFilePath>
 
     <PackageDir>pkg\</PackageDir>
-    <PackageBinZipFile>TelerikExtensions$(BuildTarget)-Bin.zip</PackageBinZipFile>
+    <PackageBinZipFile>TelerikExtensions-Bin.zip</PackageBinZipFile>
     <PackageSrcZipFile>TelerikExtensions-Src.zip</PackageSrcZipFile>
 
     <ProductVersion>1.0</ProductVersion>
 
     <TestAssembly>$(BuildDir)\Simple.Web.Mvc.Telerik.Tests.dll</TestAssembly>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(BuildTarget)' == 'MVC1' ">
     <Configuration>Release</Configuration>
     <Platform>Any CPU</Platform>
-  </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(BuildTarget)' == 'MVC2' ">
-    <Configuration>Release MVC2 NET35</Configuration>
-    <Platform>Any CPU</Platform>
   </PropertyGroup>
 
   <ItemGroup>
@@ -65,6 +56,11 @@
 
   <Target Name="Build" DependsOnTargets ="GenerateAssemblyInfo">
     <MSBuild Projects="@(SolutionFile)" Properties="Configuration=$(Configuration);Platform=$(Platform);OutputPath=$(BuildDir2)"/>
+    <ItemGroup>
+      <DeleteItems Include="$(BuildDir)\**\_svn"/>
+      <DeleteItems Include="$(BuildDir)\**\.svn"/>
+    </ItemGroup>
+	<DeleteTree Directories="@(DeleteItems)" />
   </Target>
 
   <Target Name="Rebuild">
@@ -117,7 +113,7 @@
      ProjectName="$(GCProjectName)"
      LocalFile="$(PackageDir)\$(PackageBinZipFile)"
      TargetFileName="$(PackageBinZipFile)"
-     Summary="Simple.Net Telerik Extensions v$(ProductVersion).$(BuildTag) for $(BuildTarget)"
+     Summary="Simple.Net Telerik Extensions v$(ProductVersion).$(BuildTag)"
      Labels="Nightly;Type-Package"
       />
   </Target>
@@ -129,7 +125,7 @@
       ProjectName="$(GCProjectName)"
       LocalFile="$(PackageDir)\$(PackageSrcZipFile)"
       TargetFileName="$(PackageSrcZipFile)"
-      Summary="Simple.Net Telerik Extensions v$(ProductVersion).$(BuildTag) for $(BuildTarget) (Source)"
+      Summary="Simple.Net Telerik Extensions v$(ProductVersion).$(BuildTag) (Source)"
       Labels="Nightly;Type-Package"
               />
 
