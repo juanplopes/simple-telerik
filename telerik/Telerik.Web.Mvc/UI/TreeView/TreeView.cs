@@ -247,18 +247,19 @@ namespace Telerik.Web.Mvc.UI
                 objectWriter.AppendObject("ws", webService);
             }
 
-            objectWriter.Append("onExpand", ClientEvents.OnExpand);
-            objectWriter.Append("onCollapse", ClientEvents.OnCollapse);
-            objectWriter.Append("onSelect", ClientEvents.OnSelect);
-            objectWriter.Append("onLoad", ClientEvents.OnLoad);
-            objectWriter.Append("onError", ClientEvents.OnError);
-            objectWriter.Append("onNodeDragStart", ClientEvents.OnNodeDragStart);
-            objectWriter.Append("onNodeDragging", ClientEvents.OnNodeDragging);
-            objectWriter.Append("onNodeDragCancelled", ClientEvents.OnNodeDragCancelled);
-            objectWriter.Append("onNodeDrop", ClientEvents.OnNodeDrop);
-            objectWriter.Append("onNodeDropped", ClientEvents.OnNodeDropped);
-            objectWriter.Append("onDataBinding", ClientEvents.OnDataBinding);
-            objectWriter.Append("onDataBound", ClientEvents.OnDataBound);
+            objectWriter.AppendClientEvent("onExpand", ClientEvents.OnExpand);
+            objectWriter.AppendClientEvent("onCollapse", ClientEvents.OnCollapse);
+            objectWriter.AppendClientEvent("onSelect", ClientEvents.OnSelect);
+            objectWriter.AppendClientEvent("onLoad", ClientEvents.OnLoad);
+            objectWriter.AppendClientEvent("onError", ClientEvents.OnError);
+            objectWriter.AppendClientEvent("onChecked", ClientEvents.OnChecked);
+            objectWriter.AppendClientEvent("onNodeDragStart", ClientEvents.OnNodeDragStart);
+            objectWriter.AppendClientEvent("onNodeDragging", ClientEvents.OnNodeDragging);
+            objectWriter.AppendClientEvent("onNodeDragCancelled", ClientEvents.OnNodeDragCancelled);
+            objectWriter.AppendClientEvent("onNodeDrop", ClientEvents.OnNodeDrop);
+            objectWriter.AppendClientEvent("onNodeDropped", ClientEvents.OnNodeDropped);
+            objectWriter.AppendClientEvent("onDataBinding", ClientEvents.OnDataBinding);
+            objectWriter.AppendClientEvent("onDataBound", ClientEvents.OnDataBound);
             
             objectWriter.Complete();
             base.WriteInitializationScript(writer);
@@ -268,7 +269,7 @@ namespace Telerik.Web.Mvc.UI
         {
             Guard.IsNotNull(writer, "writer");
 
-            VerifyWorkingConditions();
+            VerifySettings();
 
             if (DragAndDrop.Enabled)
             {
@@ -300,7 +301,7 @@ namespace Telerik.Web.Mvc.UI
                         {
                             item.Selected = true;
 
-                            if (!item.Items.IsEmpty() || item.Content != null)
+                            if (!item.Items.IsEmpty() || item.Template.HasValue())
                             {
                                 item.Expanded = true;
                             }
@@ -342,15 +343,22 @@ namespace Telerik.Web.Mvc.UI
             {
                 if (item.IsAccessible(Authorization, ViewContext))
                 {
-                    IHtmlNode itemTag = builder.ItemTag(item).AppendTo(parentTag);
+                    var hasAccessibleChildren = item.Items.Any() && item.Items.IsAccessible(Authorization, ViewContext);
+
+                    IHtmlNode itemTag = builder.ItemTag(item, hasAccessibleChildren).AppendTo(parentTag);
 
                     builder.ItemInnerContent(item).AppendTo(itemTag.Children[0]);
 
-                    if (item.Content != null)
+                    if (item.LoadOnDemand || ShowCheckBox || !item.Value.IsNullOrEmpty())
+                    {
+                        builder.ItemHiddenInputValue(item).AppendTo(itemTag.Children[0]);   
+                    }
+
+                    if (item.Template.HasValue())
                     {
                         builder.ItemContentTag(item).AppendTo(itemTag);
                     }
-                    else if (!item.Items.IsEmpty() && item.Items.IsAccessible(Authorization, ViewContext))
+                    else if (hasAccessibleChildren)
                     {
                         IHtmlNode ul = builder.ChildrenTag(item).AppendTo(itemTag);
 
@@ -386,7 +394,7 @@ namespace Telerik.Web.Mvc.UI
             item.Items.Each(HighlightSelectedItem);
         }
 
-        private void VerifyWorkingConditions()
+        private void VerifySettings()
         {
             if (Ajax.Enabled && WebService.Enabled)
             {

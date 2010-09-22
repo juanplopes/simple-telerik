@@ -5,17 +5,10 @@
 
 namespace Telerik.Web.Mvc.UI
 {
-    using System;
-    using System.IO;
-    using System.Linq;
-    using System.Web.UI;
-    using System.Web.Mvc;    
-    using System.Web.Routing;
     using System.Collections.Generic;
+    using System.Web.Mvc;
+    using System.Web.Routing;
 
-    using Extensions;
-    using Infrastructure;
-    using Telerik.Web.Mvc.Resources;
 
     public class TextBoxBase<T> : ViewComponentBase, ITextbox<T> where T : struct
     {
@@ -57,13 +50,13 @@ namespace Telerik.Web.Mvc.UI
             set;
         }
 
-        public T MinValue
+        public T? MinValue
         {
             get;
             set;
         }
 
-        public T MaxValue
+        public T? MaxValue
         {
             get;
             set;
@@ -116,5 +109,14 @@ namespace Telerik.Web.Mvc.UI
             get;
             private set;
         }
+        
+#if MVC2
+        protected override void EnsureRequired()
+        {
+            this.Name = this.Name ?? ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName(string.Empty);
+            base.EnsureRequired();
+        }
+#endif
+
     }
 }

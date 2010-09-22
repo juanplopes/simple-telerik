@@ -5,13 +5,10 @@
 
 namespace Telerik.Web.Mvc.UI
 {
+    using System.Collections.Generic;
     using System.Web.Mvc;
-    using System.Web.Script.Serialization;
-
     using Extensions;
     using Infrastructure;
-    using System;
-    using System.Collections.Generic;
 
     public class TreeViewHtmlBuilder : NavigationHtmlBuilderBase<TreeView, TreeViewItem>, ITreeViewHtmlBuilder
     {
@@ -40,7 +37,7 @@ namespace Telerik.Web.Mvc.UI
                 .ToggleAttribute("style", "display:none", !item.Expanded);
         }
 
-        public IHtmlNode ItemTag(TreeViewItem item)
+        public IHtmlNode ItemTag(TreeViewItem item, bool hasAccessibleChildren)
         {
             IHtmlNode li = new HtmlTag("li")
                 .Attributes(item.HtmlAttributes);
@@ -63,7 +60,7 @@ namespace Telerik.Web.Mvc.UI
                 .ToggleClass(UIPrimitives.Middle, item.PreviousSibling != null && item.NextSibling != null)
                 .AppendTo(li);
 
-            if (((Component.Ajax.Enabled || Component.WebService.Enabled) && item.LoadOnDemand) || item.Items.Count > 0 || item.Content != null)
+            if (item.LoadOnDemand || hasAccessibleChildren || item.Template.HasValue())
             {
                 new HtmlTag("span")
                         .AddClass(UIPrimitives.Icon)
@@ -73,9 +70,10 @@ namespace Telerik.Web.Mvc.UI
                         .ToggleClass("t-minus-disabled", !item.Enabled && item.Expanded)
                         .AppendTo(div);
             }
-            if (Component.ShowCheckBox)
+
+            if (Component.ShowCheckBox && item.Checkable)
             {
-                string checkedItemNamePrefix = "checkedNodes[{0}].";
+                string checkedItemNamePrefix = Component.Name + "_checkedNodes[{0}].";
 
                 IHtmlNode chkBoxWrapperTag = new HtmlTag("span")
                     .ToggleClass(UIPrimitives.DisabledState, !item.Enabled)
@@ -96,12 +94,12 @@ namespace Telerik.Web.Mvc.UI
 
                 new HtmlTag("input", TagRenderMode.SelfClosing)
                     .AddClass(UIPrimitives.Input)
-                    .Attributes(new { type = "hidden", name = "checkedNodes.Index", value = string.Join(":", indexes.ToArray()) })
+                    .Attributes(new { type = "hidden", name = Component.Name + "_checkedNodes.Index", value = string.Join(":", indexes.ToArray()) })
                     .AppendTo(chkBoxWrapperTag);
                 
                 IHtmlNode chkBoxTag = new HtmlTag("input", TagRenderMode.SelfClosing)
                     .AddClass(UIPrimitives.Input)
-                    .Attributes(new { name = checkedItemNamePrefix + "Checked", type = "checkbox", value = item.Checked })
+                    .Attributes(new { name = checkedItemNamePrefix + "Checked", type = "checkbox", value = item.Checked, title = checkedItemNamePrefix })
                     .AppendTo(chkBoxWrapperTag);
 
                 if (item.Checked)
@@ -109,23 +107,15 @@ namespace Telerik.Web.Mvc.UI
                     chkBoxTag.Attribute("checked", "checked");
 
                     new HtmlTag("input", TagRenderMode.SelfClosing)
-                    .AddClass(UIPrimitives.Input)
-                    .Attributes(new { type = "hidden", name = checkedItemNamePrefix + "Text", value = item.Text })
-                    .AppendTo(chkBoxWrapperTag);
+                        .AddClass(UIPrimitives.Input)
+                        .Attributes(new { type = "hidden", name = checkedItemNamePrefix + "Text", value = item.Text })
+                        .AppendTo(chkBoxWrapperTag);
 
                     new HtmlTag("input", TagRenderMode.SelfClosing)
                         .AddClass(UIPrimitives.Input)
                         .Attributes(new { type = "hidden", name = checkedItemNamePrefix + "Value", value = item.Value })
                         .AppendTo(chkBoxWrapperTag);
                 }
-            }
-
-            if (((Component.Ajax.Enabled || Component.WebService.Enabled) && item.LoadOnDemand) || Component.ShowCheckBox)
-            {
-                new HtmlTag("input", TagRenderMode.SelfClosing)
-                    .AddClass(UIPrimitives.Input)
-                    .Attributes(new { type = "hidden", value = item.Value, name = "itemValue" })
-                    .AppendTo(li);
             }
 
             return li;
@@ -149,8 +139,8 @@ namespace Telerik.Web.Mvc.UI
                     tag.Attribute("href", url);
                 }
 
-                tag.Attributes(item.LinkHtmlAttributes);
-                tag.PrependClass(UIPrimitives.Link);
+                tag.Attributes(item.LinkHtmlAttributes)
+                   .PrependClass(UIPrimitives.Link);
             }
 
             if (!string.IsNullOrEmpty(item.ImageUrl))
@@ -166,6 +156,13 @@ namespace Telerik.Web.Mvc.UI
             Text(item).AppendTo(tag);
 
             return tag;
+        }
+
+        public IHtmlNode ItemHiddenInputValue(TreeViewItem item) 
+        {
+            return new HtmlTag("input", TagRenderMode.SelfClosing)
+                 .AddClass(UIPrimitives.Input)
+                 .Attributes(new { type = "hidden", value = item.Value, name = "itemValue" });
         }
 
         public IHtmlNode ItemContentTag(TreeViewItem item)

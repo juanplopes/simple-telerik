@@ -4,10 +4,10 @@
 // All other rights reserved.
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Reflection;
 using Telerik.Web.Mvc.Resources;
-using System.Data;
 
 namespace Telerik.Web.Mvc.Extensions
 {
@@ -306,6 +306,11 @@ namespace Telerik.Web.Mvc.Extensions
             return null;
         }
 
+        internal static string GetName(this Type type)
+        {
+            return type.FullName.Replace(type.Namespace + ".", "");
+        }
+
         internal static object DefaultValue(this Type type)
         {
             if (type.IsValueType)
@@ -371,6 +376,11 @@ namespace Telerik.Web.Mvc.Extensions
         internal static bool IsDataRow(this Type type)
         {
             return type.IsCompatibleWith(typeof(DataRow)) || type.IsCompatibleWith(typeof(DataRowView));
+        }
+
+        internal static bool IsDateTime(this Type type)
+        {
+            return type == typeof(DateTime) || type == typeof(DateTime?);
         }
 
         internal static string ToJavaScriptType(this Type type)

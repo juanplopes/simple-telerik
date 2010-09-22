@@ -45,6 +45,24 @@ namespace Telerik.Web.Mvc
         }
 
         /// <summary>
+        /// Gets or sets the name of the Grid that is populated by the associated action method. Required
+        /// when custom server binding is enabled and the grid query string parameters are prefixed.
+        /// </summary>
+        /// <example>
+        /// <code lang="CS">
+        /// [GridAction(EnableCustomBinding=true, GridName="Employees")]
+        /// public ActionResult Index(GridCommand param)
+        /// {
+        /// }
+        /// </code>
+        /// </example>
+        public string GridName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether custom binding is enabled. Used when implementing custom ajax binding.
         /// </summary>
         /// <value><c>true</c> if custom binding is enabled; otherwise, <c>false</c>. The default value is <c>false</c>.</value>
@@ -62,25 +80,35 @@ namespace Telerik.Web.Mvc
             set;
         }
 
+        private string Prefix(string key)
+        {
+            if (GridName.HasValue())
+            {
+                return GridName + "-" + key;
+            }
+
+            return key;
+        }
+
         public void OnActionExecuting(ActionExecutingContext filterContext)
         {
             if (filterContext.ActionParameters.ContainsKey(ActionParameterName))
             {
                 GridCommand command = new GridCommand
                 {
-                    Page = filterContext.Controller.ValueOf<int>(GridUrlParameters.CurrentPage),
-                    PageSize = filterContext.Controller.ValueOf<int>(GridUrlParameters.PageSize)
+                    Page = filterContext.Controller.ValueOf<int>(Prefix(GridUrlParameters.CurrentPage)),
+                    PageSize = filterContext.Controller.ValueOf<int>(Prefix(GridUrlParameters.PageSize))
                 };
 
-                string orderBy = filterContext.Controller.ValueOf<string>(GridUrlParameters.OrderBy);
+                string orderBy = filterContext.Controller.ValueOf<string>(Prefix(GridUrlParameters.OrderBy));
 
                 command.SortDescriptors.AddRange(GridDescriptorSerializer.Deserialize<SortDescriptor>(orderBy));
                 
-                string filter = filterContext.Controller.ValueOf<string>(GridUrlParameters.Filter);
+                string filter = filterContext.Controller.ValueOf<string>(Prefix(GridUrlParameters.Filter));
 
                 command.FilterDescriptors.AddRange(FilterDescriptorFactory.Create(filter));
 
-                string groupBy = filterContext.Controller.ValueOf<string>(GridUrlParameters.GroupBy);
+                string groupBy = filterContext.Controller.ValueOf<string>(Prefix(GridUrlParameters.GroupBy));
 
                 command.GroupDescriptors.AddRange(GridDescriptorSerializer.Deserialize<GroupDescriptor>(groupBy));
 

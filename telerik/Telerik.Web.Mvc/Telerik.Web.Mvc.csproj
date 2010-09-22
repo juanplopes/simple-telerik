@@ -12,10 +12,6 @@
     <AssemblyName>Telerik.Web.Mvc</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-     
-     
-     
-     
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\SharedFiles\Telerik.Web.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
@@ -38,7 +34,6 @@
     <DefineConstants>TRACE;CODE_ANALYSIS;TELERIK_DATA;MVC1</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
     <DocumentationFile>bin\Release\Telerik.Web.Mvc.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug MVC2 NET35|AnyCPU' ">
@@ -89,18 +84,19 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.XML" />
-    <Reference Include="System.Runtime.Serialization, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
+    <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <Choose>
     <When Condition=" '$(Configuration)|$(Platform)' == 'Debug MVC2 NET35|AnyCPU' Or '$(Configuration)|$(Platform)' == 'Release MVC2 NET35|AnyCPU'">
       <ItemGroup>
         <Reference Include="System.Web.Mvc, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+        <Reference Include="System.Web.Mvc, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+          <SpecificVersion>False</SpecificVersion>
+          <HintPath>..\..\lib\System.Web.Mvc.dll</HintPath>
+        </Reference>
       </ItemGroup>
     </When>
     <Otherwise>
-      <ItemGroup>
-        <Reference Include="System.Web.Mvc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-      </ItemGroup>
     </Otherwise>
   </Choose>
   <ItemGroup>
@@ -109,28 +105,122 @@
     </Compile>
     <Compile Include="Extensions\CustomAttributeProviderExtensions.cs" />
     <Compile Include="Extensions\HttpRequestBaseExtensions.cs" />
+    <Compile Include="Extensions\ListSortDirectionExtensions.cs" />
     <Compile Include="Extensions\QueryProviderExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Extensions\ContentContainerExtensions.cs" />
     <Compile Include="Extensions\ExpressionExtensions.cs" />
     <Compile Include="Extensions\HtmlTextWriterExtensions.cs" />
     <Compile Include="Extensions\HtmlAttributesExtensions.cs" />
+    <Compile Include="Infrastructure\DynamicTypeBuilder.cs" />
+    <Compile Include="Infrastructure\FluentDictionary.cs" />
     <Compile Include="Infrastructure\Implementation\ClassFactory.cs" />
     <Compile Include="Infrastructure\Implementation\DynamicClass.cs" />
     <Compile Include="Infrastructure\Implementation\DynamicProperty.cs" />
     <Compile Include="Infrastructure\Implementation\ExpressionConstants.cs" />
     <Compile Include="Infrastructure\ILocalizationService.cs" />
     <Compile Include="Infrastructure\Implementation\LocalizationService.cs" />
-    <Compile Include="Infrastructure\LocalizedStrings.cs" />
+    <Compile Include="Infrastructure\ViewComponentLocalization.cs" />
     <Compile Include="Infrastructure\Implementation\Signature.cs" />
+    <Compile Include="Resources\EditorLocalization.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditorLocalization.resx</DependentUpon>
+    </Compile>
+    <Compile Include="UI\AutoComplete\AutoComplete.cs" />
+    <Compile Include="UI\AutoComplete\AutoCompleteHtmlBuilder.cs" />
+    <Compile Include="UI\AutoComplete\Fluent\AutoCompleteBuilder.cs" />
+    <Compile Include="UI\AutoComplete\Fluent\AutoCompleteMultipleValuesSettingsBuilder.cs" />
+    <Compile Include="UI\AutoComplete\IAutoCompleteHtmlBuilder.cs" />
+    <Compile Include="UI\AutoComplete\Settings\AutoCompleteMultipleValuesSettings.cs" />
+    <Compile Include="UI\ComboBox\ComboBox.cs" />
+    <Compile Include="UI\ComboBox\ComboBoxHtmlBuilder.cs" />
+    <Compile Include="UI\AutoComplete\AutoCompleteFilterMode.cs" />
+    <Compile Include="UI\AutoComplete\AutoCompleteDataBindingConfiguration.cs" />
+    <Compile Include="UI\ComboBox\Fluent\ComboBoxFilterSettingsBuilder.cs" />
+    <Compile Include="UI\ComboBox\Fluent\ComboBoxBuilder.cs" />
+    <Compile Include="UI\AutoComplete\Fluent\AutoCompleteBindingSettingsBuilder.cs" />
+    <Compile Include="UI\AutoComplete\Fluent\AutoCompleteFilterSettingsBuilder.cs" />
+    <Compile Include="UI\AutoComplete\Fluent\AutoCompleteDataBindingConfigurationBuilder.cs" />
+    <Compile Include="UI\AutoComplete\Fluent\AutoCompleteWebServiceBindingSettingsBuilder.cs" />
+    <Compile Include="UI\AutoComplete\Settings\AutoCompleteBindingSettings.cs" />
+    <Compile Include="UI\AutoComplete\Settings\AutoCompleteFilterSettings.cs" />
+    <Compile Include="UI\ClientEvent.cs" />
+    <Compile Include="UI\ComboBox\IComboBoxRenderable.cs" />
+    <Compile Include="UI\ComboBox\Settings\ComboBoxFilterSettings.cs" />
+    <Compile Include="UI\ComponentBuilderBase.cs" />
+    <Compile Include="UI\DropDownList\Fluent\DropDownListBindingSettingsBuilder.cs" />
+    <Compile Include="UI\DropDownList\Fluent\DropDownListWebServiceBindingSettingsBuilder.cs" />
+    <Compile Include="UI\DropDown\IDropDownRenderable.cs" />
+    <Compile Include="UI\DropDown\IDataBoundDropDown.cs" />
+    <Compile Include="UI\DropDown\IDropDownDataBindingConfiguration.cs" />
+    <Compile Include="UI\DropDown\DropDownExtentions.cs" />
+    <Compile Include="UI\DropDown\DropDownItem.cs" />
+    <Compile Include="UI\DropDownList\DropDownList.cs" />
+    <Compile Include="UI\DropDown\DropDownBindingSettingsExtensions.cs" />
+    <Compile Include="UI\DropDown\DropDownClientEvents.cs" />
+    <Compile Include="UI\DropDownList\DropDownListDataBindingConfiguration.cs" />
+    <Compile Include="UI\DropDownList\DropDownListHtmlBuilder.cs" />
+    <Compile Include="UI\DropDownList\Fluent\DropDownListBuilder.cs" />
+    <Compile Include="UI\DropDown\Fluent\DropDownBindingSettingsBuilder.cs" />
+    <Compile Include="UI\DropDown\Fluent\DropDownClientEventsBuilder.cs" />
+    <Compile Include="UI\DropDownList\Fluent\DropDownListDataBindingConfigurationBuilder.cs" />
+    <Compile Include="UI\DropDown\Fluent\DropDownItemBuilder.cs" />
+    <Compile Include="UI\DropDown\Fluent\DropDownBuilderBase.cs" />
+    <Compile Include="UI\DropDown\Fluent\DropDownWebServiceBindingSettingsBuilder.cs" />
+    <Compile Include="UI\DropDown\Fluent\DropDownItemFactory.cs" />
+    <Compile Include="UI\DropDown\IDropDown.cs" />
+    <Compile Include="UI\DropDown\IDropDownHtmlBuilder.cs" />
+    <Compile Include="UI\DropDown\Settings\DropDownBindingSettings.cs" />
+    <Compile Include="UI\DropDown\Settings\DropDownRequestSettings.cs" />
+    <Compile Include="UI\DropDown\Settings\IDropDownBindingSettings.cs" />
+    <Compile Include="UI\Editor\EditorLocalization.cs" />
+    <Compile Include="UI\Editor\Fluent\EditorCustomToolBuilder.cs" />
+    <Compile Include="UI\Editor\Html\EditorColorPickerHtmlBuilder.cs" />
+    <Compile Include="UI\Editor\Html\EditorCustomToolHtmlBuilder.cs" />
+    <Compile Include="UI\Editor\IEditorTool.cs" />
+    <Compile Include="UI\Editor\Tools\EditorColorPicker.cs" />
+    <Compile Include="UI\Editor\Tools\EditorCustomTool.cs" />
+    <Compile Include="UI\Editor\Tools\EditorSelectBox.cs" />
+    <Compile Include="UI\Editor\Tools\EditorBreak.cs" />
+    <Compile Include="UI\Editor\EditorDefaultOptions.cs" />
+    <Compile Include="UI\Editor\Tools\EditorDropDown.cs" />
+    <Compile Include="UI\Editor\Tools\EditorButton.cs" />
+    <Compile Include="UI\Editor\EditorClientEvents.cs" />
+    <Compile Include="UI\Editor\Tools\EditorComboBox.cs" />
+    <Compile Include="UI\Editor\Tools\EditorSeparator.cs" />
+    <Compile Include="UI\Editor\Fluent\EditorClientEventsBuilder.cs" />
+    <Compile Include="UI\Editor\Fluent\EditorDropDownItemBuilder.cs" />
+    <Compile Include="UI\Editor\Fluent\EditorSnippetBuilder.cs" />
+    <Compile Include="UI\Editor\Html\EditorBreakHtmlBuilder.cs" />
+    <Compile Include="UI\Editor\Html\EditorComboBoxHtmlBuilder.cs" />
+    <Compile Include="UI\Editor\Html\EditorDropDownHtmlBuilder.cs" />
+    <Compile Include="UI\Editor\Html\EditorSelectBoxHtmlBuilder.cs" />
+    <Compile Include="UI\Editor\Html\EditorSeparatorHtmlBuilder.cs" />
+    <Compile Include="UI\Editor\Html\EditorHtmlBuilder.cs" />
+    <Compile Include="UI\Editor\Editor.cs" />
+    <Compile Include="UI\Editor\Fluent\EditorToolFactory.cs" />
+    <Compile Include="UI\Editor\Html\EditorButtonHtmlBuilder.cs" />
+    <Compile Include="UI\Editor\Html\EditorToolGroupHtmlBuilder.cs" />
+    <Compile Include="UI\Editor\Tools\IEditorListTool.cs" />
+    <Compile Include="UI\Editor\EditorToolGroup.cs" />
+    <Compile Include="UI\Editor\Fluent\EditorBuilder.cs" />
+    <Compile Include="UI\Effects\EffectsBuilderBase.cs" />
     <Compile Include="UI\Effects\IEffectContainer.cs" />
     <Compile Include="UI\Effects\EffectsBuilder.cs" />
     <Compile Include="UI\Effects\Effects.cs" />
     <Compile Include="UI\Effects\EffectsBuilderFactory.cs" />
     <Compile Include="UI\Effects\IEffectsBuilderFactory.cs" />
     <Compile Include="UI\ExpressionBuilder.cs" />
+    <Compile Include="UI\Grid\Commands\GridActionCommandBaseExtensions.cs" />
+    <Compile Include="UI\Grid\GridButtonType.cs" />
+    <Compile Include="UI\Grid\GridDetailRow.cs" />
+    <Compile Include="UI\Grid\GridDetailView.cs" />
+    <Compile Include="UI\Grid\Columns\IGridActionColumn.cs" />
     <Compile Include="UI\Grid\Columns\IGridBoundColumn.cs" />
     <Compile Include="UI\Grid\Columns\IGridColumn.cs" />
+    <Compile Include="UI\Grid\Columns\IGridTemplateColumn.cs" />
+    <Compile Include="UI\Grid\Fluent\GridDetailViewBuilder.cs" />
     <Compile Include="UI\Grid\Fluent\GridFilterComparisonDescriptorBuilder.cs" />
     <Compile Include="UI\Grid\Fluent\GridFilterComparisonDescriptorBuilderBase.cs" />
     <Compile Include="UI\Grid\Fluent\GridFilterCompositeBuilder.cs" />
@@ -141,11 +231,63 @@
     <Compile Include="UI\Grid\Fluent\GridFilterEqualityDescriptorBuilderBase.cs" />
     <Compile Include="UI\Grid\Fluent\GridFilterStringDescriptorBuilder.cs" />
     <Compile Include="UI\Grid\Fluent\GridEditingSettingsBuilder.cs" />
+    <Compile Include="UI\Grid\Fluent\GridResizingSettingsBuilder.cs" />
     <Compile Include="UI\Grid\Fluent\GridTemplateColumnBuilder.cs" />
     <Compile Include="UI\Grid\Fluent\GridSortDescriptorBuilder.cs" />
     <Compile Include="UI\Grid\Fluent\GridSortDescriptorFactory.cs" />
-    <Compile Include="UI\Grid\GridLocalizedStrings.cs" />
+    <Compile Include="UI\Grid\GridDetailViewExtensions.cs" />
+    <Compile Include="UI\Grid\GridEditMode.cs" />
+    <Compile Include="UI\Grid\Html\GridActionCellHtmlBuilder.cs" />
+    <Compile Include="UI\Grid\Html\GridDataCellHtmlBuilder.cs" />
+    <Compile Include="UI\Grid\Html\GridColgroupHtmlBuilder.cs" />
+    <Compile Include="UI\Grid\Html\GridColHtmlBuilder.cs" />
+    <Compile Include="UI\Grid\Html\GridCssClassAdorner.cs" />
+    <Compile Include="UI\Grid\Html\GridDetailRowHtmlBuilder.cs" />
+    <Compile Include="UI\Grid\Html\GridDisplayForCellHtmlBuilder.cs" />
+    <Compile Include="UI\Grid\Html\GridEditorForCellHtmlBuilder.cs" />
+    <Compile Include="UI\Grid\Html\GridEmptyRowHtmlBuilder.cs" />
+    <Compile Include="UI\Grid\Html\GridFormEditRowHtmlBuilder.cs" />
+    <Compile Include="UI\Grid\Html\GridEditRowHtmlBuilder.cs" />
+    <Compile Include="UI\Grid\Html\GridFilterAdorner.cs" />
+    <Compile Include="UI\Grid\Html\GridGroupHeaderHtmlBuilder.cs" />
+    <Compile Include="UI\Grid\Html\GridGroupIndicatorHtmlBuilder.cs" />
+    <Compile Include="UI\Grid\Html\GridGroupRowHtmlBuilder.cs" />
+    <Compile Include="UI\Grid\Html\GridHeaderCellHtmlBuilder.cs" />
+    <Compile Include="UI\Grid\Html\GridHeaderHierarchyAdorner.cs" />
+    <Compile Include="UI\Grid\Html\GridHeaderRowHtmlBuilder.cs" />
+    <Compile Include="UI\Grid\Html\GridHiddenColumnAdorner.cs" />
+    <Compile Include="UI\Grid\Html\GridMasterRowAdorner.cs" />
+    <Compile Include="UI\Grid\Html\GridPagerHtmlBuilder.cs" />
+    <Compile Include="UI\Grid\Html\GridPagerNumericButtonHtmlBulder.cs" />
+    <Compile Include="UI\Grid\Html\GridPagerButtonHtmlBuilder.cs" />
+    <Compile Include="UI\Grid\Html\GridPagerStatusHtmlBuilder.cs" />
+    <Compile Include="UI\Grid\Html\GridPagerTextBoxHtmlBuilder.cs" />
+    <Compile Include="UI\Grid\Html\GridPagerWrapperHtmlBuilder.cs" />
+    <Compile Include="UI\Grid\Html\GridRefreshHtmlBuilder.cs" />
+    <Compile Include="UI\Grid\Html\GridRowHtmlBuilder.cs" />
+    <Compile Include="UI\Grid\Html\GridSortAdorner.cs" />
+    <Compile Include="UI\Grid\Html\GridTagRepeatingAdorner.cs" />
+    <Compile Include="UI\Grid\Html\GridTemplateCellHtmlBuilder.cs" />
+    <Compile Include="UI\Grid\Html\GridToggleDetailViewAdorner.cs" />
+    <Compile Include="UI\Grid\IGridRow.cs" />
+    <Compile Include="UI\Grid\Settings\GridColumnSettings.cs" />
+    <Compile Include="UI\Grid\Settings\GridCommandColumnSettings.cs" />
+    <Compile Include="UI\Grid\ToolBar\GridToolBarCommandBaseExtensions.cs" />
+    <Compile Include="UI\HtmlBuilderBase.cs" />
+    <Compile Include="UI\IHtmlBuilder.cs" />
+    <Compile Include="UI\Grid\IGrid.cs" />
+    <Compile Include="UI\Grid\IGridDetailView.cs" />
+    <Compile Include="UI\Grid\IGridRenderingContext.cs" />
+    <Compile Include="UI\Grid\Serialization\GridBoundColumnSerializer.cs" />
+    <Compile Include="UI\Grid\Serialization\GridColumnSerializer.cs" />
+    <Compile Include="UI\Grid\GridLocalization.cs" />
     <Compile Include="UI\Grid\IGridDataKey.cs" />
+    <Compile Include="UI\Grid\Serialization\GridActionColumnSerializer.cs" />
+    <Compile Include="UI\Grid\Serialization\GridClientObjectSerializer.cs" />
+    <Compile Include="UI\Grid\Serialization\GridPluginSerializer.cs" />
+    <Compile Include="UI\Grid\Serialization\GridUrlFormatSerializer.cs" />
+    <Compile Include="UI\Grid\Serialization\IGridColumnSerializer.cs" />
+    <Compile Include="UI\Grid\Settings\GridResizingSettings.cs" />
     <Compile Include="UI\Grid\ToolBar\GridToolBarCustomCommand.cs" />
     <Compile Include="UI\Grid\ToolBar\GridToolBarCustomCommandBuilder.cs" />
     <Compile Include="UI\Grid\ToolBar\GridToolBarInsertCommand.cs" />
@@ -163,6 +305,8 @@
     <Compile Include="Infrastructure\FilterDescriptorFactory.cs" />
     <Compile Include="Infrastructure\Implementation\Expressions\ExpressionBuilderOptions.cs" />
     <Compile Include="UI\HtmlTag.cs" />
+    <Compile Include="UI\IClientSerializable.cs" />
+    <Compile Include="UI\IHtmlAdorner.cs" />
     <Compile Include="UI\IHtmlNode.cs" />
     <Compile Include="Infrastructure\Implementation\Filtering\Parsing\AndNode.cs" />
     <Compile Include="Infrastructure\Implementation\Filtering\Parsing\BooleanNode.cs" />
@@ -234,6 +378,8 @@
     <Compile Include="Infrastructure\Implementation\Filtering\Parsing\OrNode.cs" />
     <Compile Include="Infrastructure\Implementation\Filtering\Parsing\PropertyNode.cs" />
     <Compile Include="Infrastructure\Implementation\Filtering\Parsing\StringNode.cs" />
+    <Compile Include="UI\HtmlTemplate.cs" />
+    <Compile Include="UI\INavigationComponentHtmlBuilder.cs" />
     <Compile Include="UI\LiteralNode.cs" />
     <Compile Include="Infrastructure\PredicateFilterDescription.cs" />
     <Compile Include="Infrastructure\Implementation\Grouping\AggregateFunctionsGroup.cs" />
@@ -260,11 +406,11 @@
     <Compile Include="Infrastructure\Implementation\ControllerTypeCache.cs" />
     <Compile Include="Infrastructure\IAuthorizeAttributeCache.cs" />
     <Compile Include="UI\TextBox\IntegerTextBox.cs" />
-    <Compile Include="UI\TextBox\IntegerTextBoxBuilder.cs" />
+    <Compile Include="UI\TextBox\Fluent\IntegerTextBoxBuilder.cs" />
     <Compile Include="UI\TextBox\PercentTextBoxBuilder.cs" />
     <Compile Include="UI\TextBox\PercentTextBox.cs" />
     <Compile Include="UI\TextBox\CurrencyTextBox.cs" />
-    <Compile Include="UI\TextBox\CurrencyTextBoxBuilder.cs" />
+    <Compile Include="UI\TextBox\Fluent\CurrencyTextBoxBuilder.cs" />
     <Compile Include="UI\TextNode.cs" />
     <Compile Include="IUrlGenerator.cs" />
     <Compile Include="UI\Grid\Settings\GridGroupingSettings.cs" />
@@ -317,15 +463,9 @@
     <Compile Include="UI\Calendar\CalendarSelectionSettingsBuilder.cs" />
     <Compile Include="UI\Calendar\ICalendarHtmlBuilder.cs" />
     <Compile Include="UI\Calendar\ICalendarHtmlBuilderFactory.cs" />
-    <Compile Include="UI\Grid\Columns\GridBoundColumnDisplayForHtmlBuilder.cs" />
-    <Compile Include="UI\Grid\Columns\GridBoundColumnHtmlBuilder.cs" />
-    <Compile Include="UI\Grid\Columns\GridBoundColumnHeaderHtmlBuilder.cs" />
-    <Compile Include="UI\Grid\Columns\GridColumnHeaderHtmlBuilder.cs" />
-    <Compile Include="UI\Grid\Columns\IGridColumnHeaderHtmlBuilder.cs" />
     <Compile Include="UI\Grid\Commands\GridSelectActionCommand.cs" />
     <Compile Include="UI\Grid\Fluent\GridDeleteActionCommandBuilder.cs" />
     <Compile Include="UI\Grid\Columns\GridActionColumn.cs" />
-    <Compile Include="UI\Grid\Columns\GridActionColumnHtmlBuilder.cs" />
     <Compile Include="UI\Grid\Commands\GridActionCommandBase.cs" />
     <Compile Include="UI\Grid\Fluent\GridActionCommandBuilderBase.cs" />
     <Compile Include="UI\Grid\Commands\GridDeleteActionCommand.cs" />
@@ -346,13 +486,13 @@
     <Compile Include="UI\Grid\Fluent\GridWebServiceBindingSettingsBuilder.cs" />
     <Compile Include="UI\INavigationHtmlBuilder.cs" />
     <Compile Include="UI\INavigationItemComponent.cs" />
-    <Compile Include="UI\TextBox\NumericTextBoxBuilder.cs" />
+    <Compile Include="UI\TextBox\Fluent\NumericTextBoxBuilder.cs" />
     <Compile Include="UI\TextBox\NumericTextBox.cs" />
     <Compile Include="UI\TextBox\TextboxBaseClientEvents.cs" />
-    <Compile Include="UI\TextBox\TextboxBaseClientEventsBuilder.cs" />
+    <Compile Include="UI\TextBox\Fluent\TextboxBaseClientEventsBuilder.cs" />
     <Compile Include="UI\TextBox\ITextbox.cs" />
     <Compile Include="UI\TextBox\TextBoxBase.cs" />
-    <Compile Include="UI\TextBox\TextBoxBaseBuilder.cs" />
+    <Compile Include="UI\TextBox\Fluent\TextBoxBuilderBase.cs" />
     <Compile Include="UI\TextBox\TextBoxBaseHtmlBuilder.cs" />
     <Compile Include="UI\TextBox\TextboxBaseHtmlBuilderFactory.cs" />
     <Compile Include="UI\TextBox\ITextBoxBaseHtmlBuilder.cs" />
@@ -364,6 +504,7 @@
     <Compile Include="UI\TreeView\Fluent\TreeViewBuilder.cs" />
     <Compile Include="UI\TreeView\Fluent\TreeViewClientEventsBuilder.cs" />
     <Compile Include="UI\TreeView\Fluent\TreeViewDataBindingConfigurationBuilder.cs" />
+    <Compile Include="UI\TreeView\ITreeViewItem.cs" />
     <Compile Include="UI\TreeView\Settings\TreeViewDragAndDropSettings.cs" />
     <Compile Include="UI\TreeView\TreeViewHtmlBuilder.cs" />
     <Compile Include="UI\TreeView\Fluent\TreeViewItemBuilder.cs" />
@@ -403,12 +544,10 @@
     <Compile Include="UI\Grid\GridBindingContextExtensions.cs" />
     <Compile Include="UI\Grid\Columns\GridBoundColumn.cs" />
     <Compile Include="UI\Grid\Fluent\GridBoundColumnBuilder.cs" />
-    <Compile Include="UI\Grid\Columns\GridBoundColumnContentHtmlBuilder.cs" />
     <Compile Include="UI\Grid\GridClientEvents.cs" />
     <Compile Include="UI\Grid\Fluent\GridClientEventsBuilder.cs" />
     <Compile Include="UI\Grid\GridCell.cs" />
     <Compile Include="UI\Grid\Columns\GridColumnGenerator.cs" />
-    <Compile Include="UI\Grid\Columns\GridColumnHtmlBuilderBase.cs" />
     <Compile Include="UI\Grid\GridCommand.cs" />
     <Compile Include="UI\Grid\Fluent\GridActionColumnBuilder.cs" />
     <Compile Include="UI\Grid\Fluent\GridActionCommandFactory.cs" />
@@ -416,7 +555,6 @@
     <Compile Include="UI\Grid\Fluent\GridFilteringSettingsBuilder.cs" />
     <Compile Include="UI\Grid\Settings\GridRequestSettings.cs" />
     <Compile Include="UI\Grid\GridRow.cs" />
-    <Compile Include="UI\Grid\GridScrollableHtmlBuilder.cs" />
     <Compile Include="UI\Grid\Settings\GridScrollingSettings.cs" />
     <Compile Include="UI\Grid\Fluent\GridScrollSettingsBuilder.cs" />
     <Compile Include="UI\Grid\Fluent\GridRequestSettingsBuilder.cs" />
@@ -427,7 +565,6 @@
     <Compile Include="UI\Grid\Settings\GridSortSettings.cs" />
     <Compile Include="UI\Grid\Fluent\GridSortSettingsBuilder.cs" />
     <Compile Include="UI\Grid\Columns\GridTemplateColumn.cs" />
-    <Compile Include="UI\Grid\Columns\GridTemplateColumnHtmlBuilder.cs" />
     <Compile Include="UI\Grid\GridUrlParameters.cs" />
     <Compile Include="UI\Grid\GridModel.cs" />
     <Compile Include="UI\Grid\Settings\GridWebServiceSettings.cs" />
@@ -435,7 +572,6 @@
     <Compile Include="UI\Grid\IGridBindingContext.cs" />
     <Compile Include="UI\Effects\AnimationDuration.cs" />
     <Compile Include="UI\Effects\AnimationDurationConverter.cs" />
-    <Compile Include="UI\Grid\Columns\IGridColumnHtmlBuilder.cs" />
     <Compile Include="UI\IAsyncContentContainer.cs" />
     <Compile Include="UI\IClientSideObjectWriter.cs" />
     <Compile Include="UI\IClientSideObjectWriterFactory.cs" />
@@ -443,7 +579,6 @@
     <Compile Include="UI\Grid\GridDataProcessor.cs" />
     <Compile Include="UI\Grid\GridDescriptorSerializer.cs" />
     <Compile Include="UI\Grid\GridSortMode.cs" />
-    <Compile Include="UI\Grid\GridHtmlBuilderFactory.cs" />
     <Compile Include="UI\Grid\Grid.cs" />
     <Compile Include="UI\Grid\Fluent\GridBuilder.cs" />
     <Compile Include="UI\Grid\Columns\GridColumnBase.cs" />
@@ -460,15 +595,12 @@
     <Compile Include="UI\Grid\GridHtmlBuilder.cs" />
     <Compile Include="UI\Grid\GridUrlBuilder.cs" />
     <Compile Include="UI\Grid\IGridColumnContainer.cs" />
-    <Compile Include="UI\Grid\IGridHtmlBuilder.cs" />
-    <Compile Include="UI\Grid\IGridHtmlBuilderFactory.cs" />
     <Compile Include="UI\IHtmlAttributesContainer.cs" />
     <Compile Include="UI\INavigatable.cs" />
     <Compile Include="LinkedObjectBase.cs" />
     <Compile Include="LinkedObjectCollection.cs" />
     <Compile Include="UI\INavigationItemContainer.cs" />
-    <Compile Include="UI\Menu\IMenuHtmlBuilderFactory.cs" />
-    <Compile Include="UI\Menu\IMenuHtmlBuilder.cs" />
+    <Compile Include="UI\INavigationComponentHtmlBuilderFactory.cs" />
     <Compile Include="UI\Menu\MenuHtmlBuilder.cs" />
     <Compile Include="UI\Menu\MenuHtmlBuilderFactory.cs" />
     <Compile Include="UI\Menu\Menu.cs" />
@@ -488,8 +620,6 @@
     <Compile Include="UI\NavigationItemBuilder.cs" />
     <Compile Include="UI\NavigationItemImageRenderer.cs" />
     <Compile Include="UI\NavigationItemLinkRenderer.cs" />
-    <Compile Include="UI\PanelBar\IPanelBarHtmlBuilder.cs" />
-    <Compile Include="UI\PanelBar\IPanelBarHtmlBuilderFactory.cs" />
     <Compile Include="UI\PanelBar\PanelBar.cs" />
     <Compile Include="UI\PanelBar\PanelBarBuilder.cs" />
     <Compile Include="UI\PanelBar\PanelBarClientEvents.cs" />
@@ -524,6 +654,23 @@
     <Compile Include="UI\TabStrip\TabStripHtmlBuilder.cs" />
     <Compile Include="UI\UiPrimitives.cs" />
     <Compile Include="UI\WebAsset\IWebAssetItemMerger.cs" />
+    <Compile Include="UI\Effects\ZoomAnimation.cs" />
+    <Compile Include="UI\Window\Fluent\WindowEffectsBuilder.cs" />
+    <Compile Include="UI\Window\WindowButtons.cs" />
+    <Compile Include="UI\Window\Fluent\WindowButtonsBuilder.cs" />
+    <Compile Include="UI\Window\Fluent\WindowResizingSettingsBuilder.cs" />
+    <Compile Include="UI\Window\IWindowButton.cs" />
+    <Compile Include="UI\Window\IWindowButtonsContainer.cs" />
+    <Compile Include="UI\Window\IWindowHtmlBuilder.cs" />
+    <Compile Include="UI\Window\IWindowHtmlBuilderFactory.cs" />
+    <Compile Include="UI\Window\Settings\WindowResizingSettings.cs" />
+    <Compile Include="UI\Window\HeaderButton.cs" />
+    <Compile Include="UI\Window\WindowClientEvents.cs" />
+    <Compile Include="UI\Window\Fluent\WindowClientEventsBuilder.cs" />
+    <Compile Include="UI\Window\Window.cs" />
+    <Compile Include="UI\Window\Fluent\WindowBuilder.cs" />
+    <Compile Include="UI\Window\WindowHtmlBuilder.cs" />
+    <Compile Include="UI\Window\WindowHtmlBuilderFactory.cs" />
     <Compile Include="WebAsset\IWebAssetRegistry.cs" />
     <Compile Include="WebAsset\SharedWebAssetGroupBuilder.cs" />
     <Compile Include="UrlGenerator.cs" />
@@ -601,9 +748,43 @@
     <None Include="..\SharedFiles\Telerik.Web.snk">
       <Link>Telerik.Web.snk</Link>
     </None>
+    <Content Include="Content\Black\editor.png" />
+    <Content Include="Content\Default\editor.png" />
+    <Content Include="Content\Forest\editor.png" />
+    <Content Include="Content\Hay\editor.png" />
+    <Content Include="Content\Office2007\editor.png" />
+    <Content Include="Content\Outlook\editor.png" />
+    <Content Include="Content\Simple\editor.png" />
+    <Content Include="Content\Sitefinity\editor.png" />
+    <Content Include="Content\Sunset\editor.png" />
+    <Content Include="Content\Telerik\editor.png" />
+    <Content Include="Content\Web20\editor.png" />
+    <Content Include="Content\WebBlue\editor.png" />
+    <Content Include="Content\Windows7\editor.png" />
+    <Content Include="Scripts\Editor\formatblock.js" />
+    <Content Include="Scripts\Editor\indent.js" />
+    <Content Include="Scripts\Editor\components.js" />
+    <Content Include="Scripts\Editor\dom.js" />
+    <Content Include="Scripts\Editor\editor.js" />
+    <Content Include="Scripts\Editor\inlineformat.js" />
+    <Content Include="Scripts\Editor\image.js" />
+    <Content Include="Scripts\Editor\linebreak.js" />
+    <Content Include="Scripts\Editor\link.js" />
+    <Content Include="Scripts\Editor\lists.js" />
+    <Content Include="Scripts\Editor\range.js" />
+    <Content Include="Scripts\Editor\serializer.js" />
+    <Content Include="Scripts\Editor\system.js" />
+    <Content Include="Scripts\telerik.combobox.js" />
+    <Content Include="Scripts\telerik.autocomplete.js" />
+    <Content Include="Scripts\telerik.list.js" />
     <Content Include="Scripts\telerik.textbox.js" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\EditorLocalization.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>EditorLocalization.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\GridLocalization.resx">
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\TextResource.resx">
@@ -639,6 +820,7 @@
     <Content Include="Content\telerik.windows7.css" />
     <Content Include="Content\Telerik\treeview-line.png" />
     <Content Include="Content\Telerik\treeview-nodes.png" />
+    <Content Include="Content\Vista\editor.png" />
     <Content Include="Content\Web20\treeview-line.png" />
     <Content Include="Content\Web20\treeview-nodes.png" />
     <Content Include="Content\WebBlue\treeview-line.png" />
@@ -680,6 +862,8 @@
     <Content Include="Content\Vista\sprite.png" />
     <Content Include="Content\telerik.vista.css" />
     <Content Include="Content\Vista\loading.gif" />
+    <Content Include="Scripts\telerik.grid.resizing.js" />
+    <Content Include="Scripts\telerik.window.js" />
     <Content Include="Scripts\jquery-1.4.2.min.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\telerik.draganddrop.js" />
@@ -698,11 +882,57 @@
     <Content Include="Scripts\telerik.tabstrip.js" />
     <Content Include="Scripts\telerik.grid.js" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- Reference the YUI CompressorTask -->
   <UsingTask TaskName="CompressorTask" AssemblyFile="Build\Yahoo.Yui.Compressor.dll" />
+  <UsingTask TaskName="MergeFiles" AssemblyFile="Build\Telerik.MSBuildTasks.dll" />
+  <UsingTask TaskName="Replace" AssemblyFile="Build\Telerik.MSBuildTasks.dll" />
   <UsingTask TaskName="GetVersion" AssemblyFile="Build\GetVersion.dll" />
+  <ItemGroup>
+    <EditorJavaScriptFiles Include="Scripts\Editor\dom.js">
+      <Visible>false</Visible>
+    </EditorJavaScriptFiles>
+    <EditorJavaScriptFiles Include="Scripts\Editor\serializer.js">
+      <Visible>false</Visible>
+    </EditorJavaScriptFiles>
+    <EditorJavaScriptFiles Include="Scripts\Editor\range.js">
+      <Visible>false</Visible>
+    </EditorJavaScriptFiles>
+    <EditorJavaScriptFiles Include="Scripts\Editor\system.js">
+      <Visible>false</Visible>
+    </EditorJavaScriptFiles>
+    <EditorJavaScriptFiles Include="Scripts\Editor\inlineformat.js">
+      <Visible>false</Visible>
+    </EditorJavaScriptFiles>
+    <EditorJavaScriptFiles Include="Scripts\Editor\formatblock.js">
+      <Visible>false</Visible>
+    </EditorJavaScriptFiles>
+    <EditorJavaScriptFiles Include="Scripts\Editor\linebreak.js">
+      <Visible>false</Visible>
+    </EditorJavaScriptFiles>
+    <EditorJavaScriptFiles Include="Scripts\Editor\lists.js">
+      <Visible>false</Visible>
+    </EditorJavaScriptFiles>
+    <EditorJavaScriptFiles Include="Scripts\Editor\link.js">
+      <Visible>false</Visible>
+    </EditorJavaScriptFiles>
+    <EditorJavaScriptFiles Include="Scripts\Editor\image.js">
+      <Visible>false</Visible>
+    </EditorJavaScriptFiles>
+    <EditorJavaScriptFiles Include="Scripts\Editor\components.js">
+      <Visible>false</Visible>
+    </EditorJavaScriptFiles>
+    <EditorJavaScriptFiles Include="Scripts\Editor\indent.js">
+      <Visible>false</Visible>
+    </EditorJavaScriptFiles>
+    <EditorJavaScriptFiles Include="Scripts\Editor\editor.js">
+      <Visible>false</Visible>
+    </EditorJavaScriptFiles>
+  </ItemGroup>
   <Target Name="AfterBuildDebug">
+    <MergeFiles Targets="@(EditorJavaScriptFiles)" Output="Scripts\telerik.editor.js" />
+    <Replace Files="Scripts\telerik.editor.js" Pattern="NONEXISTINGINVALIDJABASCRIPT" Replacement="" Multiline="false" />
     <!-- Copy the CSS files to Scripts -->
     <Copy SourceFiles="@(Content)" DestinationFolder="$(OutputPath)\Scripts" Condition="'%(Extension)'=='.js'">
       <Output TaskParameter="DestinationFiles" ItemName="Resources" />
@@ -730,15 +960,18 @@
     <PropertyGroup>
       <Version>%(Info.Version)</Version>
     </PropertyGroup>
-    <Message Text="Version is $(Version)" />
+    <MergeFiles Targets="@(EditorJavaScriptFiles)" Output="Scripts\telerik.editor.js" />
+    <Replace Files="Scripts\telerik.editor.js" Pattern="NONEXISTENTINVALIDJABASCRIPT" Replacement="" Multiline="false" Encoding="Windows-1252" />
     <!-- Copy all JavaScript to $(OutputPath)\Scripts, add versioning and ".min" suffix -->
     <ItemGroup>
       <JavaScriptFilesToSkip Include="Scripts\*.min.js" />
       <JavaScriptFilesToMinify Include="Scripts\*.js" Exclude="@(JavaScriptFilesToSkip)" />
     </ItemGroup>
+    <Message Importance="High" Text="Copy @(JavaScriptFilesToMinify)" />
     <Copy SourceFiles="@(JavaScriptFilesToMinify)" DestinationFiles="@(JavaScriptFilesToMinify -> '$(OutputPath)\Scripts\$(Version)\%(Filename).min.js')">
       <Output TaskParameter="DestinationFiles" ItemName="JavaScriptFiles" />
     </Copy>
+    <Message Importance="High" Text="Copied @(JavaScriptFiles)" />
     <!-- Minify the JavaScript files -->
     <CompressorTask JavaScriptFiles="%(JavaScriptFiles.Identity)" JavaScriptOutputFile="%(JavaScriptFiles.Identity)" IsEvalIgnored="true" LineBreakPosition="-1" PreserveAllSemicolons="false" DisableOptimizations="false" ObfuscateJavaScript="true" LoggingType="ALittleBit" />
     <Copy SourceFiles="@(JavaScriptFilesToSkip)" DestinationFolder="$(OutputPath)\Scripts\$(Version)">

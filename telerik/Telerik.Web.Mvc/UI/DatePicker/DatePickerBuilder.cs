@@ -6,7 +6,6 @@
 namespace Telerik.Web.Mvc.UI
 {
     using System;
-    using System.Collections.Generic;
 
     using Extensions;
     using Infrastructure;
@@ -117,8 +116,6 @@ namespace Telerik.Web.Mvc.UI
         /// </summary>
         public DatePickerBuilder Value(string date)
         {
-            Guard.IsNotNullOrEmpty(date, "date");
-
             DateTime parsedDate;
 
             if (DateTime.TryParse(date, out parsedDate))
@@ -127,7 +124,7 @@ namespace Telerik.Web.Mvc.UI
             }
             else 
             {
-                throw new ArgumentException(TextResource.StringNotCorrectDate);
+                Component.Value = null;
             }
             return this;
         }

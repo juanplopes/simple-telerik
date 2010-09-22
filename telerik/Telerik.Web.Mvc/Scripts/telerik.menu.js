@@ -1,49 +1,53 @@
 ﻿(function($) {
     var $t = $.telerik;
 
-    $.extend($t, {
-        menu: function(element, options) {
-            this.element = element;
-            this.nextItemZIndex = 100;
+    $t.menu = function(element, options) {
+        this.element = element;
+        this.nextItemZIndex = 100;
 
-            $.extend(this, options);
+        $.extend(this, options);
 
-            $('.t-item:not(.t-state-disabled)', element)
-                .live('mouseenter', $t.delegate(this, this.mouseenter), true)
-				.live('mouseleave', $t.delegate(this, this.mouseleave), true)
-				.live('click', $t.delegate(this, this.click));
+        $('.t-item:not(.t-state-disabled)', element)
+            .live('mouseenter', $t.delegate(this, this.mouseenter), true)
+            .live('mouseleave', $t.delegate(this, this.mouseleave), true)
+            .live('click', $t.delegate(this, this.click));
 
-            $('.t-item:not(.t-state-disabled) > .t-link', element)
-				.live('mouseenter', $t.hover)
-				.live('mouseleave', $t.leave);
+        $('.t-item:not(.t-state-disabled) > .t-link', element)
+            .live('mouseenter', $t.hover)
+            .live('mouseleave', $t.leave);
 
-            $(document).click($t.delegate(this, this.documentClick));
-            
-            $t.bind(this, {
-                select: this.onSelect,
-                open: this.onOpen,
-                close: this.onClose,
-                load: this.onLoad
-            });
-            
-            $t.trigger(element, 'load');
-        }
-    });
+        $(document).click($t.delegate(this, this.documentClick));
 
-    var getEffectOptions = function(item) {
+        $t.bind(this, {
+            select: this.onSelect,
+            open: this.onOpen,
+            close: this.onClose,
+            load: this.onLoad
+        });
+    }
+
+    function getEffectOptions(item) {
         var parent = item.parent();
         return {
             direction: parent.hasClass('t-menu') ? parent.hasClass('t-menu-vertical') ? 'right' : 'bottom' : 'right'
         };
     };
 
+    function contains(parent, child) {
+        try {
+            return $.contains(parent, child);
+        } catch (e) {
+            return false;
+        }
+    }
+
     $t.menu.prototype = {
-        
+
         toggle: function(li, enable) {
             $(li).each(function() {
                 $(this)
                     .toggleClass('t-state-default', enable)
-				    .toggleClass('t-state-disabled', !enable);
+                    .toggleClass('t-state-disabled', !enable);
             });
         },
 
@@ -58,73 +62,77 @@
         open: function($li) {
             var menu = this;
 
-            $($li).each($.proxy(function(index, item) {
-                var $item = $(item);
+            $($li).each(function() {
+                var $item = $(this);
 
                 clearTimeout($item.data('timer'));
 
-                $item.data('timer', setTimeout($.proxy(function() {
-                    var ul = $item.find('.t-group:first');
-                    if (ul.length == 0) return;
-
-                    $item.css('z-index', menu.nextItemZIndex++);
-
-                    $t.fx.play(this.effects, ul, getEffectOptions($item));
-                }, this)));
-            }, this));
+                $item.data('timer', setTimeout(function() {
+                    var $ul = $item.find('.t-group:first');
+                    if ($ul.length) {
+                        $t.fx.play(menu.effects, $ul, getEffectOptions($item));
+                        $item.css('z-index', menu.nextItemZIndex++);
+                    }
+                }, 100));
+            });
         },
 
         close: function($li) {
             var menu = this;
 
-            $($li).each($.proxy(function(index, item) {
-
+            $($li).each(function(index, item) {
                 var $item = $(item);
 
                 clearTimeout($item.data('timer'));
 
-                $item.data('timer', setTimeout($.proxy(function() {
-                    var ul = $item.find('.t-group:first');
-                    if (ul.length == 0) return;
-
-                    $t.fx.rewind(this.effects, ul, getEffectOptions($item), function() {
-                        $item.css('zIndex', '');
-                        if ($(menu.element).find('.t-group:visible').length == 0)
-                            menu.nextItemZIndex = 100;
-                    });
-
-                    ul.find('.t-group').stop(false, true);
-                }, this)));
-            }, this));
+                $item.data('timer', setTimeout(function() {
+                    var $ul = $item.find('.t-group:first');
+                    if ($ul.length) {
+                        $t.fx.rewind(menu.effects, $ul, getEffectOptions($item), function() {
+                            $item.css('zIndex', '');
+                            if ($(menu.element).find('.t-group:visible').length == 0)
+                                menu.nextItemZIndex = 100;
+                        });
+                        $ul.find('.t-group').stop(false, true);
+                    }
+                }, 100));
+            });
         },
 
         mouseenter: function(e, element) {
+            var $li = $(element);
             if (!this.openOnClick || this.clicked) {
-                this.triggerEvent('open', $(element));
+                if (!contains(element, e.relatedTarget)) {
+                    this.triggerEvent('open', $li);
+                    this.open($li);
 
-                this.open($(element));
-                
-                $(element.parentNode).trigger(e);
+                    var parentItem = $li.parent().closest('.t-item')[0];
+
+                    if (parentItem && !contains(parentItem, e.relatedTarget))
+                        this.mouseenter(e, parentItem);
+                }
             }
 
             if (this.openOnClick && this.clicked) {
+                this.triggerEvent('close', $li);
 
-                this.triggerEvent('close', $(element));
-
-                $(element).siblings().each($.proxy(function(i, sibling) {
+                $li.siblings().each($.proxy(function(_, sibling) {
                     this.close($(sibling));
                 }, this));
             }
         },
 
         mouseleave: function(e, element) {
-            if (!this.openOnClick) {
+            if (!this.openOnClick && !contains(element, e.relatedTarget)) {
+                var $li = $(element);
+                this.triggerEvent('close', $li);
 
-                this.triggerEvent('close', $(element));
+                this.close($li);
 
-                this.close($(element));
+                var parentItem = $li.parent().closest('.t-item')[0];
 
-                $(element.parentNode).trigger(e);
+                if (parentItem && !contains(parentItem, e.relatedTarget))
+                    this.mouseleave(e, parentItem);
             }
         },
 
@@ -168,13 +176,12 @@
     }
 
     $.fn.tMenu = function(options) {
-        options = $.extend({}, $.fn.tMenu.defaults, options);
-
-        return this.each(function() {
-            options = $.meta ? $.extend({}, options, $(this).data()) : options;
-
-            if (!$(this).data('tMenu'))
-                $(this).data('tMenu', new $t.menu(this, options));
+        return $t.create(this, {
+            name: 'tMenu',
+            init: function(element, options) { 
+                return new $t.menu(element, options);
+            },
+            options: options
         });
     };
 

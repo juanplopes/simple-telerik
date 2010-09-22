@@ -10,9 +10,8 @@ namespace Telerik.Web.Mvc.UI
     using System.Diagnostics;
     using System.IO;
     using System.Web.Mvc;
-    using System.Web.UI;
     using System.Web.Routing;
-
+    using System.Web.UI;
     using Infrastructure;
 
     /// <summary>
@@ -61,7 +60,10 @@ namespace Telerik.Web.Mvc.UI
             set
             {
                 Guard.IsNotNullOrEmpty(value, "value");
-
+                if (value.Contains("<#="))
+                {
+                    IsSelfInitialized = true;
+                }
                 name = value;
             }
         }
@@ -159,8 +161,6 @@ namespace Telerik.Web.Mvc.UI
         /// </summary>
         public void Render()
         {
-            EnsureRequired();
-            
             using (HtmlTextWriter textWriter = new HtmlTextWriter(ViewContext.HttpContext.Response.Output))
             {
                 WriteHtml(textWriter);    
@@ -173,6 +173,7 @@ namespace Telerik.Web.Mvc.UI
         /// <param name="writer">The writer.</param>
         public virtual void WriteInitializationScript(TextWriter writer)
         {
+            
         }
 
         /// <summary>
@@ -200,11 +201,22 @@ namespace Telerik.Web.Mvc.UI
             }
         }
 
+        public string ToHtmlString()
+        {
+            using (var output = new StringWriter())
+            {
+                WriteHtml(new HtmlTextWriter(output));
+                return output.ToString();
+            }
+        }
+
         /// <summary>
         /// Writes the HTML.
         /// </summary>
         protected virtual void WriteHtml(HtmlTextWriter writer)
         {
+            EnsureRequired();
+
             if (IsSelfInitialized)
             {
                 writer.AddAttribute(HtmlTextWriterAttribute.Type, "text/javascript");

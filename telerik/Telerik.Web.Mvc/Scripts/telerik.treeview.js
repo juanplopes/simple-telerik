@@ -1,23 +1,32 @@
-﻿(function($) {
+﻿(function ($) {
 
     var $t = $.telerik;
 
-    $t.treeview = function(element, options) {
+    $t.treeview = function (element, options) {
         this.element = element;
         var $element = $(element);
 
         $.extend(this, options);
 
-        $('div:not(.t-state-disabled) > .t-in:not(.t-state-selected)', element)
-            .live('mouseenter', $t.hover)
-            .live('mouseleave', $t.leave)
-            .live('click', $t.delegate(this, this.nodeSelect));
+        var clickableItems = '.t-in:not(.t-state-selected,.t-state-disabled)';
 
         $('.t-in.t-state-selected', element)
             .live('mouseenter', $t.preventDefault);
 
-        $('div:not(.t-state-disabled) .t-in', element)
-            .live('dblclick', $t.delegate(this, this.nodeClick));
+        $element
+            .delegate(clickableItems, 'mouseenter', $t.hover)
+            .delegate(clickableItems, 'mouseleave', $t.leave)
+            .delegate(clickableItems, 'click', $t.delegate(this, this.nodeSelect))
+            .delegate('div:not(.t-state-disabled) .t-in', 'dblclick', $t.delegate(this, this.nodeClick))
+            .delegate(':checkbox', 'click', $t.delegate(this, this.checkboxClick))
+            .delegate('.t-plus, .t-minus', 'click', $t.delegate(this, this.nodeClick));
+
+        if (this.isAjax())
+            $element.find('.t-plus')
+                .each(function () {
+                    var item = $(this.parentNode);
+                    item.parent().data('loaded', item.next('.t-group').length > 0);
+                });
 
         if (this.dragAndDrop) {
             $t.bind(this, {
@@ -29,15 +38,10 @@
             });
 
             $t.draganddrop(this.element.id, $.extend({
+                useDragClue: true,
                 draggables: $('div:not(.t-state-disabled) .t-in', element)
             }, $t.draganddrop.applyContext($t.draganddrop.treeview, this)));
         }
-
-        $('.t-plus, .t-minus', element)
-            .live('click', $t.delegate(this, this.nodeClick));
-
-        $(':checkbox', element)
-            .live('click', $t.delegate(this, this.updateCheckState));
 
         var $content = $element.find('.t-item > .t-content');
         if ($content.length > 0 && $($content[0]).children().length == 0)
@@ -46,20 +50,21 @@
         $t.bind(this, {
             expand: this.onExpand,
             collapse: this.onCollapse,
-            select: this.onSelect,
+            select: $.proxy(function (e) {
+                if (e.target == this.element && this.onSelect) this.onSelect(e);
+            }, this),
+            checked: this.onChecked,
             error: this.onError,
             load: this.onLoad,
             dataBinding: this.onDataBinding,
             dataBound: this.onDataBound
         });
-
-        $t.trigger($element, 'load');
     };
 
     $t.treeview.prototype = {
 
-        expand: function(li) {
-            $(li).each($.proxy(function(index, item) {
+        expand: function (li) {
+            $(li, this.element).each($.proxy(function (index, item) {
                 var $item = $(item);
                 var contents = $item.find('> .t-group, > .t-content');
                 if ((contents.length > 0 && !contents.is(':visible')) || this.isAjax()) {
@@ -68,8 +73,8 @@
             }, this));
         },
 
-        collapse: function(li) {
-            $(li).each($.proxy(function(index, item) {
+        collapse: function (li) {
+            $(li, this.element).each($.proxy(function (index, item) {
                 var $item = $(item);
                 var contents = $item.find('> .t-group, > .t-content');
                 if (contents.length > 0 && contents.is(':visible')) {
@@ -78,30 +83,39 @@
             }, this));
         },
 
-        enable: function(li) {
+        enable: function (li) {
             this.toggle(li, true);
         },
 
-        disable: function(li) {
+        disable: function (li) {
             this.toggle(li, false);
         },
 
-        toggle: function(li, enable) {
-            $(li).each($.proxy(function(index, item) {
+        toggle: function (li, enable) {
+            $(li, this.element).each($.proxy(function (index, item) {
                 var $item = $(item);
                 this.collapse($item);
 
                 $item.find('> div > .t-icon')
                         .toggleClass('t-state-default', enable)
-				        .toggleClass('t-state-disabled', !enable);
+                        .toggleClass('t-state-disabled', !enable);
 
                 $item.find('> div > .t-in')
                         .toggleClass('t-state-default', enable)
-				        .toggleClass('t-state-disabled', !enable);
+                        .toggleClass('t-state-disabled', !enable);
             }, this));
         },
 
-        shouldNavigate: function(element) {
+        reload: function (li) {
+            var treeView = this;
+            $(li).each(function () {
+                var $item = $(this);
+                $item.find('.t-group').remove();
+                treeView.ajaxRequest($item);
+            });
+        },
+
+        shouldNavigate: function (element) {
             var contents = $(element).closest('.t-item').find('> .t-content, > .t-group');
             var href = $(element).attr('href');
 
@@ -109,20 +123,22 @@
                     (contents.length > 0 && contents.children().length == 0));
         },
 
-        nodeSelect: function(e, element) {
+        nodeSelect: function (e, element) {
 
             if (!this.shouldNavigate(element))
                 e.preventDefault();
 
-            if (!$(element).hasClass('.t-state-selected') &&
-                !$t.trigger(this.element, 'select', { item: element.parentNode })) {
+            var $element = $(element);
+
+            if (!$element.hasClass('.t-state-selected') &&
+                !$t.trigger(this.element, 'select', { item: $element.closest('.t-item')[0] })) {
                 $('.t-in', this.element).removeClass('t-state-hover t-state-selected');
 
-                $(element).addClass('t-state-selected');
+                $element.addClass('t-state-selected');
             }
         },
 
-        nodeToggle: function(e, $item, suppressAnimation) {
+        nodeToggle: function (e, $item, suppressAnimation) {
 
             if (e != null)
                 e.preventDefault();
@@ -138,24 +154,24 @@
 
             var isExpanding = !contents.is(':visible');
 
-            if (contents.children().length > 0 &&
-                       !$t.trigger(this.element,
-                            isExpanding ? 'expand' : 'collapse',
-                            { item: $item.find('> div')[0] })) {
+            if (contents.children().length > 0
+             && $item.data('loaded') !== false
+             && !$t.trigger(this.element, isExpanding ? 'expand' : 'collapse', { item: $item[0] })) {
                 $item.find('> div > .t-icon')
                         .toggleClass('t-minus', isExpanding)
                         .toggleClass('t-plus', !isExpanding);
 
                 if (!suppressAnimation)
-                    $t.fx[isExpanding ? 'play' : 'rewind'](this.effects, contents, { direction: 'bottom' }, function() {
+                    $t.fx[isExpanding ? 'play' : 'rewind'](this.effects, contents, { direction: 'bottom' }, function () {
                         $item.data('animating', false);
                     });
-                else contents[isExpanding ? 'show' : 'hide']();
-            } else if (isExpanding && this.isAjax() && contents.length == 0)
+                else
+                    contents[isExpanding ? 'show' : 'hide']();
+            } else if (isExpanding && this.isAjax() && (contents.length == 0 || $item.data('loaded') === false))
                 this.ajaxRequest($item);
         },
 
-        nodeClick: function(e, element) {
+        nodeClick: function (e, element) {
 
             var $element = $(element);
             var $item = $element.closest('.t-item');
@@ -166,19 +182,19 @@
             this.nodeToggle(e, $item);
         },
 
-        isAjax: function() {
+        isAjax: function () {
             return this.ajax || this.ws || this.onDataBinding;
         },
 
-        url: function(which) {
+        url: function (which) {
             return (this.ajax || this.ws)[which];
         },
 
-        ajaxOptions: function($item, options) {
+        ajaxOptions: function ($item, options) {
             var result = {
                 type: 'POST',
                 dataType: 'text',
-                error: $.proxy(function(xhr, status) {
+                error: $.proxy(function (xhr, status) {
                     if ($t.ajaxError(this.element, 'error', xhr, status))
                         return;
 
@@ -186,7 +202,7 @@
                         alert('Error! The requested URL did not return JSON.');
                 }, this),
 
-                success: $.proxy(function(data) {
+                success: $.proxy(function (data) {
                     data = eval("(" + data + ")");
                     data = data.d || data; // Support the `d` returned by MS Web Services
                     this.dataBind($item, data);
@@ -210,18 +226,14 @@
             return result;
         },
 
-        ajaxRequest: function($item) {
+        ajaxRequest: function ($item) {
 
             $item = $item || $(this.element);
 
             if ($t.trigger(this.element, 'dataBinding', { item: $item[0] }) || (!this.ajax && !this.ws))
                 return;
 
-            if (!$item.hasClass('t-item')) {
-                $('<div><span class="t-icon"/><div>').appendTo($item);
-            }
-
-            $item.data('loadingIconTimeout', setTimeout(function() {
+            $item.data('loadingIconTimeout', setTimeout(function () {
                 $item.find('> div > .t-icon').addClass('t-loading');
             }, 100));
 
@@ -231,14 +243,13 @@
             }));
         },
 
-        bindTo: function(data) {
+        bindTo: function (data) {
 
             var $element = $(this.element);
             this.dataBind($element, data);
-            $t.trigger($element, 'dataBound');
         },
 
-        dataBind: function($item, data) {
+        dataBind: function ($item, data) {
             $item = $($item); // can be called from user code with dom objects
 
             if (data.length == 0) {
@@ -246,75 +257,105 @@
                 return;
             }
 
+            var group = $item.find('> .t-group');
+
+            var isGroup = group.length == 0;
             var groupHtml = new $t.stringBuilder();
-            $t.treeview.getGroupHtml(data, groupHtml, this.isAjax(), $item.hasClass('t-treeview'));
+            $t.treeview.getGroupHtml(data, groupHtml, this.isAjax(), $item.hasClass('t-treeview'), this.showCheckBox, isGroup ? data[0].Expanded : false, isGroup);
 
             $item.data('animating', true);
 
-            if (!$item.hasClass('t-item'))
-                $item.children().remove();
+            if (group.length > 0 && $item.data('loaded') === false)
+                $(groupHtml.string()).prependTo(group);
+            else if (group.length > 0 && $item.data('loaded') !== false)
+                group.html(groupHtml.string());
+            else if (group.length == 0)
+                group = $(groupHtml.string()).appendTo($item);
 
-            $t.fx.play(this.effects, $(groupHtml.string()).appendTo($item), { direction: 'bottom' }, function() {
+            $t.fx.play(this.effects, group, { direction: 'bottom' }, function () {
                 $item.data('animating', false);
             });
 
             clearTimeout($item.data('loadingIconTimeout'));
 
             if ($item.hasClass('t-item'))
-                $('.t-icon:first', $item)
-                    .removeClass('t-loading')
-                    .removeClass('t-plus')
-                    .addClass('t-minus');
+                $item.data('loaded', true)
+                    .find('.t-icon:first')
+                        .removeClass('t-loading')
+                        .removeClass('t-plus')
+                        .addClass('t-minus');
+
+            $t.trigger(this.element, 'dataBound');
         },
 
-        updateCheckState: function(e, element) {
-            var $element = $(element);
-            var $item = $element.closest('.t-item');
-            var $checkboxHolder = $(".t-checkbox", $item);
-            var $index = $checkboxHolder.find(':input[name="checkedNodes.Index"]');
-            var isChecked = $element.is(':checked');
+        checkboxClick: function (e, element) {
+            var isChecked = $(element).is(':checked');
 
-            if (!isChecked) {
-                $checkboxHolder.find(':input[name="checkedNodes[' + $index.val() + '].Text"]').remove();
-                $checkboxHolder.find(':input[name="checkedNodes[' + $index.val() + '].Value"]').remove();
-            } else {
-                var html = new $t.stringBuilder();
+            var isEventPrevented =
+                $t.trigger(this.element, 'checked', {
+                    item: $(element).closest('.t-item')[0],
+                    checked: isChecked
+                });
 
-                html.cat('<input type="hidden" value="')
-                    .cat(this.getItemValue($item))
-                    .cat('" name="checkedNodes[')
-                    .cat($index.val())
-                    .cat('].Value" class="t-input">')
-                    .cat('<input type="hidden" value="')
-                    .cat(this.getItemText($item))
-                    .cat('" name="checkedNodes[')
-                    .cat($index.val())
-                    .cat('].Text" class="t-input">');
+            if (!isEventPrevented)
+                this.nodeCheck(element, isChecked);
+            else
+                e.preventDefault();
 
-                $(html.string()).appendTo($checkboxHolder);
-            }
+            return isEventPrevented;
         },
 
-        getItemText: function($item) {
-            return $('.t-in:first', $item).text();
+        nodeCheck: function (li, isChecked) {
+            $(li, this.element).each($.proxy(function (index, item) {
+                var $element = $(item);
+                var $item = $element.closest('.t-item');
+                var $checkboxHolder = $("> div > .t-checkbox", $item);
+                var arrayName = this.element.id + '_checkedNodes';
+                var $index = $checkboxHolder.find(':input[name="' + arrayName + '.Index"]');
+
+                var value = $index.val();
+
+                $checkboxHolder.find(':input[name="' + arrayName + '[' + value + '].Text"]').remove();
+                $checkboxHolder.find(':input[name="' + arrayName + '[' + value + '].Value"]').remove();
+
+                $checkboxHolder.find(':checkbox').attr('checked', isChecked ? 'checked' : '');
+
+                if (isChecked) {
+                    var html = new $t.stringBuilder();
+
+                    html.cat('<input type="hidden" value="')
+                        .cat(this.getItemValue($item))
+                        .cat('" name="' + arrayName + '[').cat(value).cat('].Value" class="t-input">')
+
+                        .cat('<input type="hidden" value="')
+                        .cat(this.getItemText($item))
+                        .cat('" name="' + arrayName + '[').cat(value).cat('].Text" class="t-input">');
+
+                    $(html.string()).appendTo($checkboxHolder);
+                }
+            }, this));
         },
 
-        getItemValue: function($item) {
-            return $item.closest('.t-item').find(':input[name="itemValue"]').eq(0).val() || this.getItemText();
+        getItemText: function (item) {
+            return $(item).find('> div > .t-in').text();
+        },
+
+        getItemValue: function (item) {
+            return $(item).find('>div>:input[name="itemValue"]').val() || this.getItemText(item);
         }
     };
 
     $.extend($t.draganddrop, {
         treeview: {
-            shouldDrag: function($element) { return true; },
+            shouldDrag: function ($element) { return true; },
 
-            createDragClue: function($draggedElement) {
+            createDragClue: function ($draggedElement) {
                 return $draggedElement.closest('.t-top,.t-mid,.t-bot').text();
             },
 
-            onDragStart: function($draggedElement) {
+            onDragStart: function (e, $draggedElement) {
                 var isEventPrevented =
-                        $t.trigger(this.element, 'nodeDragStart', { item: $draggedElement[0] });
+                        $t.trigger(this.element, 'nodeDragStart', { item: $draggedElement.closest('.t-item')[0] });
 
                 if (!isEventPrevented)
                     this.$dropClue = $('<div class="t-drop-clue" />').appendTo(this.element);
@@ -322,19 +363,22 @@
                 return isEventPrevented;
             },
 
-            onDragMove: function(e, $draggedElement) {
+            onDragMove: function (e, $draggedElement) {
                 // change status & show drop clue
 
                 var status;
 
                 $t.trigger(this.element, 'nodeDragging', {
+                    pageY: e.pageY,
                     dropTarget: e.target,
-                    setStatusClass: function(newStatus) { status = newStatus; },
-                    item: $draggedElement[0]
+                    setStatusClass: function (newStatus) { status = newStatus; },
+                    item: $draggedElement.closest('.t-item')[0]
                 });
 
-                if (status)
+                if (status) {
+                    this.$dropClue.css('visibility', 'hidden');
                     return status;
+                }
 
                 if (this.dragAndDrop.dropTargets && $(e.target).closest(this.dragAndDrop.dropTargets).length > 0)
                     return 't-add';
@@ -393,21 +437,26 @@
                 return clueStatus;
             },
 
-            onDragCancelled: function($draggedElement) {
-                $t.trigger(this.element, 'nodeDragCancelled', { item: $draggedElement[0] });
+            onDragCancelled: function (e, $draggedElement) {
+                $t.trigger(this.element, 'nodeDragCancelled', { item: $draggedElement.closest('.t-item')[0] });
 
                 this.$dropClue.remove();
             },
 
-            onDrop: function(e, $draggedElement, $dragClue) {
-                var isDropPrevented = $t.trigger(this.element, 'nodeDrop', { dropTarget: e.target, item: $draggedElement[0] });
+            onDrop: function (e, $draggedElement, $dragClue) {
+                var isDropPrevented =
+                        $t.trigger(this.element, 'nodeDrop', {
+                            isValid: !$dragClue.find('.t-drag-status').hasClass('t-denied'),
+                            dropTarget: e.target,
+                            item: $draggedElement.closest('.t-item')[0]
+                        });
 
                 if (isDropPrevented || !$.contains(this.element, e.target)) {
                     this.$dropClue.remove();
                     return isDropPrevented;
                 }
 
-                return isDropPrevented ? true : $.proxy(function(removeClueCallback) {
+                return isDropPrevented ? true : $.proxy(function (removeClueCallback) {
 
                     var sourceItem = $draggedElement.closest('.t-top,.t-mid,.t-bot');
                     var movedItem = sourceItem.parent(); // .t-item
@@ -432,7 +481,7 @@
                     // perform reorder / move
                     if (this.$dropClue.css('visibility') == 'visible') {
                         var insertItem = this.$dropClue.closest('.t-item');
-                        dropPosition = this.$dropClue.prev('.t-in').length > 0 ? 'after' : 'before';
+                        dropPosition = this.$dropClue.prevAll('.t-in').length > 0 ? 'after' : 'before';
                         destinationItem = insertItem.find('> div');
                         insertItem[dropPosition](movedItem);
                     } else {
@@ -451,14 +500,14 @@
                     }
 
                     $t.trigger(this.element, 'nodeDropped', {
-                        destinationItem: destinationItem[0],
+                        destinationItem: destinationItem.closest('.t-item')[0],
                         dropPosition: dropPosition,
-                        item: sourceItem[0]
+                        item: sourceItem.parent('.t-item')[0]
                     });
 
                     var level = movedItem.parents('.t-group').length;
 
-                    var normalizeClasses = function(item) {
+                    var normalizeClasses = function (item) {
                         var isFirstItem = item.prev().length === 0;
                         var isLastItem = item.next().length === 0;
 
@@ -489,89 +538,92 @@
 
     // client-side rendering
     $.extend($t.treeview, {
-        getGroupHtml: function(data, html, isAjax, isFirstLevel) {
-
-            html.cat('<ul class="t-group')
-                .catIf(' t-treeview-lines', isFirstLevel)
+        getItemHtml: function (item, html, isAjax, isFirstLevel, showCheckBoxes, itemIndex, itemsCount) {
+            html.cat('<li class="t-item')
+                    .catIf(' t-first', isFirstLevel && itemIndex == 0)
+                    .catIf(' t-last', itemIndex == itemsCount - 1)
+                .cat('">')
+                .cat('<div class="')
+                    .catIf('t-top ', isFirstLevel && itemIndex == 0)
+                    .catIf('t-top', itemIndex != itemsCount - 1 && itemIndex == 0)
+                    .catIf('t-mid', itemIndex != itemsCount - 1 && itemIndex != 0)
+                    .catIf('t-bot', itemIndex == itemsCount - 1)
                 .cat('">');
 
+            if ((isAjax && item.LoadOnDemand) || (item.Items && item.Items.length > 0))
+                html.cat('<span class="t-icon')
+                        .catIf(' t-plus', !item.Expanded)
+                        .catIf(' t-minus', item.Expanded)
+                        .catIf('-disabled', item.Enabled === false) // t-(plus|minus)-disabled
+                    .cat('"></span>');
+
+            if (showCheckBoxes && item.Checkable !== false)
+                html.cat('<input type="checkbox" value="')
+                    .cat(item.Value)
+                    .cat('" class="t-input')
+                    .catIf(' t-state-disabled', item.Enabled === false)
+                    .cat('"')
+                    .catIf(' checked="checked"', item.Checked)
+                    .cat('/>');
+
+            html.cat(item.NavigateUrl ? '<a href="' + item.NavigateUrl + '" class="t-link ' : '<span class="')
+                    .cat('t-in').catIf(' t-state-disabled', item.Enabled === false)
+                .cat('">');
+
+            if (item.ImageUrl != null)
+                html.cat('<img class="t-image" alt="" src="')
+                    .cat(item.ImageUrl)
+                    .cat('" />');
+
+            html.catIf(item.Text, item.Encoded === false)
+                .catIf(item.Text.replace(/</g, '&lt;').replace(/>/g, '&gt;'), item.Encoded !== false)
+                .cat(item.NavigateUrl ? '</a>' : '</span>');
+
+            if (item.Value)
+                html.cat('<input type="hidden" class="t-input" name="itemValue" value="')
+                    .cat(item.Value)
+                    .cat('" />');
+
+            html.cat('</div>');
+
+            if (item.Items && item.Items.length > 0)
+                $t.treeview.getGroupHtml(item.Items, html, isAjax, false, showCheckBoxes, item.Expanded);
+
+            html.cat('</li>');
+        },
+
+        getGroupHtml: function (data, html, isAjax, isFirstLevel, showCheckBoxes, isExpanded, renderGroup) {
+
+            if (renderGroup !== false)
+                html.cat('<ul class="t-group')
+                    .catIf(' t-treeview-lines', isFirstLevel)
+                    .cat('"')
+                    .catIf(' style="display:none"', isExpanded === false)
+                    .cat('>');
+
             if (data && data.length > 0) {
+                var getItemHtml = $t.treeview.getItemHtml;
 
-                for (var i = 0, len = data.length; i < len; i++) {
-                    var item = data[i];
-
-                    html.cat('<li class="t-item')
-                        .catIf(' t-first', isFirstLevel && i == 0)
-                        .catIf(' t-last', i == len - 1)
-                    .cat('">')
-                    .cat('<div class="')
-                        .catIf('t-top ', isFirstLevel && i == 0)
-                        .catIf('t-top', i != len - 1 && i == 0)
-                        .catIf('t-mid', i != len - 1 && i != 0)
-                        .catIf('t-bot', i == len - 1)
-                        .catIf(' t-state-disabled', item.Enabled === false)
-                    .cat('">');
-
-                    if ((isAjax && item.LoadOnDemand) || (item.Items && item.Items.length > 0))
-                        html.cat('<span class="t-icon')
-                            .catIf(' t-plus', !item.Expanded)
-                            .catIf(' t-minus', item.Expanded)
-                            .catIf('-disabled', item.Enabled === false) // t-(plus|minus)-disabled
-                            .cat('"')
-                            .cat('></span>');
-
-                    if (this.ShowCheckBox)
-                        html.cat('<input type="checkbox" value="')
-                            .cat(item.Value)
-                            .cat('" class="t-input')
-                            .catIf(' t-state-disabled', item.Enabled === false)
-                            .cat('"')
-                            .catIf(' checked="checked"', item.Checked)
-                            .cat('/>');
-
-                    html.cat(item.NavigateUrl ? '<a class="t-link t-in">' : '<span class="t-in">');
-
-                    if (item.ImageUrl != null)
-                        html.cat('<img class="t-image" alt="" src="')
-                            .cat(item.ImageUrl)
-                            .cat('" />');
-
-                    html.cat(item.Text)
-                        .cat(item.NavigateUrl ? '</a>' : '</span>')
-                        .cat('</div>');
-
-                    if (item.Items && item.Items.length > 0)
-                        this.getGroupHtml(item.Items, html, isAjax, false);
-                    
-                    if (item.Value)
-                        html.cat('<input type="hidden" class="t-input" name="itemValue" value="')
-                            .cat(item.Value)
-                            .cat('" />');
-
-                    html.cat('</li>');
-                }
+                for (var i = 0, len = data.length; i < len; i++)
+                    getItemHtml(data[i], html, isAjax, isFirstLevel, showCheckBoxes, i, len);
             }
 
-            html.cat('</ul>');
+            if (renderGroup !== false)
+                html.cat('</ul>');
         }
     });
 
     // jQuery extender
-    $.fn.tTreeView = function(options) {
-        options = $.extend({}, $.fn.tTreeView.defaults, options);
-
-        return this.each(function() {
-            options = $.meta ? $.extend({}, options, $(this).data()) : options;
-
-            if (!$(this).data('tTreeView')) {
-                var treeview = new $t.treeview(this, options);
-
-                $(this).data('tTreeView', treeview);
-
-                // fetch first level of empty ajax-enabled treeview
-                // has to be here because it fires events that use the treeview object
-                if (treeview.isAjax() && $(this).find('.t-item').length == 0)
-                    treeview.ajaxRequest();
+    $.fn.tTreeView = function (options) {
+        return $t.create(this, {
+            name: 'tTreeView',
+            init: function (element, options) {
+                return new $t.treeview(element, options);
+            },
+            options: options,
+            success: function (treeView) {
+                if (treeView.isAjax() && $(treeView.element).find('.t-item').length == 0)
+                    treeView.ajaxRequest();
             }
         });
     };

@@ -17,6 +17,10 @@ namespace Telerik.Web.Mvc.UI.Fluent
         private readonly INavigationItemContainer<TreeViewItem> container;
         private readonly ViewContext viewContext;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TreeViewItemFactory"/> class.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
         public TreeViewItemFactory(INavigationItemContainer<TreeViewItem> container, ViewContext viewContext)
         {
             Guard.IsNotNull(container, "container");

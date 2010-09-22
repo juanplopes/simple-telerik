@@ -2,9 +2,9 @@
 
 .t-widget
 {
-	border-color: #688caf;
-	/*font-size: .75em; /* 12px base, if there are no inherited font-sizes (MVC default) */
-	background-color: #fff;
+    border-color: #688caf;
+    /*font-size: .75em; /* 12px base, if there are no inherited font-sizes (MVC default) */
+    background-color: #fff;
 }
 
 /* .small .t-widget { font-size: .687em; } /* 11px base, if there are no inherited font-sizes (MVC default) */
@@ -12,14 +12,12 @@
 .t-header,
 .t-grid-header
 {
-	border-color: #688caf;
-	background: #c3d8f1 url('Office2007/sprite.png') repeat-x 0 -352px;
+    border-color: #688caf;
+    background: #c3d8f1 url('Office2007/sprite.png') repeat-x 0 -368px;
 }
 
-.t-icon
-{
-	background: transparent url('Office2007/sprite.png') no-repeat;
-}
+.t-icon { background-image: url('Office2007/sprite.png'); }
+.t-editor .t-tool-icon { background-image: url('Office2007/editor.png'); }
 
 .t-expand { background-position: 0 -160px; }
 .t-collapse { background-position: 0 -176px; }
@@ -63,7 +61,15 @@
 .t-refresh { background-position: -32px -240px; }
 .t-icon-calendar { background-position: -48px -240px; }
 
-.t-delete { background-position: 0 -288px; }
+.t-edit { background-position: 0 -336px; }
+.t-delete { background-position: -16px -336px; }
+.t-insert, .t-update { background-position: -32px -336px; }
+.t-cancel { background-position: -48px -336px; }
+.t-group-delete { background-position: 0 -288px; }
+
+.t-maximize { background-position: -16px -288px; }
+.t-restore { background-position: -32px -288px; }
+.t-close { background-position: -64px -288px; }
 
 .t-insert-top { background-position: 0 -320px; }
 .t-insert-middle { background-position: -16px -320px; }
@@ -77,26 +83,39 @@
 .t-widget,
 .t-link:link,
 .t-link:active,
-.t-link:visited
+.t-link:visited,
+.t-popup
 {
-	color: #000;
+    color: #000;
 }
 
 .t-group,
-.t-content
+.t-content,
+.t-editable-area
 {
-	border-color: #688caf;
-	background-color: #fff;
+    border-color: #688caf;
+    background-color: #fff;
+}
+
+.t-colorpicker .t-arrow-down
+{
+    border-color: #688caf;
+}
+
+.t-separator
+{
+    border-color: #ebf1f9;
+    background-color: #a0b2c7;
 }
 
 .t-alt
 {
-	background-color: #fff;
+    background-color: #fff;
 }
 
 .t-state-default
 {
-	border-color: #688caf;
+    border-color: #688caf;
 }
 
 .t-active-filter
@@ -106,70 +125,70 @@
 
 .t-state-hover
 {
-	background-color: #d6e5f3;
-	border-color: #688caf;
+    background-color: #d6e5f3;
+    border-color: #688caf;
 }
 
 .t-state-active
 {
-	background-color: #fff;
-	border-color: #688caf;
+    background-color: #fff;
+    border-color: #688caf;
 }
 
 .t-state-selected
 {
-	background-color: #ffd176;
+    background-color: #ffd176;
 }
 
 .t-state-error
 {
-	border-style: ridge;
-	border-color: #f00;
-	background-color: #ffc0cb;
+    border-style: ridge;
+    border-color: #f00;
+    background-color: #ffc0cb;
 }
 
 .t-state-disabled,
 .t-state-disabled .t-link
 {
-	color: #8d8d8d;
+    color: #8d8d8d;
 }
 
-.t-grid-toolbar,
+.t-toolbar,
 .t-grouping-header,
-.t-widget .t-footer,
+.t-widget .t-pager-wrapper,
 .t-grid-footer,
 .t-widget .t-status
 {
-	border-color: #5d8cc9;
-	background-color: #d6e5f3;
+    border-color: #5d8cc9;
+    background-color: #d6e5f3;
 }
 
 .t-button
 {
-	background: #e8e8e8 url('Office2007/sprite.png') repeat-x 0 -96px;
-	color: #333;
+    background: #e8e8e8 url('Office2007/sprite.png') repeat-x 0 -96px;
+    color: #333;
 }
 
 .t-button-hover
 {
-	background-position: 0 -128px;
-	border-color: #d8ca95 #b9a073 #c6b99c;
+    background-position: 0 -128px;
+    border-color: #d8ca95 #b9a073 #c6b99c;
 }
 
 .t-tabstrip li.t-state-active
 {
-	border-bottom-color: #fff;
+    border-bottom-color: #fff;
 }
 
 .t-grid td
 {
-	border-color: #ddd;
-	border-right: 1px solid #d6e5f3;
+    border-color: #ddd;
+    border-right: 1px solid #d6e5f3;
 }
 
-.t-grid .t-grouping-row
+.t-grouping-row td
 {
-	background: #fff url('Office2007/sprite.png') repeat-x 0 -48px;
+    background: #fff url('Office2007/sprite.png') repeat-x 0 -48px;
 }
 
 .t-grouping-header .t-group-indicator
@@ -183,16 +202,16 @@
     background: url('Office2007/sprite.png') no-repeat -48px -288px;
 }
 
-.t-grouping-row .t-groupcell,
+.t-grouping-row .t-group-cell,
 .t-grouping-row p
 {
-	background: #fff;
+    background: #fff;
 }
 
 .t-treeview .t-drop-clue
 {
     background-image: url('Office2007/sprite.png');
-    background-position: 0 -342px;
+    background-position: 0 -358px;
 }
 
 .t-treeview .t-state-selected
@@ -204,12 +223,12 @@
 .t-panelbar .t-group,
 .t-panelbar .t-content
 {
-	border-color: #5d8cc9;
+    border-color: #5d8cc9;
 }
 
 .t-panelbar .t-state-hover
 {
-	background-image: none;
+    background-image: none;
 }
 
 .t-calendar th
@@ -234,3 +253,15 @@
 
 .t-treeview-lines .t-item { background-image: url('Office2007/treeview-line.png'); }
 .t-treeview-lines .t-last { background-image: none; }
+
+.t-editor-button .t-state-hover
+{
+    border-color: #e8f0fa #98b2d0 #98b2d0 #e8f0fa;
+    background-color: #d4e3f5;
+}
+
+.t-editor-button .t-state-active
+{
+    border-color: #88a4c5 #d0dcea #d0dcea #88a4c5;
+    background-color: #9fbad9;
+}

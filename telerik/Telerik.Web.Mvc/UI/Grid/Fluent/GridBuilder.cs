@@ -1,6 +1,6 @@
-// (c) Copyright 2002-2010 Telerik 
+// (c) Copyright 2002-2010 Telerik
 // This source is subject to the GNU General Public License, version 2
-// See http://www.gnu.org/licenses/gpl-2.0.html. 
+// See http://www.gnu.org/licenses/gpl-2.0.html.
 // All other rights reserved.
 
 namespace Telerik.Web.Mvc.UI.Fluent
@@ -9,8 +9,9 @@ namespace Telerik.Web.Mvc.UI.Fluent
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Globalization;
-
+    using Extensions;
     using Infrastructure;
+    using Telerik.Web.Mvc.UI;
 
     /// <summary>
     /// Defines the fluent interface for configuring the <see cref="Grid{T}"/> component.
@@ -21,8 +22,51 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// Initializes a new instance of the <see cref="GridBuilder{T}"/> class.
         /// </summary>
         /// <param name="component">The component.</param>
-        public GridBuilder(Grid<T> component) : base(component)
+        public GridBuilder(Grid<T> component)
+            : base(component)
         {
+        }
+
+        public GridBuilder<T> TableHtmlAttributes(object attributes)
+        {
+            Guard.IsNotNull(attributes, "attributes");
+
+            Component.TableHtmlAttributes.Clear();
+            Component.TableHtmlAttributes.Merge(attributes);
+
+            return this;
+        }
+
+        public GridBuilder<T> DetailView(Action<GridDetailViewBuilder<T>> configurator)
+        {
+            Guard.IsNotNull(configurator, "configurator");
+
+            Component.DetailView = new GridDetailView<T>();
+
+            configurator(new GridDetailViewBuilder<T>(Component.DetailView));
+
+            return this;
+        }
+
+        /// <summary>
+        /// Configures the grid resizing settings
+        /// </summary>
+        /// <param name="configurator">Resizing settings configurator method</param>
+        /// <example>
+        /// <code lang="CS">
+        ///  &lt;%= Html.Telerik().Grid(Model)
+        ///             .Name("Grid")
+        ///             .Resizable(resizing => resizing.Columns(true))
+        /// %&gt;
+        /// </code>
+        /// </example>
+        public GridBuilder<T> Resizable(Action<GridResizingSettingsBuilder> configurator)
+        {
+            Guard.IsNotNull(configurator, "configurator");
+
+            configurator(new GridResizingSettingsBuilder(Component.Resizing));
+
+            return this;
         }
 
         /// <summary>
@@ -37,9 +81,9 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public virtual GridBuilder<T> Localizable(string culture)
+        public GridBuilder<T> Localizable(string culture)
         {
-            Component.Localization = new GridLocalizedStrings(new CultureInfo(culture));
+            Component.Localization = new GridLocalization(new CultureInfo(culture));
 
             return this;
         }
@@ -56,7 +100,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public virtual GridBuilder<T> Editable(Action<GridEditingSettingsBuilder> configurator)
+        public GridBuilder<T> Editable(Action<GridEditingSettingsBuilder> configurator)
         {
             Guard.IsNotNull(configurator, "configurator");
 
@@ -77,7 +121,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public virtual GridBuilder<T> ToolBar(Action<GridToolBarCommandFactory<T>> configurator)
+        public GridBuilder<T> ToolBar(Action<GridToolBarCommandFactory<T>> configurator)
         {
             Guard.IsNotNull(configurator, "configurator");
 
@@ -94,19 +138,19 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// <code lang="CS">
         ///  &lt;%= Html.Telerik().Grid&lt;Order&gt;()
         ///             .Name("Orders")
-        ///             .DataKeys(keys => 
+        ///             .DataKeys(keys =>
         ///             {
         ///                 keys.Add(c => c.CustomerID);
         ///             })
         /// %&gt;
         /// </code>
         /// </example>
-        public virtual GridBuilder<T> DataKeys(Action<GridDataKeyFactory<T>> configurator)
+        public GridBuilder<T> DataKeys(Action<GridDataKeyFactory<T>> configurator)
         {
             Guard.IsNotNull(configurator, "configurator");
 
             configurator(new GridDataKeyFactory<T>(Component));
-            
+
             return this;
         }
 
@@ -114,7 +158,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// Configure when to show footer of the grid.
         /// </summary>
         /// <param name="visible">If it is true, the future is visible.</param>
-        public virtual GridBuilder<T> Footer(bool visible)
+        public GridBuilder<T> Footer(bool visible)
         {
             Component.Footer = visible;
             return this;
@@ -141,7 +185,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public virtual GridBuilder<T> BindTo(IEnumerable<T> dataSource)
+        public GridBuilder<T> BindTo(IEnumerable<T> dataSource)
         {
             Component.DataSource = dataSource;
 
@@ -151,7 +195,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// <summary>
         /// Callback for each row.
         /// </summary>
-        /// <param name="configurator">Action, which will be executed for each row. 
+        /// <param name="configurator">Action, which will be executed for each row.
         /// You can format the entire row</param>
         /// <example>
         /// <code lang="CS">
@@ -181,7 +225,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// <summary>
         /// Callback for each cell.
         /// </summary>
-        /// <param name="configurator">Action, which will be executed for each cell. 
+        /// <param name="configurator">Action, which will be executed for each cell.
         /// You can format a concrete cell.</param>
         /// <example>
         /// <code lang="CS">
@@ -215,7 +259,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// </summary>
         /// <param name="value">If true enables custom binding.</param>
         /// <returns></returns>
-        public virtual GridBuilder<T> EnableCustomBinding(bool value)
+        public GridBuilder<T> EnableCustomBinding(bool value)
         {
             Component.EnableCustomBinding = value;
 
@@ -242,7 +286,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public virtual GridBuilder<T> Columns(Action<GridColumnFactory<T>> configurator)
+        public GridBuilder<T> Columns(Action<GridColumnFactory<T>> configurator)
         {
             Guard.IsNotNull(configurator, "addAction");
 
@@ -252,7 +296,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
 
             return this;
         }
-
+        
         /// <summary>
         /// Allows sorting of the columns.
         /// </summary>
@@ -273,7 +317,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public virtual GridBuilder<T> Sortable()
+        public GridBuilder<T> Sortable()
         {
             Component.Sorting.Enabled = true;
 
@@ -301,7 +345,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public virtual GridBuilder<T> Sortable(Action<GridSortSettingsBuilder<T>> configurator)
+        public GridBuilder<T> Sortable(Action<GridSortSettingsBuilder<T>> configurator)
         {
             Guard.IsNotNull(configurator, "configurator");
 
@@ -323,7 +367,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public virtual GridBuilder<T> Selectable()
+        public GridBuilder<T> Selectable()
         {
             Component.Selection.Enabled = true;
 
@@ -342,7 +386,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public virtual GridBuilder<T> Selectable(Action<GridSelectionSettingsBuilder> selectionAction)
+        public GridBuilder<T> Selectable(Action<GridSelectionSettingsBuilder> selectionAction)
         {
             Guard.IsNotNull(selectionAction, "selectionAction");
 
@@ -352,10 +396,11 @@ namespace Telerik.Web.Mvc.UI.Fluent
 
             return this;
         }
+
         /// <summary>
         /// Put grid name as a prefix.
         /// </summary>
-        public virtual GridBuilder<T> PrefixUrlParameters(bool prefix)
+        public GridBuilder<T> PrefixUrlParameters(bool prefix)
         {
             Component.PrefixUrlParameters = prefix;
 
@@ -382,7 +427,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public virtual GridBuilder<T> Pageable()
+        public GridBuilder<T> Pageable()
         {
             return Pageable(delegate { });
         }
@@ -404,7 +449,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
         ///                 columns.Add(c => c.ShipCity).Width(200);
         ///             })
         ///             .BindTo((IEnumerable&lt;Order&gt;)ViewData["Orders"])
-        ///             .Pageable(paging => 
+        ///             .Pageable(paging =>
         ///                        paging.PageSize(20)
         ///                              .Style(GridPagerStyles.NextPreviousAndNumeric)
         ///                              .Position(GridPagerPosition.Bottom)
@@ -412,7 +457,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public virtual GridBuilder<T> Pageable(Action<GridPagerSettingsBuilder> pagerAction)
+        public GridBuilder<T> Pageable(Action<GridPagerSettingsBuilder> pagerAction)
         {
             Guard.IsNotNull(pagerAction, "pagerAction");
 
@@ -421,7 +466,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
 
             return this;
         }
-        
+
         /// <summary>
         /// Use it to configure Server binding.
         /// </summary>
@@ -440,7 +485,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// </example>
         [Obsolete("Use DataBinding(dataBinding => dataBinding.Server().Select()) instead")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public virtual GridBuilder<T> ServerBinding(Action<GridRequestSettingsBuilder> operationSettingsAction)
+        public GridBuilder<T> ServerBinding(Action<GridRequestSettingsBuilder> operationSettingsAction)
         {
             Guard.IsNotNull(operationSettingsAction, "operationSettingsAction");
 
@@ -449,7 +494,25 @@ namespace Telerik.Web.Mvc.UI.Fluent
             return this;
         }
 
-        public virtual GridBuilder<T> DataBinding(Action<GridDataBindingConfigurationBuilder> configurator)
+        /// <summary>
+        /// Use it to configure binding option when performing data operations - paging, sorting and filtering.
+        /// </summary>
+        /// <param name="configurator">Use builder to set different data binding options.</param>
+        /// <example>
+        /// <code lang="CS">
+        ///  &lt;%= Html.Telerik().Grid()
+        ///             .Name("Grid")
+        ///             .DataBinding(dataBinding =>
+        ///             {
+        ///                 dataBinding.Server().Select("FirstLook", "Grid"});
+        ///                 dataBinding.Ajax().Select("_FirstLook", "Grid").Enabled((bool)ViewData["ajax"]);
+        ///             })
+        ///             .Pagealbe()
+        ///             .Sortable();
+        /// %&gt;
+        /// </code>
+        /// </example>
+        public GridBuilder<T> DataBinding(Action<GridDataBindingConfigurationBuilder> configurator)
         {
             Guard.IsNotNull(configurator, "configurator");
 
@@ -474,14 +537,14 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// </example>
         [Obsolete("Use DataBinding(dataBinding => dataBinding.Ajax().Select()) instead")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public virtual GridBuilder<T> Ajax(Action<GridAjaxSettingsBuilder> configurator)
+        public GridBuilder<T> Ajax(Action<GridAjaxSettingsBuilder> configurator)
         {
             Guard.IsNotNull(configurator, "configurator");
-            
+
             Component.Ajax.Enabled = true;
 
             configurator(new GridAjaxSettingsBuilder(Component.Ajax));
-            
+
             return this;
         }
 
@@ -505,7 +568,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public virtual GridBuilder<T> Filterable()
+        public GridBuilder<T> Filterable()
         {
             Component.Filtering.Enabled = true;
             return this;
@@ -532,7 +595,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public virtual GridBuilder<T> Filterable(Action<GridFilteringSettingsBuilder<T>> configurator)
+        public GridBuilder<T> Filterable(Action<GridFilteringSettingsBuilder<T>> configurator)
         {
             Guard.IsNotNull(configurator, "configurator");
 
@@ -563,7 +626,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public virtual GridBuilder<T> Scrollable()
+        public GridBuilder<T> Scrollable()
         {
             Component.Scrolling.Enabled = true;
 
@@ -591,14 +654,14 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public virtual GridBuilder<T> Scrollable(Action<GridScrollSettingsBuilder> configurator)
+        public GridBuilder<T> Scrollable(Action<GridScrollSettingsBuilder> configurator)
         {
             Guard.IsNotNull(configurator, "configurator");
 
             Scrollable();
 
             configurator(new GridScrollSettingsBuilder(Component.Scrolling));
-            
+
             return this;
         }
 
@@ -617,10 +680,10 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public virtual GridBuilder<T> ClientEvents(Action<GridClientEventsBuilder> configurator)
+        public GridBuilder<T> ClientEvents(Action<GridClientEventsBuilder> configurator)
         {
             Guard.IsNotNull(configurator, "configurator");
-            
+
             configurator(new GridClientEventsBuilder(Component.ClientEvents, Component.ViewContext));
 
             return this;
@@ -646,7 +709,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public virtual GridBuilder<T> Groupable(Action<GridGroupingSettingsBuilder<T>> configurator)
+        public GridBuilder<T> Groupable(Action<GridGroupingSettingsBuilder<T>> configurator)
         {
             Guard.IsNotNull(configurator, "configurator");
 
@@ -676,7 +739,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public virtual GridBuilder<T> Groupable()
+        public GridBuilder<T> Groupable()
         {
             return Groupable(delegate { });
         }
@@ -702,14 +765,14 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// </example>
         [Obsolete("Use DataBinding(dataBinding => dataBinding.WebService().Select()) instead")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public virtual GridBuilder<T> WebService(Action<GridWebServiceSettingsBuilder> configurator)
+        public GridBuilder<T> WebService(Action<GridWebServiceSettingsBuilder> configurator)
         {
             Guard.IsNotNull(configurator, "webServiceAction");
 
             Component.WebService.Enabled = true;
 
             configurator(new GridWebServiceSettingsBuilder(Component.WebService));
-            
+
             return this;
         }
     }

@@ -222,4 +222,13 @@
   <data name="DeleteConfirmation" xml:space="preserve">
     <value>Are you sure you want to delete this record?</value>
   </data>
+  <data name="FilterSelectValue" xml:space="preserve">
+    <value>-Select value-</value>
+  </data>
+  <data name="FilterBoolIsFalse" xml:space="preserve">
+    <value>is false</value>
+  </data>
+  <data name="FilterBoolIsTrue" xml:space="preserve">
+    <value>is true</value>
+  </data>
 </root>

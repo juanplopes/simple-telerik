@@ -5,12 +5,18 @@
 
 namespace Telerik.Web.Mvc.UI.Fluent
 {
-    using System;
 
+    /// <summary>
+    /// Defines the fluent interface for configuring the treeview webservice.
+    /// </summary>
     public class TreeViewWebServiceBindingSettingsBuilder : IHideObjectMembers
     {
         private TreeViewBindingSettings settings;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TreeViewWebServiceBindingSettingsBuilder"/> class.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
         public TreeViewWebServiceBindingSettingsBuilder(TreeViewBindingSettings settings)
         {
             this.settings = settings;

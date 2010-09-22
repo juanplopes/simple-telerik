@@ -1,19 +1,15 @@
-﻿using Telerik.Web.Mvc.Infrastructure;
-// (c) Copyright 2002-2010 Telerik 
+﻿// (c) Copyright 2002-2010 Telerik 
 // This source is subject to the GNU General Public License, version 2
 // See http://www.gnu.org/licenses/gpl-2.0.html. 
 // All other rights reserved.
 
 namespace Telerik.Web.Mvc.UI
 {
-    using System.Web.UI;
-    using System.Reflection;
 
     using Extensions;
     using Infrastructure;
-    using System.Web.Mvc;
 
-    public class PanelBarHtmlBuilder : NavigationHtmlBuilderBase<PanelBar,PanelBarItem>, IPanelBarHtmlBuilder
+    public class PanelBarHtmlBuilder : NavigationHtmlBuilderBase<PanelBar, PanelBarItem>, INavigationComponentHtmlBuilder<PanelBarItem>
     {
         public PanelBarHtmlBuilder(PanelBar panelBar, IActionMethodCache actionMethodCache)
             : base(panelBar, actionMethodCache)
@@ -32,7 +28,7 @@ namespace Telerik.Web.Mvc.UI
             return ul;
         }
 
-        public IHtmlNode PanelBarTag()
+        public IHtmlNode Build()
         {
             return ComponentTag("ul")
                 .PrependClass(UIPrimitives.Widget, "t-panelbar", UIPrimitives.ResetStyle);
@@ -53,7 +49,7 @@ namespace Telerik.Web.Mvc.UI
             });
         }
 
-        public IHtmlNode ItemInnerTag(PanelBarItem item)
+        public IHtmlNode ItemInnerContentTag(PanelBarItem item, bool hasAccessibleChildren)
         {
             IHtmlNode a = LinkTag(item, tag =>
             {
@@ -68,12 +64,14 @@ namespace Telerik.Web.Mvc.UI
                 }
             });
 
-            if (item.Items.Count > 0 || item.Content != null || !string.IsNullOrEmpty(item.ContentUrl))
+            if (hasAccessibleChildren || item.Template.HasValue() || item.ContentUrl.HasValue())
             {
                 new HtmlTag("span")
                     .AddClass(UIPrimitives.Icon)
-                    .ToggleClass("t-arrow-up", item.Enabled && item.Expanded)
-                    .ToggleClass("t-arrow-down", item.Enabled && !item.Expanded)
+                    .ToggleClass("t-arrow-up", item.Expanded)
+                    .ToggleClass("t-panelbar-collapse", item.Expanded)
+                    .ToggleClass("t-arrow-down", !item.Expanded)
+                    .ToggleClass("t-panelbar-expand", !item.Expanded)
                     .AppendTo(a);
             }
 
@@ -83,8 +81,8 @@ namespace Telerik.Web.Mvc.UI
         public IHtmlNode ItemContentTag(PanelBarItem item)
         {
             IHtmlNode div = ContentTag(item);
-            
-            if (!item.Expanded || !string.IsNullOrEmpty(item.ContentUrl) || !item.Enabled)
+
+            if (!item.Expanded || item.ContentUrl.HasValue() || !item.Enabled)
             {
                 div.Attribute("style", "display:none");
             }

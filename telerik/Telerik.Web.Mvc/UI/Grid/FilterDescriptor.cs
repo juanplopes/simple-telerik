@@ -8,7 +8,6 @@ namespace Telerik.Web.Mvc
     using System;
     using System.Linq.Expressions;
 
-    using Infrastructure.Implementation;
     using Infrastructure.Implementation.Expressions;
 
     /// <summary>
@@ -93,10 +92,11 @@ namespace Telerik.Web.Mvc
         protected override Expression CreateFilterExpression(ParameterExpression parameterExpression)
         {
             var builder = new FilterDescriptorExpressionBuilder(parameterExpression, this);
+            builder.Options.CopyFrom(ExpressionBuilderOptions);
 
             return builder.CreateBodyExpression();
         }
-
+        
         /// <summary>
         /// Determines whether the specified <paramref name="other"/> descriptor 
         /// is equal to the current one.

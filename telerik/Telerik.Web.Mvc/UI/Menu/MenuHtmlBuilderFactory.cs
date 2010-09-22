@@ -5,11 +5,10 @@
 
 namespace Telerik.Web.Mvc.UI
 {
-    using System.Web.UI;
 
     using Infrastructure;
 
-    public class MenuHtmlBuilderFactory : IMenuHtmlBuilderFactory
+    public class MenuHtmlBuilderFactory : INavigationComponentHtmlBuilderFactory<Menu, MenuItem>
     {
         private readonly IActionMethodCache actionMethodCache;
 
@@ -20,7 +19,7 @@ namespace Telerik.Web.Mvc.UI
             this.actionMethodCache = actionMethodCache;
         }
 
-        public IMenuHtmlBuilder Create(Menu menu)
+        public INavigationComponentHtmlBuilder<MenuItem> Create(Menu menu)
         {
             return new MenuHtmlBuilder(menu, actionMethodCache);
         }

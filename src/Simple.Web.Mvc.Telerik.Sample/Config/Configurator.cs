@@ -13,7 +13,7 @@ namespace Simple.Web.Mvc.Telerik.Sample.Config
 {
     public class Configurator : ConfigDef
     {
-        public Configurator() : base(Development) { }
+        public Configurator() : base(Development, null) { }
 
 
         public override ConfigDef ConfigClient()
@@ -31,6 +31,11 @@ namespace Simple.Web.Mvc.Telerik.Sample.Config
 
         protected override void InitLocations(FileLocator paths)
         {
+        }
+
+        public override FileInfo FindKeyFile()
+        {
+            throw new NotImplementedException();
         }
     }
 }

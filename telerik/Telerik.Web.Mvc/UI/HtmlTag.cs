@@ -1,5 +1,4 @@
-﻿using Telerik.Web.Mvc.Infrastructure;
-using Telerik.Web.Mvc.UI;
+﻿using Telerik.Web.Mvc.UI;
 // (c) Copyright 2002-2010 Telerik 
 // This source is subject to the GNU General Public License, version 2
 // See http://www.gnu.org/licenses/gpl-2.0.html. 
@@ -9,14 +8,13 @@ namespace Telerik.Web.Mvc.Infrastructure
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
-    using System.Text;
     using System.Web.Mvc;
     using System.Web.Routing;
-
     using Extensions;
-    using System.Globalization;
+    using System.Text;
 
     public class HtmlTag : IHtmlNode
     {
@@ -175,10 +173,10 @@ namespace Telerik.Web.Mvc.Infrastructure
 
         public IHtmlNode Html(string value)
         {
-            tagBuilder.InnerHtml = value;
-
             Children.Clear();
 
+            Children.Add(new LiteralNode(value));
+            
             return this;
         }
         
@@ -198,6 +196,15 @@ namespace Telerik.Web.Mvc.Infrastructure
         {
             get
             {
+                if (Children.Any())
+                {
+                    StringBuilder innerHtml = new StringBuilder();
+
+                    Children.Each(child => innerHtml.Append(child.ToString()));
+
+                    return innerHtml.ToString();
+                }
+
                 return tagBuilder.InnerHtml;
             }
         }

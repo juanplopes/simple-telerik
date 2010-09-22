@@ -17,7 +17,7 @@ namespace Simple.Web.Mvc.Telerik.Sample.Model
 
         static TGroup()
         {
-            Identifiers.AddID(x => x.Id);
+            Identifiers.Add(x => x.Id);
         }
 
         public TGroup() { }

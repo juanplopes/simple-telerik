@@ -6,11 +6,9 @@
 namespace Telerik.Web.Mvc.UI
 {
     using System;
-    using System.Collections.Generic;
-
-    using Infrastructure;
-    using Extensions;
     using System.Collections;
+    using System.Collections.Generic;
+    using Infrastructure;
 
     /// <summary>
     /// Defines the fluent interface for configuring the <see cref="Menu"/> component.

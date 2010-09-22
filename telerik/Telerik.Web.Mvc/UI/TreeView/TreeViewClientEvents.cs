@@ -5,80 +5,49 @@
 
 namespace Telerik.Web.Mvc.UI
 {
-    using System;
-
     public class TreeViewClientEvents
     {
-        public Action OnExpand
+        public TreeViewClientEvents()
         {
-            get;
-            set;
+            OnExpand = new ClientEvent();
+            OnCollapse = new ClientEvent();
+            OnSelect = new ClientEvent();
+            OnChecked = new ClientEvent();
+            OnLoad = new ClientEvent();
+            OnError = new ClientEvent();
+            OnNodeDragStart = new ClientEvent();
+            OnNodeDragging = new ClientEvent();
+            OnNodeDragCancelled = new ClientEvent();
+            OnNodeDrop = new ClientEvent();
+            OnNodeDropped = new ClientEvent();
+            OnDataBinding = new ClientEvent();
+            OnDataBound = new ClientEvent();
         }
 
-        public Action OnCollapse
-        {
-            get;
-            set;
-        }
+        public ClientEvent OnExpand { get; set; }
 
-        public Action OnSelect
-        {
-            get;
-            set;
-        }
+        public ClientEvent OnCollapse { get; set; }
 
-        public Action OnLoad
-        {
-            get;
-            set;
-        }
+        public ClientEvent OnSelect { get; set; }
 
-        public Action OnError
-        {
-            get;
-            set;
-        }
+        public ClientEvent OnChecked { get; set; }
 
-        public Action OnNodeDragStart
-        {
-            get;
-            set;
-        }
+        public ClientEvent OnLoad { get; set; }
 
-        public Action OnNodeDragging
-        {
-            get;
-            set;
-        }
+        public ClientEvent OnError { get; set; }
 
-        public Action OnNodeDragCancelled
-        {
-            get;
-            set;
-        }
+        public ClientEvent OnNodeDragStart { get; set; }
 
-        public Action OnNodeDrop
-        {
-            get;
-            set;
-        }
+        public ClientEvent OnNodeDragging { get; set; }
 
-        public Action OnNodeDropped
-        {
-            get;
-            set;
-        }
+        public ClientEvent OnNodeDragCancelled { get; set; }
 
-        public Action OnDataBinding
-        {
-            get;
-            set;
-        }
+        public ClientEvent OnNodeDrop { get; set; }
 
-        public Action OnDataBound
-        {
-            get;
-            set;
-        }
+        public ClientEvent OnNodeDropped { get; set; }
+
+        public ClientEvent OnDataBinding { get; set; }
+
+        public ClientEvent OnDataBound { get; set; }
     }
 }

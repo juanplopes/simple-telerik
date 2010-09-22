@@ -6,7 +6,6 @@
 namespace Telerik.Web.Mvc.Infrastructure.Implementation
 {
     using System;
-    using System.Web;
     using System.Collections.Generic;
     using System.Web.Routing;
 
@@ -175,9 +174,8 @@ namespace Telerik.Web.Mvc.Infrastructure.Implementation
                      { typeof(IUrlGenerator).TypeHandle, locator => new UrlGenerator() },
                      { typeof(IClientSideObjectWriterFactory).TypeHandle, locator => new ClientSideObjectWriterFactory() },
                      { typeof(ScriptWrapperBase).TypeHandle, locator => new ScriptWrapper() },
-                     { typeof(IGridHtmlBuilderFactory).TypeHandle, locator => new GridHtmlBuilderFactory() },
-                     { typeof(IPanelBarHtmlBuilderFactory).TypeHandle, locator => new PanelBarHtmlBuilderFactory(locator.Resolve<IActionMethodCache>()) },
-                     { typeof(IMenuHtmlBuilderFactory).TypeHandle, locator => new MenuHtmlBuilderFactory(locator.Resolve<IActionMethodCache>()) },
+                     { typeof(INavigationComponentHtmlBuilderFactory<PanelBar, PanelBarItem>).TypeHandle, locator => new PanelBarHtmlBuilderFactory(locator.Resolve<IActionMethodCache>()) },
+                     { typeof(INavigationComponentHtmlBuilderFactory<Menu, MenuItem>).TypeHandle, locator => new MenuHtmlBuilderFactory(locator.Resolve<IActionMethodCache>()) },
                      { typeof(ITabStripHtmlBuilderFactory).TypeHandle, locator => new TabStripHtmlBuilderFactory(locator.Resolve<IActionMethodCache>()) },
                      { typeof(IDatePickerHtmlBuilderFactory).TypeHandle, locator => new DatePickerHtmlBuilderFactory() },
                      { typeof(ICalendarHtmlBuilderFactory).TypeHandle, locator => new CalendarHtmlBuilderFactory() },
@@ -186,7 +184,8 @@ namespace Telerik.Web.Mvc.Infrastructure.Implementation
                      { typeof(ITextboxBaseHtmlBuilderFactory<int>).TypeHandle, locator => new TextboxBaseHtmlBuilderFactory<int>() },
                      { typeof(ITextboxBaseHtmlBuilderFactory<float>).TypeHandle, locator => new TextboxBaseHtmlBuilderFactory<float>() },
                      { typeof(ITextboxBaseHtmlBuilderFactory<double>).TypeHandle, locator => new TextboxBaseHtmlBuilderFactory<double>() },
-                     { typeof(ITextboxBaseHtmlBuilderFactory<decimal>).TypeHandle, locator => new TextboxBaseHtmlBuilderFactory<decimal>() }
+                     { typeof(ITextboxBaseHtmlBuilderFactory<decimal>).TypeHandle, locator => new TextboxBaseHtmlBuilderFactory<decimal>() },
+                     { typeof(IWindowHtmlBuilderFactory).TypeHandle, locator => new WindowHtmlBuilderFactory() }
                  };
             
             return defaultFactories;

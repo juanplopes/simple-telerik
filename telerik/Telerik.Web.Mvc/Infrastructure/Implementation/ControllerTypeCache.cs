@@ -16,6 +16,7 @@ namespace Telerik.Web.Mvc.Infrastructure.Implementation
     using System.Web.Routing;
 
     using Extensions;
+    using Resources;
 
     public class ControllerTypeCache : IControllerTypeCache
     {
@@ -53,11 +54,11 @@ namespace Telerik.Web.Mvc.Infrastructure.Implementation
             {
                 IEnumerable<string> routeNamespacesAsStrings = routeNamespacesAsObject as IEnumerable<string>;
 
-                if (routeNamespacesAsStrings != null)
+                if (routeNamespacesAsStrings != null && routeNamespacesAsStrings.Any())
                 {
                     HashSet<string> routeNamespaces = new HashSet<string>(routeNamespacesAsStrings, StringComparer.OrdinalIgnoreCase);
 
-                    match = GetControllerTypeWithinNamespaces(controllerName, routeNamespaces);
+                    match = GetControllerTypeWithinNamespaces(requestContext.RouteData.Route,controllerName, routeNamespaces);
 
                     if (match != null)
                     {
@@ -66,24 +67,33 @@ namespace Telerik.Web.Mvc.Infrastructure.Implementation
                 }
             }
 
-            HashSet<string> defaultNamespaces = new HashSet<string>(ControllerBuilder.Current.DefaultNamespaces, StringComparer.OrdinalIgnoreCase);
+            // then search in the application's default namespace collection
+            if ((requestContext != null) && (ControllerBuilder.Current.DefaultNamespaces.Count > 0))
+            {
+                HashSet<string> nsDefaults = new HashSet<string>(ControllerBuilder.Current.DefaultNamespaces, StringComparer.OrdinalIgnoreCase);
 
-            match = GetControllerTypeWithinNamespaces(controllerName, defaultNamespaces);
+                match = GetControllerTypeWithinNamespaces(requestContext.RouteData.Route, controllerName, nsDefaults);
 
-            return match ?? GetControllerTypeWithinNamespaces(controllerName, null);
+                if (match != null)
+                {
+                    return match;
+                }
+            }
+
+            return (requestContext != null) ? GetControllerTypeWithinNamespaces(requestContext.RouteData.Route, controllerName, null /* namespaces */) : null;
         }
 
-        private Type GetControllerTypeWithinNamespaces(string controllerName, IEnumerable<string> namespaces)
+        private Type GetControllerTypeWithinNamespaces(RouteBase route, string controllerName, IEnumerable<string> namespaces)
         {
             EnsureInitialized();
 
-            IList<Type> matchingTypes = GetControllerTypes(controllerName, namespaces);
+            ICollection<Type> matchingTypes = GetControllerTypes(controllerName, namespaces);
 
             switch (matchingTypes.Count)
             {
                 case 1:
                     {
-                        return matchingTypes[0];
+                        return matchingTypes.First();
                     }
 
                 case 0:
@@ -93,15 +103,31 @@ namespace Telerik.Web.Mvc.Infrastructure.Implementation
 
                 default:
                     {
-                        StringBuilder controllerTypes = new StringBuilder();
-
+                        // we need to generate an exception containing all the controller types
+                        StringBuilder typeList = new StringBuilder();
                         foreach (Type matchedType in matchingTypes)
                         {
-                            controllerTypes.AppendLine();
-                            controllerTypes.Append(matchedType.FullName);
+                            typeList.AppendLine();
+                            typeList.Append(matchedType.FullName);
                         }
 
-                        throw new InvalidOperationException("The controller name '{0}' is ambiguous between the following types:{1}".FormatWith(controllerName, controllerTypes.ToString()));
+                        Route castRoute = route as Route;
+
+                        string errorText = castRoute != null ?
+                                           String.Format(Culture.CurrentUI, TextResource.ControllerNameAmbiguousWithRouteUrl, controllerName, castRoute.Url, typeList) :
+                                           String.Format(Culture.CurrentUI, TextResource.ControllerNameAmbiguousWithoutRouteUrl, controllerName, typeList);
+
+                        throw new InvalidOperationException(errorText);
+
+                        //StringBuilder controllerTypes = new StringBuilder();
+
+                        //foreach (Type matchedType in matchingTypes)
+                        //{
+                        //    controllerTypes.AppendLine();
+                        //    controllerTypes.Append(matchedType.FullName);
+                        //}
+
+                        //throw new InvalidOperationException("The controller name '{0}' is ambiguous between the following types:{1}".FormatWith(controllerName, controllerTypes.ToString()));
                     }
             }
         }
@@ -124,26 +150,34 @@ namespace Telerik.Web.Mvc.Infrastructure.Implementation
             }
         }
 
-        private IList<Type> GetControllerTypes(string controllerName, IEnumerable<string> namespaces)
+        private ICollection<Type> GetControllerTypes(string controllerName, IEnumerable<string> namespaces)
         {
-            IList<Type> matchingTypes = new List<Type>();
+            var matchingTypes = new HashSet<Type>();
 
-            ILookup<string, Type> namespaceLookup;
+            ILookup<string, Type> nsLookup;
 
-            if (cache.TryGetValue(controllerName, out namespaceLookup))
+            if (cache.TryGetValue(controllerName, out nsLookup))
             {
+                // this friendly name was located in the cache, now cycle through namespaces
                 if (namespaces != null)
                 {
-                    foreach (string ns in namespaces)
+                    foreach (string requestedNamespace in namespaces)
                     {
-                        matchingTypes.AddRange(namespaceLookup[ns]);
+                        foreach (var targetNamespaceGrouping in nsLookup)
+                        {
+                            if (IsNamespaceMatch(requestedNamespace, targetNamespaceGrouping.Key))
+                            {
+                                matchingTypes.UnionWith(targetNamespaceGrouping);
+                            }
+                        }
                     }
                 }
                 else
                 {
-                    foreach (IGrouping<string, Type> namespaceGroup in namespaceLookup)
+                    // if the namespaces parameter is null, search *every* namespace
+                    foreach (var nsGroup in nsLookup)
                     {
-                        matchingTypes.AddRange(namespaceGroup);
+                        matchingTypes.UnionWith(nsGroup);
                     }
                 }
             }
@@ -177,6 +211,49 @@ namespace Telerik.Web.Mvc.Infrastructure.Implementation
             }
 
             return controllerTypes;
+        }
+
+        private static bool IsNamespaceMatch(string requestedNamespace, string targetNamespace)
+        {
+            // degenerate cases
+            if (requestedNamespace == null)
+            {
+                return false;
+            }
+
+            if (requestedNamespace.Length == 0)
+            {
+                return true;
+            }
+
+            if (!requestedNamespace.EndsWith(".*", StringComparison.OrdinalIgnoreCase))
+            {
+                // looking for exact namespace match
+                return String.Equals(requestedNamespace, targetNamespace, StringComparison.OrdinalIgnoreCase);
+            }
+
+            // looking for exact or sub-namespace match
+
+            requestedNamespace = requestedNamespace.Substring(0, requestedNamespace.Length - ".*".Length);
+            if (!targetNamespace.StartsWith(requestedNamespace, StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
+            if (requestedNamespace.Length == targetNamespace.Length)
+            {
+                // exact match
+                return true;
+            }
+
+            if (targetNamespace[requestedNamespace.Length] == '.')
+            {
+                // good prefix match, e.g. requestedNamespace = "Foo.Bar" and targetNamespace = "Foo.Bar.Baz"
+                return true;
+            }
+
+            // bad prefix match, e.g. requestedNamespace = "Foo.Bar" and targetNamespace = "Foo.Bar2"
+            return false;
         }
     }
 }

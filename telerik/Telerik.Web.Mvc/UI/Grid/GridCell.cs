@@ -7,15 +7,31 @@ namespace Telerik.Web.Mvc.UI
 {
     using System;
     using System.Collections.Generic;
+    using Telerik.Web.Mvc.Extensions;
 
-    public class GridCell<T>
+    public class GridCell<T> : IGridRenderingContext<T>
         where T : class
     {
         public GridCell(GridColumnBase<T> column, T dataItem)
         {
             Column = column;
+            Grid = column.Grid;
             DataItem = dataItem;
+            Template = new HtmlTemplate<T>();
             HtmlAttributes = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+            HtmlAttributes.Merge(column.HtmlAttributes);
+        }
+
+        public Grid<T> Grid 
+        { 
+            get; 
+            private set; 
+        }
+        
+        public HtmlTemplate<T> Template
+        {
+            get;
+            private set;
         }
         
         public IDictionary<string, object> HtmlAttributes
@@ -44,14 +60,26 @@ namespace Telerik.Web.Mvc.UI
 
         public string Text
         {
-            get;
-            set;
+            get
+            {
+                return Template.Html;
+            }
+            set
+            {
+                Template.Html = value;
+            }
         }
 
         public Action<T> Content
         {
-            get;
-            set;
+            get
+            {
+                return Template.CodeBlockTemplate;
+            }
+            set
+            {
+                Template.CodeBlockTemplate = value;
+            }
         }
 
 #if MVC2

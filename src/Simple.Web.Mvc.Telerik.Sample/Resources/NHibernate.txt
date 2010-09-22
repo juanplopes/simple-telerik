@@ -6,7 +6,7 @@
     <property name="connection.connection_string">
       Data Source=|DataDirectory|Workspace.db;Version=3;New=True;
     </property>
-    <property name="proxyfactory.factory_class">NHibernate.ByteCode.Castle.ProxyFactoryFactory, Simple</property>
+    <property name="proxyfactory.factory_class">NHibernate.ByteCode.LinFu.ProxyFactoryFactory</property>
   </session-factory>
 </hibernate-configuration>
 

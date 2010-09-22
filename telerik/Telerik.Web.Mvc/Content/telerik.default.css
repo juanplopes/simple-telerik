@@ -2,9 +2,9 @@
 
 .t-widget
 {
-	border-color: #989898;
-	/*font-size: .75em; /* 12px base, if there are no inherited font-sizes (MVC default) */
-	background-color: #fff;
+    border-color: #989898;
+    /*font-size: .75em; /* 12px base, if there are no inherited font-sizes (MVC default) */
+    background-color: #fff;
 }
 
 /* .small .t-widget { font-size: .687em; } /* 11px base, if there are no inherited font-sizes (MVC default) */
@@ -12,14 +12,12 @@
 .t-header,
 .t-grid-header
 {
-	border-color: #989898;
-	background: #adadad url('Default/sprite.png') repeat-x 0 -352px;
+    border-color: #989898;
+    background: #adadad url('Default/sprite.png') repeat-x 0 -368px;
 }
 
-.t-icon
-{
-	background: transparent url('Default/sprite.png') no-repeat;
-}
+.t-icon { background-image: url('Default/sprite.png'); }
+.t-editor .t-tool-icon { background-image: url('Default/editor.png'); }
 
 .t-expand { background-position: 0 -160px; }
 .t-collapse { background-position: 0 -176px; }
@@ -63,7 +61,15 @@
 .t-refresh { background-position: -32px -240px; }
 .t-icon-calendar { background-position: -48px -240px; }
 
-.t-delete { background-position: 0 -288px; }
+.t-edit { background-position: 0 -336px; }
+.t-delete { background-position: -16px -336px; }
+.t-insert, .t-update { background-position: -32px -336px; }
+.t-cancel { background-position: -48px -336px; }
+.t-group-delete { background-position: 0 -288px; }
+
+.t-maximize { background-position: -16px -288px; }
+.t-restore { background-position: -32px -288px; }
+.t-close { background-position: -64px -288px; }
 
 .t-insert-top { background-position: 0 -320px; }
 .t-insert-middle { background-position: -16px -320px; }
@@ -77,26 +83,39 @@
 .t-widget,
 .t-link:link,
 .t-link:active,
-.t-link:visited
+.t-link:visited,
+.t-popup
 {
-	color: #000;
+    color: #000;
 }
 
 .t-group,
-.t-content
+.t-content,
+.t-editable-area
 {
-	border-color: #828282;
-	background-color: #fff;
+    border-color: #828282;
+    background-color: #fff;
+}
+
+.t-colorpicker .t-arrow-down
+{
+    border-color: #989898;
+}
+
+.t-separator
+{
+    border-color: #d8d8d8;
+    background-color: #999;
 }
 
 .t-alt
 {
-	background-color: #f7f7f7;
+    background-color: #f7f7f7;
 }
 
 .t-state-default
 {
-	border-color: #828282;
+    border-color: #828282;
 }
 
 .t-active-filter
@@ -106,8 +125,8 @@
 
 .t-state-hover
 {
-	background-color: #e9e9e9;
-	border-color: #828282;
+    background-color: #e9e9e9;
+    border-color: #828282;
 }
 
 .t-header .t-state-hover
@@ -118,63 +137,63 @@
 .t-state-active,
 .t-header .t-state-active
 {
-	background-color: #fff;
-	border-color: #828282;
+    background-color: #fff;
+    border-color: #828282;
 }
 
 .t-state-selected
 {
-	background-color: #ddd;
+    background-color: #ddd;
 }
 
 .t-state-error
 {
-	border-style: ridge;
-	border-color: #f00;
-	background-color: #ffc0cb;
+    border-style: ridge;
+    border-color: #f00;
+    background-color: #ffc0cb;
 }
 
 .t-state-disabled,
 .t-state-disabled .t-link
 {
-	color: #888;
+    color: #888;
 }
 
-.t-grid-toolbar,
+.t-toolbar,
 .t-grouping-header,
-.t-widget .t-footer,
+.t-widget .t-pager-wrapper,
 .t-grid-footer,
 .t-widget .t-status
 {
-	border-color: #aaa;
-	background-color: #eee;
+    border-color: #aaa;
+    background-color: #eee;
 }
 
 .t-button
 {
-	background: #e8e8e8 url('Default/sprite.png') repeat-x 0 -96px;
-	color: #333;
+    background: #e8e8e8 url('Default/sprite.png') repeat-x 0 -96px;
+    color: #333;
 }
 
 .t-button-hover
 {
-	background-position: 0 -128px;
+    background-position: 0 -128px;
 }
 
 .t-tabstrip li.t-state-active
 {
-	border-bottom-color: #fff;
+    border-bottom-color: #fff;
 }
 
 .t-grid td
 {
-	border-color: #ddd;
-	border-right: 1px solid #eee;
+    border-color: #ddd;
+    border-right: 1px solid #eee;
 }
 
-.t-grid .t-grouping-row
+.t-grouping-row td
 {
-	background: #fff url('Default/sprite.png') repeat-x 0 -48px;
+    background: #fff url('Default/sprite.png') repeat-x 0 -48px;
 }
 
 .t-grouping-header .t-group-indicator
@@ -188,16 +207,16 @@
     background: url('Default/sprite.png') no-repeat -48px -288px;
 }
 
-.t-grouping-row .t-groupcell,
+.t-grouping-row .t-group-cell,
 .t-grouping-row p
 {
-	background: #fff;
+    background: #fff;
 }
 
 .t-treeview .t-drop-clue
 {
     background-image: url('Default/sprite.png');
-    background-position: 0 -342px;
+    background-position: 0 -358px;
 }
 
 .t-treeview .t-state-selected
@@ -209,12 +228,12 @@
 .t-panelbar .t-group,
 .t-panelbar .t-content
 {
-	border-color: #aaa;
+    border-color: #aaa;
 }
 
 .t-panelbar .t-state-hover
 {
-	background-image: none;
+    background-image: none;
 }
 
 .t-calendar th
@@ -239,3 +258,15 @@
 
 .t-treeview-lines .t-item { background-image: url('Default/treeview-line.png'); }
 .t-treeview-lines .t-last { background-image: none; }
+
+.t-editor-button .t-state-hover
+{
+    border-color: #e2e2e2 #878787 #878787 #e2e2e2;
+    background-color: #c6c6c6;
+}
+
+.t-editor-button .t-state-active
+{
+    border-color: #767676 #d0d0d0 #d0d0d0 #767676;
+    background-color: #9e9e9e;
+}

@@ -47,9 +47,21 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Simple, Version=1.0.3575.23962, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate, Version=3.0.0.1003, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="Simple, Version=3.0.1048.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Simple.dll</HintPath>
+    </Reference>
+    <Reference Include="Simple.Data, Version=3.0.1048.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Simple.Data.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -58,6 +70,10 @@
     </Reference>
     <Reference Include="System.Data.DataSetExtensions">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\System.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -77,18 +93,6 @@
       <HintPath>..\..\lib\Telerik.Web.Mvc.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <Choose>
-    <When Condition=" '$(Configuration)|$(Platform)' == 'Debug MVC2 NET35|AnyCPU' Or '$(Configuration)|$(Platform)' == 'Release MVC2 NET35|AnyCPU'">
-      <ItemGroup>
-        <Reference Include="System.Web.Mvc, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-      </ItemGroup>
-    </When>
-    <Otherwise>
-      <ItemGroup>
-        <Reference Include="System.Web.Mvc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-      </ItemGroup>
-    </Otherwise>
-  </Choose>
   <ItemGroup>
     <Compile Include="..\GlobalInfo.cs">
       <Link>Properties\GlobalInfo.cs</Link>
@@ -270,6 +274,27 @@
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>GridLocalization.pt-BR.designer.cs</LastGenOutput>
     </Content>
+    <Content Include="Scripts\2010.2.825\jquery-1.4.2.min.js" />
+    <Content Include="Scripts\2010.2.825\jquery.validate.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.autocomplete.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.calendar.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.combobox.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.common.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.datepicker.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.draganddrop.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.editor.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.grid.editing.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.grid.filtering.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.grid.grouping.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.grid.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.grid.resizing.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.list.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.menu.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.panelbar.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.tabstrip.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.textbox.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.treeview.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.window.min.js" />
     <Content Include="System.Data.SQLite.DLL">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

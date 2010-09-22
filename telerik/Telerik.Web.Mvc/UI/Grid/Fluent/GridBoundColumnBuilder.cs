@@ -189,6 +189,15 @@ namespace Telerik.Web.Mvc.UI.Fluent
             (Column as GridColumnBase<T>).Template = templateAction;
 
             return this;
+        }        
+        
+        public virtual GridBoundColumnBuilder<T> Template(Func<T, object> inlineTemplate)
+        {
+            Guard.IsNotNull(inlineTemplate, "inlineTemplate");
+
+            (Column as GridColumnBase<T>).InlineTemplate = inlineTemplate;
+
+            return this;
         }
 
         public virtual GridBoundColumnBuilder<T> ClientTemplate(string value)

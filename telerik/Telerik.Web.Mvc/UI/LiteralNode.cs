@@ -6,8 +6,8 @@
 namespace Telerik.Web.Mvc.UI
 {
     using System;
-    using System.IO;
     using System.Collections.Generic;
+    using System.IO;
     using System.Web.Mvc;
     
     public class LiteralNode : IHtmlNode
@@ -30,7 +30,7 @@ namespace Telerik.Web.Mvc.UI
 
         public string InnerHtml
         {
-            get { throw new NotSupportedException(); }
+            get { return Content; }
         }
 
         public TagRenderMode RenderMode
@@ -133,6 +133,11 @@ namespace Telerik.Web.Mvc.UI
             parent.Children.Add(this);
 
             return this;
+        }
+
+        public override string ToString()
+        {
+            return Content;
         }
     }
 }

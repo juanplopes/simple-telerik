@@ -7,20 +7,19 @@ namespace Telerik.Web.Mvc
 {
     using System;
     using System.Collections;
+    using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.Diagnostics;
     using System.IO;
     using System.Text;
     using System.Web;
+    using System.Web.Caching;
     using System.Web.Mvc;
     using System.Web.Routing;
-    using System.Web.Caching;
     using System.Web.UI;
-
-    using Moq;
-    using System.Collections.Generic;
     using Infrastructure;
-    using UI;
+    using Moq;
+
 
 #if MVC2
     class ValueProvider : IValueProvider
@@ -87,6 +86,21 @@ namespace Telerik.Web.Mvc
             return helper;
         }
 
+#if MVC2
+        [DebuggerStepThrough]
+        public static HtmlHelper<TModel> CreateHtmlHelper<TModel>() where TModel : class, new()
+        {
+            Mock<IViewDataContainer> viewDataContainer = new Mock<IViewDataContainer>();
+
+            viewDataContainer.SetupGet(container => container.ViewData).Returns(new ViewDataDictionary { Model = new TModel() });
+
+            ViewContext viewContext = TestHelper.CreateViewContext();
+
+            HtmlHelper<TModel> helper = new HtmlHelper<TModel>(viewContext, viewDataContainer.Object);
+
+            return helper;
+        }
+#endif
         private static Mock<HttpContextBase> httpContext;
         private static object sync = new object();
 
@@ -148,7 +162,14 @@ namespace Telerik.Web.Mvc
         [DebuggerStepThrough]
         public static RequestContext CreateRequestContext()
         {
-            return new RequestContext(CreateMockedHttpContext().Object, new RouteData());
+            return new RequestContext(CreateMockedHttpContext().Object, new RouteData
+                {
+                    Values =
+                    {
+                        {"controller", "home"},
+                        {"action", "index"}
+                    }
+                });
         }
 
         [DebuggerStepThrough]

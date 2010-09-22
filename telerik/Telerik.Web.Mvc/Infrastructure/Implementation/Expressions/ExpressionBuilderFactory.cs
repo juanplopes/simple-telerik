@@ -8,10 +8,9 @@ namespace Telerik.Web.Mvc.Infrastructure.Implementation.Expressions
     using System;
     using System.ComponentModel;
     using System.Data;
-    using System.Xml;
-
-    using Extensions;
     using System.Linq;
+    using System.Xml;
+    using Extensions;
 
     internal static class ExpressionBuilderFactory
     {

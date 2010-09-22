@@ -5,13 +5,17 @@
 
 namespace Telerik.Web.Mvc.UI.Fluent
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
 
+    /// <summary>
+    /// Creates command for the <see cref="Grid{T}" />.
+    /// </summary>
+    /// <typeparam name="T">The type of the data item</typeparam>
     public class GridActionCommandFactory<T> : IHideObjectMembers where T : class
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GridActionCommandFactory&lt;T&gt;"/> class.
+        /// </summary>
+        /// <param name="column">The column.</param>
         public GridActionCommandFactory(GridActionColumn<T> column)
         {
             Column = column;
@@ -23,33 +27,48 @@ namespace Telerik.Web.Mvc.UI.Fluent
             set;
         }
 
-        public GridEditActionCommandBuilder<T> Edit()
+#if MVC2
+        /// <summary>
+        /// Defines a edit command.
+        /// </summary>
+        /// <returns></returns>
+        public GridEditActionCommandBuilder Edit()
         {
-            GridEditActionCommand<T> command = new GridEditActionCommand<T>();
+            GridEditActionCommand command = new GridEditActionCommand();
+            
+            Column.Commands.Add(command);
+
+            Column.Grid.Editing.Enabled = true;
+
+            return new GridEditActionCommandBuilder(command);
+        }
+
+        /// <summary>
+        /// Defines a delete command.
+        /// </summary>
+        /// <returns></returns>
+        public GridDeleteActionCommandBuilder Delete()
+        {
+            GridDeleteActionCommand command = new GridDeleteActionCommand();
 
             Column.Commands.Add(command);
 
             Column.Grid.Editing.Enabled = true;
 
-            return new GridEditActionCommandBuilder<T>(command);
+            return new GridDeleteActionCommandBuilder(command);
         }
-
-        public GridDeleteActionCommandBuilder<T> Delete()
+#endif
+        /// <summary>
+        /// Defines a select command.
+        /// </summary>
+        /// <returns></returns>
+        public GridSelectActionCommandBuilder Select()
         {
-            GridDeleteActionCommand<T> command = new GridDeleteActionCommand<T>();
+            GridSelectActionCommand command = new GridSelectActionCommand();
 
             Column.Commands.Add(command);
 
-            return new GridDeleteActionCommandBuilder<T>(command);
-        }
-        
-        public GridSelectActionCommandBuilder<T> Select()
-        {
-            GridSelectActionCommand<T> command = new GridSelectActionCommand<T>();
-
-            Column.Commands.Add(command);
-
-            return new GridSelectActionCommandBuilder<T>(command);
+            return new GridSelectActionCommandBuilder(command);
         }
     }
 }

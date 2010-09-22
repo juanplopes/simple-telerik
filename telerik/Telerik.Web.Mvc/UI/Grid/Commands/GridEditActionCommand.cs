@@ -8,18 +8,18 @@ namespace Telerik.Web.Mvc.UI
     using Extensions;
     using Infrastructure;
 
-    public class GridEditActionCommand<T> : GridActionCommandBase<T> where T : class
+    public class GridEditActionCommand : GridActionCommandBase
     {
         public override string Name
         {
             get { return "edit"; }
         }
 
-        public override void EditModeHtml(IHtmlNode parent, GridCell<T> context)
+        public override void EditModeHtml<T>(IHtmlNode parent, IGridRenderingContext<T> context)
         {
             #if MVC2
 
-            Grid<T> grid = context.Column.Grid;
+            Grid<T> grid = context.Grid;
 
             grid.WriteDataKeys(context.DataItem, parent);
 
@@ -27,7 +27,7 @@ namespace Telerik.Web.Mvc.UI
                 .Attributes(HtmlAttributes)
                 .AddClass(UIPrimitives.Grid.Action, UIPrimitives.Button, UIPrimitives.DefaultState, UIPrimitives.Grid.Update)
                 .Attribute("type", "submit")
-                .Text(grid.Localization.Update)
+                .Html(this.ButtonContent(grid.Localization.Update, "t-update"))
                 .AppendTo(parent);
 
             AppendCancelButton(grid, parent);
@@ -35,11 +35,11 @@ namespace Telerik.Web.Mvc.UI
             #endif
         }
 
-        public override void InsertModeHtml(IHtmlNode parent, GridCell<T> context)
+        public override void InsertModeHtml<T>(IHtmlNode parent, IGridRenderingContext<T> context)
         {
             #if MVC2
 
-            Grid<T> grid = context.Column.Grid;
+            Grid<T> grid = context.Grid;
 
             grid.WriteDataKeys(context.DataItem, parent);
 
@@ -47,7 +47,7 @@ namespace Telerik.Web.Mvc.UI
                 .Attributes(HtmlAttributes)
                 .AddClass(UIPrimitives.Grid.Action, UIPrimitives.Button, UIPrimitives.DefaultState, UIPrimitives.Grid.Insert)
                 .Attribute("type", "submit")
-                .Text(grid.Localization.Insert)
+                .Html(this.ButtonContent(grid.Localization.Insert, "t-insert"))
                 .AppendTo(parent);
 
             AppendCancelButton(grid, parent);
@@ -55,10 +55,11 @@ namespace Telerik.Web.Mvc.UI
             #endif
         }
 
-        public override void BoundModeHtml(IHtmlNode parent, GridCell<T> context)
+        public override void BoundModeHtml<T>(IHtmlNode parent, IGridRenderingContext<T> context)
         {
-            Grid<T> grid = context.Column.Grid;
-            var urlBuilder = new GridUrlBuilder<T>(grid);
+            #if MVC2
+            Grid<T> grid = context.Grid;
+            var urlBuilder = new GridUrlBuilder(grid);
 
             new HtmlTag("a")
                 .Attributes(HtmlAttributes)
@@ -72,13 +73,15 @@ namespace Telerik.Web.Mvc.UI
 
                     routeValues[grid.Prefix(GridUrlParameters.Mode)] = "edit";
                 }))
-                .Text(grid.Localization.Edit)
+                .Html(this.ButtonContent(grid.Localization.Edit, "t-edit"))
                 .AppendTo(parent);
+            #endif
         }
 
-        private void AppendCancelButton(Grid<T> grid, IHtmlNode parent)
+        #if MVC2
+        private void AppendCancelButton<T>(Grid<T> grid, IHtmlNode parent) where T : class
         {
-            var urlBuilder = new GridUrlBuilder<T>(grid);
+            var urlBuilder = new GridUrlBuilder(grid);
 
             new HtmlTag("a")
                 .Attributes(HtmlAttributes)
@@ -92,11 +95,12 @@ namespace Telerik.Web.Mvc.UI
                             routeValues[dataKey.RouteKey] = string.Empty;
                         }
                     });
-
+                    routeValues.Merge(grid.Server.Select.RouteValues);
                     routeValues.Remove(grid.Prefix(GridUrlParameters.Mode));
                 }))
-                .Text(grid.Localization.Cancel)
+                .Html(this.ButtonContent(grid.Localization.Cancel, "t-cancel"))
                 .AppendTo(parent);
         }
+#endif
     }
 }

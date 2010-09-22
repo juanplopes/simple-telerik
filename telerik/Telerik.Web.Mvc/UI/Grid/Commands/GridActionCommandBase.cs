@@ -8,22 +8,37 @@ namespace Telerik.Web.Mvc.UI
     using System.Collections.Generic;
     using System.Web.Routing;
     
-    public abstract class GridActionCommandBase<T> where T : class
+    public abstract class GridActionCommandBase
     {
         public abstract string Name { get; }
-        
+
+        public GridButtonType ButtonType
+        {
+            get;
+            set;
+        }
+
         public IDictionary<string, object> HtmlAttributes
         {
             get;
             private set;
         }
-        
-        public GridActionCommandBase()
+
+        public IDictionary<string, object> ImageHtmlAttributes
         {
-            HtmlAttributes = new RouteValueDictionary();
+            get;
+            private set;
         }
 
-        public void Html(GridCell<T> context, IHtmlNode parent)
+        public GridActionCommandBase()
+        {
+            ButtonType = GridButtonType.Text;
+            HtmlAttributes = new RouteValueDictionary();
+            ImageHtmlAttributes = new RouteValueDictionary();
+        }
+
+        public void Html<T>(IGridRenderingContext<T> context, IHtmlNode parent)
+             where T : class
         {
             #if MVC2
 
@@ -43,10 +58,10 @@ namespace Telerik.Web.Mvc.UI
             #endif
         }
 
-        public abstract void EditModeHtml(IHtmlNode parent, GridCell<T> context);
+        public abstract void EditModeHtml<T>(IHtmlNode parent, IGridRenderingContext<T> context) where T : class;
 
-        public abstract void InsertModeHtml(IHtmlNode parent, GridCell<T> context);
+        public abstract void InsertModeHtml<T>(IHtmlNode parent, IGridRenderingContext<T> context) where T : class;
 
-        public abstract void BoundModeHtml(IHtmlNode parent, GridCell<T> context);
+        public abstract void BoundModeHtml<T>(IHtmlNode parent, IGridRenderingContext<T> context) where T : class;
     }
 }

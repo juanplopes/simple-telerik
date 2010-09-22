@@ -1,4 +1,3 @@
-using Telerik.Web.Mvc.Infrastructure;
 // (c) Copyright 2002-2010 Telerik 
 // This source is subject to the GNU General Public License, version 2
 // See http://www.gnu.org/licenses/gpl-2.0.html. 
@@ -107,9 +106,9 @@ namespace Telerik.Web.Mvc.UI
                 objectWriter.Serialize("effects", Effects);
             }
 
-            objectWriter.Append("onSelect", ClientEvents.OnSelect);
-            objectWriter.Append("onLoad", ClientEvents.OnLoad);
-            objectWriter.Append("onError", ClientEvents.OnError);
+            objectWriter.AppendClientEvent("onSelect", ClientEvents.OnSelect);
+            objectWriter.AppendClientEvent("onLoad", ClientEvents.OnLoad);
+            objectWriter.AppendClientEvent("onError", ClientEvents.OnError);
 
             objectWriter.Complete();
 
@@ -167,7 +166,7 @@ namespace Telerik.Web.Mvc.UI
 
                 builder.ItemInnerTag(item).AppendTo(itemTag);
 
-                if (item.Content != null || !string.IsNullOrEmpty(item.ContentUrl))
+                if (item.Template.HasValue() || item.ContentUrl.HasValue())
                 {
                     builder.ItemContentTag(item).AppendTo(parentTag);
                 }

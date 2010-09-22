@@ -6,11 +6,16 @@
 namespace Telerik.Web.Mvc.UI
 {
     using System.Collections.Generic;
+    using System.Linq;
 
-    public class GridSortSettings
+    public class GridSortSettings : IClientSerializable
     {
-        public GridSortSettings()
+        private readonly IGrid grid;
+
+        public GridSortSettings(IGrid grid)
         {
+            this.grid = grid;
+            
             OrderBy = new List<SortDescriptor>();
         }
 
@@ -30,6 +35,18 @@ namespace Telerik.Web.Mvc.UI
         {
             get;
             private set;
+        }
+
+        public void SerializeTo(string key, IClientSideObjectWriter writer)
+        {
+            if (Enabled)
+            {
+                writer.Append("sortMode", SortMode == GridSortMode.MultipleColumn ? "multi" : "single");
+                if (grid.DataProcessor.SortDescriptors.Any())
+                {
+                    writer.Append("orderBy", GridDescriptorSerializer.Serialize(grid.DataProcessor.SortDescriptors));
+                }
+            }
         }
     }
 }

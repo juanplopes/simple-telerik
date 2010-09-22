@@ -6,9 +6,8 @@
 namespace Telerik.Web.Mvc.UI
 {
     using System;
-
+    using System.Web.Mvc;
     using Infrastructure;
-using System.Web.Mvc;
 
     /// <summary>
     /// Defines the fluent interface for configuring child menu items.

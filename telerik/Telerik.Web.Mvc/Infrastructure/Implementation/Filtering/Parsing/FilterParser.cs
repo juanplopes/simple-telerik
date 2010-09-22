@@ -8,6 +8,8 @@ namespace Telerik.Web.Mvc.Infrastructure.Implementation
     using System;
     using System.Collections.Generic;
 
+    using Extensions;
+
     public class FilterParser
     {
         private readonly IList<FilterToken> tokens;
@@ -208,9 +210,9 @@ namespace Telerik.Web.Mvc.Infrastructure.Implementation
 
             return new DateTimeNode
                        {
-                           //The actual XSD date format is yyyy-MM-ddThh:mm:ss but ":" generates BAD REQUEST HTTP code when send via GET.
+                           //The actual XSD date format is yyyy-MM-ddTHH:mm:ss but ":" generates BAD REQUEST HTTP code when send via GET.
                            //That's why we are using yyyy-MM-ddThh-mm-ss
-                           Value = DateTime.ParseExact(dateTime.Value, "yyyy-MM-ddThh-mm-ss", null)
+                           Value = DateTime.ParseExact(dateTime.Value, "yyyy-MM-ddTHH-mm-ss", null)
                        };
         }
 

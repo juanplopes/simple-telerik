@@ -7,11 +7,14 @@ namespace Telerik.Web.Mvc.UI
 {
     public class GridDataBindingSettings
     {
-        public GridDataBindingSettings()
+        private readonly IGrid grid;
+
+        public GridDataBindingSettings(IGrid grid)
         {
-            Server = new GridBindingSettings();
-            Ajax = new GridBindingSettings();
-            WebService = new GridBindingSettings();
+            this.grid = grid;
+            Server = new GridBindingSettings(grid);
+            Ajax = new GridBindingSettings(grid);
+            WebService = new GridBindingSettings(grid);
         }
 
         public GridBindingSettings Server

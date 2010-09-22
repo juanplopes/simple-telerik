@@ -5,13 +5,12 @@
 
 namespace Telerik.Web.Mvc
 {
-    using Telerik.Web.Mvc.Extensions;
     using System;
     using System.Diagnostics;
     using System.IO;
     using System.Web;
-
     using Infrastructure;
+    using Telerik.Web.Mvc.Extensions;
 
     /// <summary>
     /// The HttpHandler to compress, cache and combine web assets.

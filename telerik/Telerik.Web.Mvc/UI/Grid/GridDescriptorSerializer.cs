@@ -44,18 +44,30 @@ namespace Telerik.Web.Mvc.UI
 
             if (!string.IsNullOrEmpty(from))
             {
-                string[] descriptors = from.Split(ColumnDelimiter.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                string[] components = from.Split(ColumnDelimiter.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 
-                if (descriptors.Length > 0)
+                if (components.Length > 0)
                 {
-                    foreach (string descriptor in descriptors)
+                    foreach (string component in components)
                     {
-                        string[] parts = descriptor.Split(DirectionDelimiter.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                        string[] parts = component.Split(DirectionDelimiter.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 
                         if (parts.Length == 2)
                         {
-                            T column = Deserialize<T>(parts);
-                            result.Add(column);
+                            T descriptor = Deserialize<T>(parts);
+                            result.Add(descriptor);
+                        }
+                        else if (parts.Length == 1)
+                        {
+                            if (parts[0] == "asc" || parts[0] == "desc")
+                            {
+                                T descriptor = new T
+                                {
+                                    SortDirection = parts[0].IsCaseInsensitiveEqual(Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending
+                                };
+
+                                result.Add(descriptor);
+                            }
                         }
                     }
                 }

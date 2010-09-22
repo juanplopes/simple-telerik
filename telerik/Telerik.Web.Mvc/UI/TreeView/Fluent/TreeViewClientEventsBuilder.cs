@@ -52,9 +52,11 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public TreeViewClientEventsBuilder OnExpand(Action javaScript)
+        public TreeViewClientEventsBuilder OnExpand(Action onExpandInlineCode)
         {
-            clientEvents.OnExpand = javaScript;
+            Guard.IsNotNull(onExpandInlineCode, "onExpandInlineCode");
+
+            clientEvents.OnExpand.InlineCode = onExpandInlineCode;
 
             return this;
         }
@@ -71,9 +73,11 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public TreeViewClientEventsBuilder OnExpand(string handlerName)
+        public TreeViewClientEventsBuilder OnExpand(string onExpandHandlerName)
         {
-            clientEvents.OnExpand = HandlerAction(handlerName);
+            Guard.IsNotNullOrEmpty(onExpandHandlerName, "onExpandHandlerName");
+
+            clientEvents.OnExpand.HandlerName = onExpandHandlerName;
 
             return this;
         }
@@ -98,9 +102,11 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public TreeViewClientEventsBuilder OnCollapse(Action javaScript)
+        public TreeViewClientEventsBuilder OnCollapse(Action onCollapseInlineCode)
         {
-            clientEvents.OnCollapse = javaScript;
+            Guard.IsNotNull(onCollapseInlineCode, "onCollapseInlineCode");
+
+            clientEvents.OnCollapse.InlineCode = onCollapseInlineCode;
 
             return this;
         }
@@ -117,9 +123,11 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public TreeViewClientEventsBuilder OnCollapse(string handlerName)
+        public TreeViewClientEventsBuilder OnCollapse(string onCollapseHandlerName)
         {
-            clientEvents.OnCollapse = HandlerAction(handlerName);
+            Guard.IsNotNullOrEmpty(onCollapseHandlerName, "onCollapseHandlerName");
+
+            clientEvents.OnCollapse.HandlerName = onCollapseHandlerName;
 
             return this;
         }
@@ -144,9 +152,11 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public TreeViewClientEventsBuilder OnSelect(Action javaScript)
+        public TreeViewClientEventsBuilder OnSelect(Action onSelectInlineCode)
         {
-            clientEvents.OnSelect = javaScript;
+            Guard.IsNotNull(onSelectInlineCode, "onSelectInlineCode");
+
+            clientEvents.OnSelect.InlineCode = onSelectInlineCode;
 
             return this;
         }
@@ -163,9 +173,11 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public TreeViewClientEventsBuilder OnSelect(string handlerName)
+        public TreeViewClientEventsBuilder OnSelect(string onSelectHandlerName)
         {
-            clientEvents.OnSelect = HandlerAction(handlerName);
+            Guard.IsNotNullOrEmpty(onSelectHandlerName, "onSelectHandlerName");
+
+            clientEvents.OnSelect.HandlerName = onSelectHandlerName;
 
             return this;
         }
@@ -190,9 +202,11 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public TreeViewClientEventsBuilder OnLoad(Action javaScript)
+        public TreeViewClientEventsBuilder OnLoad(Action onLoadInlineCode)
         {
-            clientEvents.OnLoad = javaScript;
+            Guard.IsNotNull(onLoadInlineCode, "onLoadInlineCode");
+
+            clientEvents.OnLoad.InlineCode = onLoadInlineCode;
 
             return this;
         }
@@ -209,9 +223,11 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public TreeViewClientEventsBuilder OnLoad(string handlerName)
+        public TreeViewClientEventsBuilder OnLoad(string onLoadHandlerName)
         {
-            clientEvents.OnLoad = HandlerAction(handlerName);
+            Guard.IsNotNullOrEmpty(onLoadHandlerName, "onLoadHandlerName");
+
+            clientEvents.OnLoad.HandlerName = onLoadHandlerName;
 
             return this;
         }
@@ -236,9 +252,11 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public TreeViewClientEventsBuilder OnError(Action javaScript)
+        public TreeViewClientEventsBuilder OnError(Action onErrorInlineCode)
         {
-            clientEvents.OnError = javaScript;
+            Guard.IsNotNull(onErrorInlineCode, "onErrorInlineCode");
+
+            clientEvents.OnError.InlineCode = onErrorInlineCode;
 
             return this;
         }
@@ -255,9 +273,11 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public TreeViewClientEventsBuilder OnError(string handlerName)
+        public TreeViewClientEventsBuilder OnError(string onErrorHandlerName)
         {
-            clientEvents.OnError = HandlerAction(handlerName);
+            Guard.IsNotNullOrEmpty(onErrorHandlerName, "onErrorHandlerName");
+
+            clientEvents.OnError.HandlerName = onErrorHandlerName;
 
             return this;
         }
@@ -282,9 +302,11 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public TreeViewClientEventsBuilder OnNodeDragStart(Action javaScript)
+        public TreeViewClientEventsBuilder OnNodeDragStart(Action onNodeDragStartInlineCode)
         {
-            clientEvents.OnNodeDragStart = javaScript;
+            Guard.IsNotNull(onNodeDragStartInlineCode, "onNodeDragStartInlineCode");
+
+            clientEvents.OnNodeDragStart.InlineCode = onNodeDragStartInlineCode;
 
             return this;
         }
@@ -301,9 +323,11 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public TreeViewClientEventsBuilder OnNodeDragStart(string handlerName)
+        public TreeViewClientEventsBuilder OnNodeDragStart(string onNodeDragStartHandlerName)
         {
-            clientEvents.OnNodeDragStart = HandlerAction(handlerName);
+            Guard.IsNotNullOrEmpty(onNodeDragStartHandlerName, "onNodeDragStartHandlerName");
+
+            clientEvents.OnNodeDragStart.HandlerName = onNodeDragStartHandlerName;
 
             return this;
         }
@@ -328,9 +352,11 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public TreeViewClientEventsBuilder OnNodeDrop(Action javaScript)
+        public TreeViewClientEventsBuilder OnNodeDrop(Action onNodeDropInlineCode)
         {
-            clientEvents.OnNodeDrop = javaScript;
+            Guard.IsNotNull(onNodeDropInlineCode, "onNodeDropInlineCode");
+
+            clientEvents.OnNodeDrop.InlineCode = onNodeDropInlineCode;
 
             return this;
         }
@@ -347,9 +373,11 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public TreeViewClientEventsBuilder OnNodeDrop(string handlerName)
+        public TreeViewClientEventsBuilder OnNodeDrop(string onNodeDropHandlerName)
         {
-            clientEvents.OnNodeDrop = HandlerAction(handlerName);
+            Guard.IsNotNullOrEmpty(onNodeDropHandlerName, "onNodeDropHandlerName");
+
+            clientEvents.OnNodeDrop.HandlerName = onNodeDropHandlerName;
 
             return this;
         }
@@ -374,9 +402,11 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public TreeViewClientEventsBuilder OnNodeDropped(Action javaScript)
+        public TreeViewClientEventsBuilder OnNodeDropped(Action onNodeDroppedInlineCode)
         {
-            clientEvents.OnNodeDropped = javaScript;
+            Guard.IsNotNull(onNodeDroppedInlineCode, "onNodeDroppedInlineCode");
+
+            clientEvents.OnNodeDropped.InlineCode = onNodeDroppedInlineCode;
 
             return this;
         }
@@ -393,9 +423,11 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public TreeViewClientEventsBuilder OnNodeDropped(string handlerName)
+        public TreeViewClientEventsBuilder OnNodeDropped(string onNodeDroppedHandlerName)
         {
-            clientEvents.OnNodeDropped = HandlerAction(handlerName);
+            Guard.IsNotNullOrEmpty(onNodeDroppedHandlerName, "onNodeDroppedHandlerName");
+
+            clientEvents.OnNodeDropped.HandlerName = onNodeDroppedHandlerName;
 
             return this;
         }
@@ -420,9 +452,11 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public TreeViewClientEventsBuilder OnNodeDragCancelled(Action javaScript)
+        public TreeViewClientEventsBuilder OnNodeDragCancelled(Action onNodeDragCancelledInlineCode)
         {
-            clientEvents.OnNodeDragCancelled = javaScript;
+            Guard.IsNotNull(onNodeDragCancelledInlineCode, "onNodeDragCancelledInlineCode");
+
+            clientEvents.OnNodeDragCancelled.InlineCode = onNodeDragCancelledInlineCode;
 
             return this;
         }
@@ -439,9 +473,11 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public TreeViewClientEventsBuilder OnNodeDragCancelled(string handlerName)
+        public TreeViewClientEventsBuilder OnNodeDragCancelled(string onNodeDragCancelledHandlerName)
         {
-            clientEvents.OnNodeDragCancelled = HandlerAction(handlerName);
+            Guard.IsNotNullOrEmpty(onNodeDragCancelledHandlerName, "onNodeDragCancelledHandlerName");
+
+            clientEvents.OnNodeDragCancelled.HandlerName = onNodeDragCancelledHandlerName;
 
             return this;
         }
@@ -466,9 +502,11 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public TreeViewClientEventsBuilder OnNodeDragging(Action javaScript)
+        public TreeViewClientEventsBuilder OnNodeDragging(Action onNodeDraggingInlineCode)
         {
-            clientEvents.OnNodeDragging = javaScript;
+            Guard.IsNotNull(onNodeDraggingInlineCode, "onNodeDraggingInlineCode");
+
+            clientEvents.OnNodeDragging.InlineCode = onNodeDraggingInlineCode;
 
             return this;
         }
@@ -485,9 +523,11 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public TreeViewClientEventsBuilder OnNodeDragging(string handlerName)
+        public TreeViewClientEventsBuilder OnNodeDragging(string onNodeDraggingHandlerName)
         {
-            clientEvents.OnNodeDragging = HandlerAction(handlerName);
+            Guard.IsNotNullOrEmpty(onNodeDraggingHandlerName, "onNodeDraggingHandlerName");
+
+            clientEvents.OnNodeDragging.HandlerName = onNodeDraggingHandlerName;
 
             return this;
         }
@@ -512,9 +552,11 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public TreeViewClientEventsBuilder OnDataBinding(Action javaScript)
+        public TreeViewClientEventsBuilder OnDataBinding(Action onDataBindingInlineCode)
         {
-            clientEvents.OnDataBinding = javaScript;
+            Guard.IsNotNull(onDataBindingInlineCode, "onDataBindingInlineCode");
+
+            clientEvents.OnDataBinding.InlineCode = onDataBindingInlineCode;
 
             return this;
         }
@@ -531,9 +573,11 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public TreeViewClientEventsBuilder OnDataBinding(string handlerName)
+        public TreeViewClientEventsBuilder OnDataBinding(string OnDataBindingHandlerName)
         {
-            clientEvents.OnDataBinding = HandlerAction(handlerName);
+            Guard.IsNotNullOrEmpty(OnDataBindingHandlerName, "OnDataBindingHandlerName");
+
+            clientEvents.OnDataBinding.HandlerName = OnDataBindingHandlerName;
 
             return this;
         }
@@ -558,9 +602,11 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public TreeViewClientEventsBuilder OnDataBound(Action javaScript)
+        public TreeViewClientEventsBuilder OnDataBound(Action onDataBoundInlineCode)
         {
-            clientEvents.OnDataBound = javaScript;
+            Guard.IsNotNull(onDataBoundInlineCode, "onDataBoundInlineCode");
+
+            clientEvents.OnDataBound.InlineCode = onDataBoundInlineCode;
 
             return this;
         }
@@ -577,16 +623,63 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public TreeViewClientEventsBuilder OnDataBound(string handlerName)
+        public TreeViewClientEventsBuilder OnDataBound(string onDataBoundHandlerName)
         {
-            clientEvents.OnDataBound = HandlerAction(handlerName);
+            Guard.IsNotNullOrEmpty(onDataBoundHandlerName, "onDataBoundHandlerName");
+
+            clientEvents.OnDataBound.HandlerName = onDataBoundHandlerName;
 
             return this;
         }
 
-        private Action HandlerAction(string handlerName)
+        /// <summary>
+        /// Defines the inline handler of the OnChecked client-side event. Requires ShowCheckBox to be true.
+        /// </summary>
+        /// <param name="onDataBoundAction">The action defining the inline handler.</param>
+        /// <example>
+        /// <code lang="CS">
+        ///  &lt;% Html.Telerik().TreeView()
+        ///            .Name("TreeView")
+        ///            .ClientEvents(events => events.OnChecked(() =>
+        ///            {
+        ///                 %&gt;
+        ///                 function(e) {
+        ///                     // event handling code
+        ///                 }
+        ///                 &lt;%
+        ///            }))
+        ///            .Render();
+        /// %&gt;
+        /// </code>
+        /// </example>
+        public TreeViewClientEventsBuilder OnChecked(Action onCheckedInlineCode)
         {
-            return () => viewContext.HttpContext.Response.Write(handlerName);
+            Guard.IsNotNull(onCheckedInlineCode, "onCheckedInlineCode");
+
+            clientEvents.OnChecked.InlineCode = onCheckedInlineCode;
+
+            return this;
+        }
+
+        /// <summary>
+        ///  Defines the name of the JavaScript function that will handle the the OnChecked client-side event. Requires ShowCheckBox to be true.
+        /// </summary>
+        /// <param name="onCheckedHandlerName">The name of the JavaScript function that will handle the event.</param>
+        /// <example>
+        /// <code lang="CS">
+        ///  &lt;%= Html.Telerik().TreeView()
+        ///             .Name("TreeView")
+        ///             .ClientEvents(events => events.OnChecked("onChecked"))
+        /// %&gt;
+        /// </code>
+        /// </example>
+        public TreeViewClientEventsBuilder OnChecked(string onCheckedHandlerName)
+        {
+            Guard.IsNotNullOrEmpty(onCheckedHandlerName, "onCheckedHandlerName");
+
+            clientEvents.OnChecked.HandlerName = onCheckedHandlerName;
+
+            return this;
         }
     }
 }

@@ -3,14 +3,11 @@
 // See http://www.gnu.org/licenses/gpl-2.0.html. 
 // All other rights reserved.
 
-namespace Telerik.Web.Mvc.Infrastructure.Implementation
+namespace Telerik.Web.Mvc.Infrastructure
 {
     using System.Collections.ObjectModel;
     using System.Linq;
 
-    /// <summary>
-    /// Represents a collection of <see cref="AggregateResult"/> items.
-    /// </summary>
     public class AggregateResultCollection : Collection<AggregateResult>
     {
         /// <summary>

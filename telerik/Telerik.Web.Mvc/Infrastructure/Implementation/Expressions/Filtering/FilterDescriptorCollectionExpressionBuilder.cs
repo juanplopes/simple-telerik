@@ -1,5 +1,3 @@
-using Telerik.Web.Mvc.Infrastructure;
-using Telerik.Web.Mvc.Infrastructure.Implementation;
 // (c) Copyright 2002-2010 Telerik 
 // This source is subject to the GNU General Public License, version 2
 // See http://www.gnu.org/licenses/gpl-2.0.html. 
@@ -34,6 +32,8 @@ namespace Telerik.Web.Mvc.Infrastructure.Implementation.Expressions
             Expression result = null;
             foreach (var descriptor in this.filterDescriptors)
             {
+                InitilializeExpressionBuilderOptions(descriptor);
+
                 var filterExpression = descriptor.CreateFilterExpression(this.ParameterExpression);
 
                 if (result == null)
@@ -68,6 +68,15 @@ namespace Telerik.Web.Mvc.Infrastructure.Implementation.Expressions
                 {
                     return Expression.AndAlso(left, right);
                 }
+            }
+        }
+
+        private void InitilializeExpressionBuilderOptions(IFilterDescriptor filterDescriptor)
+        {
+            var descriptor = filterDescriptor as FilterDescriptorBase;
+            if (descriptor != null)
+            {
+                descriptor.ExpressionBuilderOptions.CopyFrom(this.Options);
             }
         }
     }

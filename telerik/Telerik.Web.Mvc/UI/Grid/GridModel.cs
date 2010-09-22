@@ -7,9 +7,8 @@ namespace Telerik.Web.Mvc
 {
     using System.Collections;
     using System.Collections.Generic;
-    using System.Runtime.Serialization;
 
-    
+
     public interface IGridModel
     {
         int Total

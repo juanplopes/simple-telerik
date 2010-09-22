@@ -1,5 +1,4 @@
-﻿using Telerik.Web.Mvc.Infrastructure;
-// (c) Copyright 2002-2010 Telerik 
+﻿// (c) Copyright 2002-2010 Telerik 
 // This source is subject to the GNU General Public License, version 2
 // See http://www.gnu.org/licenses/gpl-2.0.html. 
 // All other rights reserved.
@@ -7,10 +6,8 @@
 namespace Telerik.Web.Mvc.UI
 {
     using System;
-    using System.Web.UI;
     using System.Web.Mvc;
 
-    using Extensions;
     using Infrastructure;
     
     public class DatePickerHtmlBuilder : IDatePickerHtmlBuilder
@@ -31,7 +28,7 @@ namespace Telerik.Web.Mvc.UI
             return new HtmlTag("div")
                 .Attribute("id", DatePicker.Id)
                 .Attributes(DatePicker.HtmlAttributes)
-                .AddClass(UIPrimitives.Widget, "t-datepicker");
+                .PrependClass(UIPrimitives.Widget, "t-datepicker");
         }
 
         public IHtmlNode InputTag()
@@ -39,17 +36,17 @@ namespace Telerik.Web.Mvc.UI
             ModelState state;
             DateTime? date = null;
             ViewDataDictionary viewData = DatePicker.ViewContext.ViewData;
-            if (viewData.ModelState.TryGetValue(DatePicker.Id, out state))
+
+            if (DatePicker.Value != DateTime.MinValue)
+            {
+                date = DatePicker.Value;
+            }
+            else if (viewData.ModelState.TryGetValue(DatePicker.Id, out state))
             {
                 if (state.Errors.Count == 0)
                 {
-                    date = state.Value.ConvertTo(typeof(DateTime), null) as DateTime?;
+                    date = state.Value.ConvertTo(typeof(DateTime), Culture.Current) as DateTime?;
                 }
-            }
-
-            else if (DatePicker.Value != DateTime.MinValue)
-            {
-                date = DatePicker.Value;
             }
 
             object valueFromViewData = viewData.Eval(DatePicker.Name);
@@ -74,9 +71,9 @@ namespace Telerik.Web.Mvc.UI
             }
 
             return new HtmlTag("input", TagRenderMode.SelfClosing)
-                .AddClass(UIPrimitives.Input)
-                .Attributes(new { name = DatePicker.Name, id = DatePicker.Id + "-input", value = value })
-                .Attributes(DatePicker.InputHtmlAttributes);
+                .Attributes(new { name = DatePicker.Name, id = DatePicker.Id + "-input", value = value, title = DatePicker.Name })
+                .Attributes(DatePicker.InputHtmlAttributes)
+                .PrependClass(UIPrimitives.Input);
         }
 
         public IHtmlNode ButtonTag()

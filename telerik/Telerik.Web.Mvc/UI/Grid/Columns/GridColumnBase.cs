@@ -8,7 +8,8 @@ namespace Telerik.Web.Mvc.UI
 {
     using System;
     using System.Collections.Generic;
-    using System.Web.Routing;
+    using System.Linq;
+    using Telerik.Web.Mvc.UI.Html;
 
     /// <summary>
     /// Represents a column in the <see cref="Grid{T}"/> component
@@ -16,19 +17,19 @@ namespace Telerik.Web.Mvc.UI
     /// <typeparam name="T">The type of the data item</typeparam>
     public abstract class GridColumnBase<T> : IGridColumn where T : class
     {
-        internal string EditorHtml
+        public string Format
         {
-            get;
-            set;
+            get
+            {
+                return Settings.Format;
+            }
+            set
+            {
+                Settings.Format = value;
+            }
         }
-
-        internal IGridColumnHtmlBuilder<T> HtmlBuilder
-        {
-            get;
-            set;
-        }
-
-        internal virtual IGridColumnHeaderHtmlBuilder<T> HeaderHtmlBuilder
+        
+        public string EditorHtml
         {
             get;
             set;
@@ -37,9 +38,7 @@ namespace Telerik.Web.Mvc.UI
         protected GridColumnBase(Grid<T> grid)
         {
             Grid = grid;
-            HeaderHtmlAttributes = new RouteValueDictionary();
-            HtmlAttributes = new RouteValueDictionary();
-
+            Settings = new GridColumnSettings();
             Visible = true;
         }
 
@@ -54,37 +53,19 @@ namespace Telerik.Web.Mvc.UI
         }
 
         /// <summary>
-        /// Gets type of the property to which the column is bound to.
-        /// </summary>
-        public Type MemberType
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
         /// Gets the member of the column.
         /// </summary>
         /// <value>The member.</value>
         public string Member
         {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Gets the name of the column
-        /// </summary>
-        [Obsolete("Use the Member property instead")]
-        public string Name
-        {
             get
             {
-                return Member;
+                return Settings.Member;
             }
+            
             set
             {
-                Member = value;
+                Settings.Member = value;
             }
         }
 
@@ -97,7 +78,7 @@ namespace Telerik.Web.Mvc.UI
             set;
         }
 
-        public string ClientTemplate
+        public virtual Func<T, object> InlineTemplate
         {
             get;
             set;
@@ -109,8 +90,14 @@ namespace Telerik.Web.Mvc.UI
         /// <value>The title.</value>
         public virtual string Title
         {
-            get;
-            set;
+            get
+            {
+                return Settings.Title;
+            }
+            set
+            {
+                Settings.Title = value;
+            }
         }
 
         /// <summary>
@@ -119,18 +106,26 @@ namespace Telerik.Web.Mvc.UI
         /// <value>The width.</value>
         public string Width
         {
-            get;
-            set;
+            get
+            {
+                return Settings.Width;
+            }
+            set
+            {
+                Settings.Width = value;
+            }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether this column is groupable.
-        /// </summary>
-        /// <value><c>true</c> if groupable; otherwise, <c>false</c>.</value>
-        public bool Groupable
+        public string ClientTemplate
         {
-            get;
-            set;
+            get
+            {
+                return Settings.ClientTemplate;
+            }
+            set
+            {
+                Settings.ClientTemplate = value;
+            }
         }
 
         /// <summary>
@@ -140,10 +135,29 @@ namespace Telerik.Web.Mvc.UI
         /// <remarks>
         /// Hidden columns are output as HTML but are not visible by the end-user.
         /// </remarks>
-        public bool Hidden
+        public virtual bool Hidden
         {
-            get;
-            set;
+            get
+            {
+                return Settings.Hidden;
+            }
+            set
+            {
+                Settings.Hidden = value;
+            }
+        }
+
+        public virtual bool Encoded
+        {
+            get
+            {
+                return Settings.Encoded;
+            }
+            
+            set
+            {
+                Settings.Encoded = value;
+            }
         }
 
         /// <summary>
@@ -152,18 +166,10 @@ namespace Telerik.Web.Mvc.UI
         /// <value>The header HTML attributes.</value>
         public IDictionary<string, object> HeaderHtmlAttributes
         {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// Gets or sets the display format for the data.
-        /// </summary>
-        /// <value>The format.</value>
-        public virtual string Format
-        {
-            get;
-            set;
+            get
+            {
+                return Settings.HeaderHtmlAttributes;
+            }
         }
 
         /// <summary>
@@ -175,25 +181,117 @@ namespace Telerik.Web.Mvc.UI
         /// </remarks>
         public bool Visible
         {
-            get;
-            set;
+            get
+            {
+                return Settings.Visible;
+            }
+            set
+            {
+                Settings.Visible = value;
+            }
         }
 
-#if MVC2        
-        public bool ReadOnly
+        public virtual IHtmlBuilder CreateDisplayHtmlBuilder(GridCell<T> cell)
         {
-            get;
-            set;
+            return CreateCellBuilder(CreateDisplayHtmlBuilderCore, cell);
         }
-#endif
+
+        public virtual IHtmlBuilder CreateEditorHtmlBuilder(GridCell<T> cell)
+        {
+            return CreateCellBuilder(CreateEditorHtmlBuilderCore, cell);
+        }
+
+        private IHtmlBuilder CreateCellBuilder(Func<GridCell<T>, IHtmlBuilder> creator, GridCell<T> cell)
+        {
+            var builder = creator(cell);
+
+            CellAction(cell);
+
+            Decorate(builder);
+
+            return builder;
+        }
+
+        private void CellAction(GridCell<T> cell)
+        {
+            if (Grid.CellAction != null)
+            {
+                Grid.CellAction(cell);
+            }
+        }
+
+        private void Decorate(IHtmlBuilder builder)
+        {
+            if (builder != null)
+            {
+                if (Hidden)
+                {
+                    builder.Adorners.Add(new GridHiddenColumnAdorner());
+                }
+
+                if (IsLast)
+                {
+                    builder.Adorners.Add(new GridCssClassAdorner
+                    {
+                        CssClasses = { UIPrimitives.Last }
+                    });
+                }
+            }
+        }
+
+
+        protected virtual IHtmlBuilder CreateEditorHtmlBuilderCore(GridCell<T> cell)
+        {
+            return CreateDisplayHtmlBuilderCore(cell);
+        }
+
+        protected virtual IHtmlBuilder CreateDisplayHtmlBuilderCore(GridCell<T> cell)
+        {
+            if (Template != null || InlineTemplate != null)
+            {
+                return new GridTemplateCellHtmlBuilder<T>(cell);
+            }
+
+            return null;
+        }
+
         /// <summary>
         /// Gets the HTML attributes of the cell rendered for the column
         /// </summary>
         /// <value>The HTML attributes.</value>
         public IDictionary<string, object> HtmlAttributes
         {
+            get
+            {
+                return Settings.HtmlAttributes;
+            }
+        }
+
+        public virtual IGridColumnSerializer CreateSerializer()
+        {
+            return new GridColumnSerializer(this);
+        }
+
+        IGrid IGridColumn.Grid
+        {
+            get
+            {
+                return Grid;
+            }
+        }
+
+        public bool IsLast
+        {
+            get
+            {
+                return Grid.VisibleColumns.LastOrDefault() == this;
+            }
+        }
+
+        internal GridColumnSettings Settings
+        {
             get;
-            private set;
+            set;
         }
     }
 }

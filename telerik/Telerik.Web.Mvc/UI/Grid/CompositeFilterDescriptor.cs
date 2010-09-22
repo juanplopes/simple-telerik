@@ -61,6 +61,7 @@ namespace Telerik.Web.Mvc
         protected override Expression CreateFilterExpression(ParameterExpression parameterExpression)
         {
             var builder = new FilterDescriptorCollectionExpressionBuilder(parameterExpression, this.FilterDescriptors, this.LogicalOperator);
+            builder.Options.CopyFrom(this.ExpressionBuilderOptions);
 
             return builder.CreateBodyExpression();
         }

@@ -5,9 +5,9 @@
 
 namespace Telerik.Web.Mvc.UI
 {
+    using System;
     using System.Web.Mvc;
-	using System;
-	using System.Web.Routing;
+    using System.Web.Routing;
 
     public class ContentNavigationItemBuilder<TItem, TBuilder> : NavigationItemBuilder<TItem, TBuilder>
         where TItem : NavigationItem<TItem>, IAsyncContentContainer

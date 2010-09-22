@@ -5,26 +5,19 @@
 
 namespace Telerik.Web.Mvc.UI
 {
-    using System;
-
     public class TabStripClientEvents
     {
-        public Action OnSelect
-        { 
-            get; 
-            set; 
+        public TabStripClientEvents()
+        {
+            OnLoad = new ClientEvent();
+            OnError = new ClientEvent();
+            OnSelect = new ClientEvent();
         }
 
-        public Action OnLoad
-        {
-            get;
-            set;
-        }
+        public ClientEvent OnLoad { get; private set; }
 
-        public Action OnError
-        {
-            get;
-            set;
-        }
+        public ClientEvent OnError { get; private set; }
+
+        public ClientEvent OnSelect {  get; private set; }
     }
 }

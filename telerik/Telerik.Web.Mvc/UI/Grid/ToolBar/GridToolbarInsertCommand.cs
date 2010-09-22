@@ -11,7 +11,8 @@ namespace Telerik.Web.Mvc.UI
     {
         public override void Html(Grid<T> context, IHtmlNode parent)
         {
-            GridUrlBuilder<T> urlBuilder = new GridUrlBuilder<T>(context);
+            #if MVC2
+            GridUrlBuilder urlBuilder = new GridUrlBuilder(context);
 
             new HtmlTag("a")
                 .Attributes(HtmlAttributes)
@@ -20,8 +21,9 @@ namespace Telerik.Web.Mvc.UI
                 {
                     routeValues[context.Prefix(GridUrlParameters.Mode)] = "insert";
                 }))
-                .Text(context.Localization.AddNew)
+                .Html(this.ButtonContent<T>(context.Localization.AddNew, "t-add"))
                 .AppendTo(parent);
+            #endif
         }
     }
 }

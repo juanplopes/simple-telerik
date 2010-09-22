@@ -5,28 +5,29 @@
 
 namespace Telerik.Web.Mvc.UI
 {
-    using Extensions;
     using Infrastructure;
+    using Telerik.Web.Mvc.Extensions;
 
-    public class GridSelectActionCommand<T> : GridActionCommandBase<T> where T : class
+    public class GridSelectActionCommand : GridActionCommandBase
     {
         public override string Name
         {
             get { return "select"; }
         }
 
-        public override void EditModeHtml(IHtmlNode parent, GridCell<T> context)
+        public override void EditModeHtml<T>(IHtmlNode parent, IGridRenderingContext<T> context)
         {
         }
 
-        public override void InsertModeHtml(IHtmlNode parent, GridCell<T> context)
+        public override void InsertModeHtml<T>(IHtmlNode parent, IGridRenderingContext<T> context)
         {
         }
 
-        public override void BoundModeHtml(IHtmlNode parent, GridCell<T> context)
+        public override void BoundModeHtml<T>(IHtmlNode parent, IGridRenderingContext<T> context)
         {
-            Grid<T> grid = context.Column.Grid;
-            var urlBuilder = new GridUrlBuilder<T>(grid);
+            #if MVC2
+            Grid<T> grid = context.Grid;
+            var urlBuilder = new GridUrlBuilder(grid);
 
             new HtmlTag("a")
                 .Attributes(HtmlAttributes)
@@ -37,10 +38,11 @@ namespace Telerik.Web.Mvc.UI
                     {
                         routeValues[dataKey.RouteKey] = dataKey.GetValue(context.DataItem);
                     });
-                    routeValues[grid.Prefix(GridUrlParameters.Mode)] ="select";
+                    routeValues[grid.Prefix(GridUrlParameters.Mode)] = "select";
                 }))
-                .Text(grid.Localization.Select)
+                .Html(this.ButtonContent(grid.Localization.Select, "t-select"))
                 .AppendTo(parent);
+            #endif
         }
     }
 }

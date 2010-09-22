@@ -6,8 +6,8 @@
 namespace Telerik.Web.Mvc.UI
 {
     using System.Collections;
-    using System.Web.Mvc;
     using System.Collections.Generic;
+    using System.Web.Mvc;
 
     public interface IGridBindingContext
     {

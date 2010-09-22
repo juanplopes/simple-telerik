@@ -9,13 +9,16 @@ namespace Telerik.Web.Mvc.UI
 
     using Infrastructure;
 
-    public class GridPagingSettings
+    public class GridPagingSettings : IClientSerializable
     {
+        private readonly IGrid grid;
+
         private int pageSize = 10;
         private int total = 0;
 
-        public GridPagingSettings()
+        public GridPagingSettings(IGrid grid)
         {
+            this.grid = grid;
             Style = GridPagerStyles.NextPreviousAndNumeric;
         }
 
@@ -66,6 +69,20 @@ namespace Telerik.Web.Mvc.UI
                 Guard.IsNotNegative(value, "value");
 
                 total = value;
+            }
+        }
+
+        public void SerializeTo(string key, IClientSideObjectWriter writer)
+        {
+            if (Enabled)
+            {
+                writer.Append("pageSize", PageSize, 10);
+                writer.Append("total", grid.DataProcessor.Total);
+                writer.Append("currentPage", grid.DataProcessor.CurrentPage);
+            }
+            else
+            {
+                writer.Append("pageSize", 0);
             }
         }
     }

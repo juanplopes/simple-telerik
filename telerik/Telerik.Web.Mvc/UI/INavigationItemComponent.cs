@@ -5,9 +5,10 @@
 
 namespace Telerik.Web.Mvc.UI
 {
-    using Infrastructure;
-
+    using System;
     using System.Web.Mvc;
+    
+    using Infrastructure;
 
     public interface INavigationItemComponent<TItem> : INavigationItemContainer<TItem>
         where TItem: NavigationItem<TItem>
@@ -18,6 +19,17 @@ namespace Telerik.Web.Mvc.UI
         }
 
         ViewContext ViewContext
+        {
+            get;
+        }
+
+        Action<TItem> ItemAction
+        {
+            get;
+            set;
+        }
+
+        INavigationItemAuthorization Authorization
         {
             get;
         }

@@ -9,16 +9,21 @@ namespace Telerik.Web.Mvc.UI
 
     public class TextboxBaseClientEvents
     {
-        public Action OnLoad
+
+        public TextboxBaseClientEvents()
         {
-            get;
-            set;
+            OnLoad = new ClientEvent();
+            OnChange = new ClientEvent();
         }
 
-        public Action OnChange
+        public ClientEvent OnLoad { get; private set; }
+
+        public ClientEvent OnChange { get; private set; }
+
+        public void SerializeTo(IClientSideObjectWriter writer)
         {
-            get; 
-            set; 
+            writer.AppendClientEvent("onLoad", OnLoad);
+            writer.AppendClientEvent("onChange", OnChange);
         }
     }
 }

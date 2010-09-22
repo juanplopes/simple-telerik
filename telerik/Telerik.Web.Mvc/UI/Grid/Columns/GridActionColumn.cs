@@ -6,20 +6,29 @@
 namespace Telerik.Web.Mvc.UI
 {
     using System.Collections.Generic;
+    using Telerik.Web.Mvc.UI.Html;
 
-    public class GridActionColumn<T> : GridColumnBase<T> where T : class
+    public class GridActionColumn<T> : GridColumnBase<T>, IGridActionColumn where T : class
     {
         public GridActionColumn(Grid<T> grid) : base(grid)
         {
-            Commands = new List<GridActionCommandBase<T>>();
-            HtmlBuilder = new GridActionColumnHtmlBuilder<T>(this);
-            HeaderHtmlBuilder = new GridColumnHeaderHtmlBuilder<T, GridActionColumn<T>>(this);
+            Commands = new List<GridActionCommandBase>();
         }
 
-        public IList<GridActionCommandBase<T>> Commands
+        public IList<GridActionCommandBase> Commands
         {
             get;
             private set;
+        }
+
+        public override IGridColumnSerializer CreateSerializer()
+        {
+            return new GridActionColumnSerializer(this);
+        }
+
+        protected override IHtmlBuilder CreateDisplayHtmlBuilderCore(GridCell<T> cell)
+        {
+            return new GridActionCellHtmlBuilder<T>(cell);
         }
     }
 }

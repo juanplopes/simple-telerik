@@ -10,9 +10,8 @@ namespace Telerik.Web.Mvc.Extensions
     using System.IO;
     using System.IO.Compression;
     using System.Text;
-
-    using Infrastructure;
     using System.Text.RegularExpressions;
+    using Infrastructure;
 
     /// <summary>
     /// Contains the extension methods of <see cref="string"/>.
@@ -140,6 +139,13 @@ namespace Telerik.Web.Mvc.Extensions
             return Encoding.UTF8.GetString(binary);
         }
 
+        public static string ToCamelCase(this string instance)
+        {
+            Guard.IsNotNullOrEmpty(instance, "instance");
+
+            return instance[0].ToString().ToLower() + instance.Substring(1);
+        }
+
         [DebuggerStepThrough]
         public static T ToEnum<T>(this string instance, T defaultValue) where T : IComparable, IFormattable
         {
@@ -161,6 +167,11 @@ namespace Telerik.Web.Mvc.Extensions
 
         public static string AsTitle(this string value)
         {
+            if (value == null)
+            {
+                return string.Empty;
+            }
+
             int lastIndex = value.LastIndexOf(".", StringComparison.Ordinal);
 
             if (lastIndex > -1)

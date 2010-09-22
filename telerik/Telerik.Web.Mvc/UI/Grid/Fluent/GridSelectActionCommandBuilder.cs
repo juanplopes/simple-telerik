@@ -5,10 +5,9 @@
 
 namespace Telerik.Web.Mvc.UI.Fluent
 {
-    public class GridSelectActionCommandBuilder<T> : GridActionCommandBuilderBase<T, GridSelectActionCommand<T>, GridSelectActionCommandBuilder<T>>
-        where T : class
+    public class GridSelectActionCommandBuilder : GridActionCommandBuilderBase<GridSelectActionCommand, GridSelectActionCommandBuilder>
     {
-        public GridSelectActionCommandBuilder(GridSelectActionCommand<T> command)
+        public GridSelectActionCommandBuilder(GridSelectActionCommand command)
             : base(command)
         {
         }

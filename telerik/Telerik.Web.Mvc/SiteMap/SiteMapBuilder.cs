@@ -5,9 +5,8 @@
 
 namespace Telerik.Web.Mvc
 {
-    using System.Diagnostics;
     using System.ComponentModel;
-
+    using System.Diagnostics;
     using Infrastructure;
 
     /// <summary>

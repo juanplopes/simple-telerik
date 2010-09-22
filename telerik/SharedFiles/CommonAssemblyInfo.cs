@@ -15,11 +15,11 @@ using System.Security;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 #if MVC1
-[assembly: AssemblyVersion("2010.1.309.135")]
-[assembly: AssemblyFileVersion("2010.1.309.135")]
+[assembly: AssemblyVersion("2010.2.825.135")]
+[assembly: AssemblyFileVersion("2010.2.825.135")]
 #endif
 #if MVC2
-[assembly: AssemblyVersion("2010.1.309.235")]
-[assembly: AssemblyFileVersion("2010.1.309.235")]
+[assembly: AssemblyVersion("2010.2.825.235")]
+[assembly: AssemblyFileVersion("2010.2.825.235")]
 #endif
 [assembly: AllowPartiallyTrustedCallers]

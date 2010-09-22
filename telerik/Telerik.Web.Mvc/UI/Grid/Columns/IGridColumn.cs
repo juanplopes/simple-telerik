@@ -5,30 +5,30 @@
 
 namespace Telerik.Web.Mvc.UI
 {
-    using System;
-    
+
     using System.Collections.Generic;
 
     public interface IGridColumn
     {
-        string ClientTemplate 
-        { 
-            get; 
-            set; 
+        bool IsLast
+        {
+            get;
         }
-        
-        string Format 
-        { 
-            get; 
-            set; 
+
+        IGridColumnSerializer CreateSerializer();
+
+        string ClientTemplate
+        {
+            get;
+            set;
         }
-        
-        bool Groupable 
-        { 
-            get; 
-            set; 
+
+        bool Encoded
+        {
+            get;
+            set;
         }
-        
+
         IDictionary<string, object> HeaderHtmlAttributes 
         { 
             get; 
@@ -61,6 +61,11 @@ namespace Telerik.Web.Mvc.UI
         { 
             get; 
             set; 
+        }
+
+        IGrid Grid
+        {
+            get;
         }
     }
 }

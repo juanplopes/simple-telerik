@@ -5,7 +5,6 @@
 
 namespace Telerik.Web.Mvc.UI
 {
-    using Infrastructure;
 
     /// <summary>
     /// Defines an individual web asset.
@@ -15,11 +14,8 @@ namespace Telerik.Web.Mvc.UI
         /// <summary>
         /// Initializes a new instance of the <see cref="WebAssetItem"/> class.
         /// </summary>
-        /// <param name="source">The source. Source must be a virtual path.</param>
         public WebAssetItem(string source)
         {
-            Guard.IsNotVirtualPath(source, "source");
-
             Source = source;
         }
 

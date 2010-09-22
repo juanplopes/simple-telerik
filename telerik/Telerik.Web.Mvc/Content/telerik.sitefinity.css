@@ -2,9 +2,16 @@
 
 .t-widget
 {
-	border: 0;
-	/*font-size: .75em; /* 12px base, if there are no inherited font-sizes (MVC default) */
-	background: none;
+    border-width: 0;
+    border-color: #ccc; /* if component overrides the above */
+    /*font-size: .75em; /* 12px base, if there are no inherited font-sizes (MVC default) */
+    background: none;
+}
+
+.t-autocomplete
+{
+    border-width: 1px;
+    border-style: solid;
 }
 
 /* .small .t-widget { font-size: .687em; } /* 11px base, if there are no inherited font-sizes (MVC default) */
@@ -12,14 +19,12 @@
 .t-header,
 .t-grid-header
 {
-	border-color: #ccc;
-	background: none;
+    border-color: #ccc;
+    background: #fff;
 }
 
-.t-icon
-{
-	background: transparent url('Sitefinity/sprite.png') no-repeat;
-}
+.t-icon { background-image: url('Sitefinity/sprite.png'); }
+.t-editor .t-tool-icon { background-image: url('Sitefinity/editor.png'); }
 
 .t-expand { background-position: 0 -160px; }
 .t-collapse { background-position: 0 -176px; }
@@ -66,7 +71,10 @@
 .t-refresh { background-position: -32px -240px; }
 .t-icon-calendar { background-position: -48px -240px; }
 
-.t-delete { background-position: 0 -288px; }
+.t-group-delete { background-position: 0 -288px; }
+.t-maximize { background-position: -16px -288px; }
+.t-restore { background-position: -32px -288px; }
+.t-close { background-position: -64px -288px; }
 
 .t-insert-top { background-position: 0 -320px; }
 .t-insert-middle { background-position: -16px -320px; }
@@ -74,35 +82,53 @@
 .t-add { background-position: -48px -320px; }
 .t-denied { background-position: -64px -320px; }
 
+.t-edit { background-position: 0 -336px; }
+.t-delete { background-position: -16px -336px; }
+.t-insert, .t-update { background-position: -32px -336px; }
+.t-cancel { background-position: -48px -336px; }
+
 .t-loading,
 .t-widget .t-loading { background: transparent url('Sitefinity/loading.gif') no-repeat 0 0; }
 
 .t-widget
 {
-	color: #000;
+    color: #000;
 }
 
-.t-link
+.t-link,
+.t-popup
 {
-	color: #105cd6;
+    color: #105cd6;
 }
 
 .t-group,
-.t-content
+.t-content,
+.t-editable-area
 {
-	border-color: #ccc #666 #666 #ccc;
-	background-color: #fff;
-	border-width: 1px 2px 2px 1px;
+    border-color: #ccc #666 #666 #ccc;
+    background-color: #fff;
+    border-width: 1px 2px 2px 1px;
+}
+
+.t-colorpicker .t-arrow-down
+{
+    border-color: #ccc;
+}
+
+.t-separator
+{
+    border-color: #fff;
+    background-color: #999;
 }
 
 .t-alt
 {
-	background: none;
+    background: none;
 }
 
 .t-state-default
 {
-	border-color: #eee;
+    border-color: #eee;
 }
 
 .t-active-filter
@@ -112,90 +138,103 @@
 
 .t-state-hover
 {
-	background: none;
-	border-color: #dee2e7;
+    background-color: none;
+    border-color: #dee2e7;
 }
 
 .t-state-active
 {
-	background: #fff;
-	border-color: #ccc;
+    background-color: #fff;
+    border-color: #ccc;
 }
 
 .t-state-selected
 {
-	background: #ffffe1;
+    background-color: #ffffe1;
 }
 
 .t-state-error
 {
-	border-color: #e50000;
+    border-color: #e50000;
 }
 
 .t-state-disabled,
 .t-state-disabled .t-link
 {
-	color: #afaeae;
-	border-color: #eee;
+    color: #afaeae;
+    border-color: #eee;
 }
 
-.t-grid-toolbar,
+.t-toolbar,
 .t-grouping-header,
-.t-widget .t-footer,
+.t-widget .t-pager-wrapper,
 .t-grid-footer,
 .t-widget .t-status
 {
-	border-color: #ccc;
-	background-color: none;
+    border-color: #ccc;
+    background-color: none;
 }
 
 .t-widget .t-status
 {
-	border: 0;
+    border: 0;
 }
 
 .t-button
 {
-	background: #f1f1f1;
-	border-width: 1px 2px 2px 1px;
-	color: #333;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
-	border-color: #ccc #666 #666 #ccc;
+    background: #f1f1f1;
+    border-width: 1px 2px 2px 1px;
+    color: #333;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    border-color: #ccc #666 #666 #ccc;
 }
 
 .t-button-hover
 {
-	background: #fff;
+    background: #fff;
+}
+
+
+.t-autocomplete
+{
+    border-width: 1px;
+    border-style: solid;
+}
+
+.t-combobox .t-state-default,
+.t-dropdown .t-state-default
+{
+    border-color: #ccc;
 }
 
 .t-tabstrip li.t-state-active
 {
-	border-bottom-color: #fff;
+    border-bottom-color: #fff;
 }
 
 .t-grid .t-header,
 .t-grid .t-header .t-link
 {
-	letter-spacing: 1px;
-	text-transform: uppercase;
-	font-size: 0.866em;
-	line-height: 2.6em;
-	color: #666;
-	background: none;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-size: 0.866em;
+    line-height: 2.6em;
+    color: #666;
+    background: none;
 }
 
 .t-grid .t-header,
 .t-grid td
 {
-	border-bottom: 1px solid #eee;
-	border-color: #eee;
+    border-bottom: 1px solid #eee;
+    border-color: #eee;
 }
 
 .t-grid .t-grid-filter
 {
-	border-left: 0;
+    border-left: 0;
 }
 
 .t-grouping-header .t-group-indicator
@@ -212,7 +251,7 @@
 .t-treeview .t-drop-clue
 {
     background-image: url('Sitefinity/sprite.png');
-    background-position: 0 -342px;
+    background-position: 0 -358px;
 }
 
 .t-treeview .t-state-selected
@@ -220,36 +259,36 @@
     border-color: #999;
 }
 
-.t-footer .t-state-hover
+.t-pager-wrapper .t-state-hover
 {
-	color: #002bb8;
-	background: #f0f0f0;
+    color: #002bb8;
+    background: #f0f0f0;
 }
 
 .t-menu .t-state-hover,
 .t-panelbar .t-state-hover,
 .t-tabstrip .t-state-hover
 {
-	color: #002bb8;
-	background: none;
+    color: #002bb8;
+    background: none;
 }
 
 .t-tabstrip
 {
-	border: 1px solid #ccc;
+    border: 1px solid #ccc;
 }
 
 .t-tabstrip .t-state-default,
 .t-tabstrip .t-state-disabled
 {
-	border-bottom-color: #ccc;
+    border-bottom-color: #ccc;
 }
 
 .t-panelbar .t-link,
 .t-panelbar .t-group,
 .t-panelbar .t-content
 {
-	border-color: #aaa;
+    border-color: #aaa;
 }
 
 .t-calendar th
@@ -275,6 +314,7 @@
 .t-treeview-lines .t-item { background-image: url('Sitefinity/treeview-line.png'); }
 .t-treeview-lines .t-last { background-image: none; }
 
+.t-window-titlebar,
 .t-drag-clue
 {
     background-color: #fff;

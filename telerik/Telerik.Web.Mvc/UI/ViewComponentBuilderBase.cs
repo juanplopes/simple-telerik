@@ -5,18 +5,17 @@
 
 namespace Telerik.Web.Mvc.UI
 {
-    using System.ComponentModel;
-    using System.Diagnostics;
-
-    using Extensions;
-    using Infrastructure;
+    using Telerik.Web.Mvc.Extensions;
+    using Telerik.Web.Mvc.Infrastructure;
 
     /// <summary>
     /// View component Builder base class.
     /// </summary>
-    public abstract class ViewComponentBuilderBase<TViewComponent, TBuilder> : IHideObjectMembers where TViewComponent : ViewComponentBase where TBuilder : ViewComponentBuilderBase<TViewComponent, TBuilder>
+    public abstract class ViewComponentBuilderBase<TViewComponent, TBuilder> : ComponentBuilderBase<TViewComponent, TBuilder>, IHideObjectMembers
+        where TViewComponent : ViewComponentBase
+        where TBuilder : ViewComponentBuilderBase<TViewComponent, TBuilder>
     {
-        private readonly TViewComponent component;
+        private TViewComponent component;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewComponentBuilderBase&lt;TViewComponent, TBuilder&gt;"/> class.
@@ -34,10 +33,13 @@ namespace Telerik.Web.Mvc.UI
         /// <value>The component.</value>
         protected internal TViewComponent Component
         {
-            [DebuggerStepThrough]
             get
             {
                 return component;
+            }
+            set
+            {
+                component = value;
             }
         }
 
@@ -136,17 +138,14 @@ namespace Telerik.Web.Mvc.UI
             Component.Render();
         }
 
-        /// <summary>
-        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-        /// </returns>
+        public string ToHtmlString()
+        {
+            return ToComponent().ToHtmlString();
+        }
+
         public override string ToString()
         {
-            Render();
-
-            return null;
+            return ToHtmlString();
         }
     }
 }

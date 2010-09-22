@@ -1,5 +1,4 @@
-﻿using Telerik.Web.Mvc.Infrastructure;
-// (c) Copyright 2002-2010 Telerik 
+﻿// (c) Copyright 2002-2010 Telerik 
 // This source is subject to the GNU General Public License, version 2
 // See http://www.gnu.org/licenses/gpl-2.0.html. 
 // All other rights reserved.
@@ -21,13 +20,12 @@ namespace Telerik.Web.Mvc.UI
     {
         private readonly IList<IEffect> defaultEffects = new List<IEffect> { new PropertyAnimation(PropertyAnimationType.Height) };
 
-        private readonly IPanelBarHtmlBuilderFactory builderFactory;
+        private readonly INavigationComponentHtmlBuilderFactory<PanelBar, PanelBarItem> builderFactory;
 
-        internal bool isBoundToSiteMap;
         internal bool isPathHighlighted;
         internal bool isExpanded;
 
-        public PanelBar(ViewContext viewContext, IClientSideObjectWriterFactory clientSideObjectWriterFactory, IUrlGenerator urlGenerator, INavigationItemAuthorization authorization, IPanelBarHtmlBuilderFactory rendererFactory)
+        public PanelBar(ViewContext viewContext, IClientSideObjectWriterFactory clientSideObjectWriterFactory, IUrlGenerator urlGenerator, INavigationItemAuthorization authorization, INavigationComponentHtmlBuilderFactory<PanelBar, PanelBarItem> rendererFactory)
             : base(viewContext, clientSideObjectWriterFactory)
         {
             Guard.IsNotNull(urlGenerator, "urlGenerator");
@@ -130,11 +128,11 @@ namespace Telerik.Web.Mvc.UI
                 objectWriter.Serialize("effects", Effects);
             }
 
-            objectWriter.Append("onExpand", ClientEvents.OnExpand);
-            objectWriter.Append("onCollapse", ClientEvents.OnCollapse);
-            objectWriter.Append("onSelect", ClientEvents.OnSelect);
-            objectWriter.Append("onLoad", ClientEvents.OnLoad);
-            objectWriter.Append("onError", ClientEvents.OnError);
+            objectWriter.AppendClientEvent("onExpand", ClientEvents.OnExpand);
+            objectWriter.AppendClientEvent("onCollapse", ClientEvents.OnCollapse);
+            objectWriter.AppendClientEvent("onSelect", ClientEvents.OnSelect);
+            objectWriter.AppendClientEvent("onLoad", ClientEvents.OnLoad);
+            objectWriter.AppendClientEvent("onError", ClientEvents.OnError);
 
             objectWriter.Append("expandMode", (int) ExpandMode);
 
@@ -156,9 +154,9 @@ namespace Telerik.Web.Mvc.UI
 
                 int itemIndex = 0;
 
-                IPanelBarHtmlBuilder builder = builderFactory.Create(this);
+                INavigationComponentHtmlBuilder<PanelBarItem> builder = builderFactory.Create(this);
 
-                IHtmlNode panelbarTag = builder.PanelBarTag();
+                IHtmlNode panelbarTag = builder.Build();
 
                 //this loop is required because of SelectedIndex feature.
                 if (HighlightPath)
@@ -175,41 +173,12 @@ namespace Telerik.Web.Mvc.UI
 
                     itemIndex++;
 
-                    WriteItem(item, panelbarTag, builder);
+                    item.WriteItem<PanelBar, PanelBarItem>(this, panelbarTag, builder);
                 });
 
                 panelbarTag.WriteTo(writer);
             }
             base.WriteHtml(writer);
-        }
-
-        private void WriteItem(PanelBarItem item, IHtmlNode parentTag, IPanelBarHtmlBuilder builder)
-        {
-            if (ItemAction != null)
-            {
-                ItemAction(item);
-            }
-
-            if (item.Visible)
-            {
-                if (!isBoundToSiteMap || item.IsAccessible(Authorization, ViewContext))
-                {
-                    IHtmlNode itemTag = builder.ItemTag(item).AppendTo(parentTag);
-
-                    builder.ItemInnerTag(item).AppendTo(itemTag);
-
-                    if (item.Content != null || !string.IsNullOrEmpty(item.ContentUrl))
-                    {
-                        builder.ItemContentTag(item).AppendTo(itemTag);
-                    }
-                    else if (!item.Items.IsEmpty() && item.Items.IsAccessible(Authorization, ViewContext))
-                    {
-                        IHtmlNode ul = builder.ChildrenTag(item).AppendTo(itemTag);
-
-                        item.Items.Each(child => WriteItem(child, ul, builder));
-                    }
-                }
-            }
         }
 
         private void HighlightSelectedItem(PanelBarItem item)
@@ -247,7 +216,7 @@ namespace Telerik.Web.Mvc.UI
                 {
                     item.Selected = true;
 
-                    if (!item.Items.IsEmpty() || item.Content != null || !string.IsNullOrEmpty(item.ContentUrl))
+                    if (!item.Items.IsEmpty() || item.Template.HasValue() || !string.IsNullOrEmpty(item.ContentUrl))
                         item.Expanded = true;
                 }
             }

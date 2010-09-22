@@ -52,11 +52,11 @@ namespace Telerik.Web.Mvc.UI
         /// %&gt;
         /// </code>
         /// </example>
-        public TabStripClientEventsBuilder OnSelect(Action javaScript)
+        public TabStripClientEventsBuilder OnSelect(Action onSelectInlineCode)
         {
-            Guard.IsNotNull(javaScript, "javaScript");
+            Guard.IsNotNull(onSelectInlineCode, "onSelectInlineCode");
 
-            clientEvents.OnSelect = javaScript;
+            clientEvents.OnSelect.InlineCode = onSelectInlineCode;
 
             return this;
         }
@@ -73,11 +73,11 @@ namespace Telerik.Web.Mvc.UI
         /// %&gt;
         /// </code>
         /// </example>
-        public TabStripClientEventsBuilder OnSelect(string handlerName)
+        public TabStripClientEventsBuilder OnSelect(string onSelectHandlerName)
         {
-            Guard.IsNotNullOrEmpty(handlerName, "handlerName");
+            Guard.IsNotNullOrEmpty(onSelectHandlerName, "onSelectHandlerName");
 
-            clientEvents.OnSelect = HandlerAction(handlerName);
+            clientEvents.OnSelect.HandlerName = onSelectHandlerName;
 
             return this;
         }
@@ -102,11 +102,11 @@ namespace Telerik.Web.Mvc.UI
         /// %&gt;
         /// </code>
         /// </example>
-        public TabStripClientEventsBuilder OnLoad(Action javaScript)
+        public TabStripClientEventsBuilder OnLoad(Action onLoadInlineCode)
         {
-            Guard.IsNotNull(javaScript, "javaScript");
+            Guard.IsNotNull(onLoadInlineCode, "onLoadInlineCode");
 
-            clientEvents.OnLoad = javaScript;
+            clientEvents.OnLoad.InlineCode = onLoadInlineCode;
 
             return this;
         }
@@ -123,11 +123,11 @@ namespace Telerik.Web.Mvc.UI
         /// %&gt;
         /// </code>
         /// </example>
-        public TabStripClientEventsBuilder OnLoad(string handlerName)
+        public TabStripClientEventsBuilder OnLoad(string onLoadHandlerName)
         {
-            Guard.IsNotNullOrEmpty(handlerName, "handlerName");
+            Guard.IsNotNullOrEmpty(onLoadHandlerName, "onLoadHandlerName");
 
-            clientEvents.OnLoad = HandlerAction(handlerName);
+            clientEvents.OnLoad.HandlerName = onLoadHandlerName;
 
             return this;
         }
@@ -152,11 +152,11 @@ namespace Telerik.Web.Mvc.UI
         /// %&gt;
         /// </code>
         /// </example>
-        public TabStripClientEventsBuilder OnError(Action javaScript)
+        public TabStripClientEventsBuilder OnError(Action onErrorInlineCode)
         {
-            Guard.IsNotNull(javaScript, "javaScript");
+            Guard.IsNotNull(onErrorInlineCode, "onErrorInlineCode");
 
-            clientEvents.OnError = javaScript;
+            clientEvents.OnError.InlineCode = onErrorInlineCode;
 
             return this;
         }
@@ -173,18 +173,13 @@ namespace Telerik.Web.Mvc.UI
         /// %&gt;
         /// </code>
         /// </example>
-        public TabStripClientEventsBuilder OnError(string handlerName)
+        public TabStripClientEventsBuilder OnError(string onErrorHandlerName)
         {
-            Guard.IsNotNullOrEmpty(handlerName, "handlerName");
+            Guard.IsNotNullOrEmpty(onErrorHandlerName, "onErrorHandlerName");
 
-            clientEvents.OnError = HandlerAction(handlerName);
+            clientEvents.OnError.HandlerName = onErrorHandlerName;
 
             return this;
-        }
-
-        private Action HandlerAction(string handlerName)
-        {
-            return () => viewContext.HttpContext.Response.Write(handlerName);
         }
     }
 }

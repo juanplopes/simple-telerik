@@ -94,8 +94,8 @@ namespace Telerik.Web.Mvc.UI
             objectWriter.AppendDatesOnly("dates", SelectionSettings.Dates);
             objectWriter.Append("urlFormat", urlFormat);
 
-            objectWriter.Append("onLoad", ClientEvents.OnLoad);
-            objectWriter.Append("onChange", ClientEvents.OnChange);
+            objectWriter.AppendClientEvent("onLoad", ClientEvents.OnLoad);
+            objectWriter.AppendClientEvent("onChange", ClientEvents.OnChange);
 
             objectWriter.Complete();
 
@@ -142,12 +142,11 @@ namespace Telerik.Web.Mvc.UI
             IHtmlNode monthTag = renderer.MonthTag();
 
             DateTime? focusedDate = this.DetermineFocusedDate();
-            int dPosIndex = (int)(new DateTime(focusedDate.Value.Year, focusedDate.Value.Month, 1)).DayOfWeek;
+            DateTime prevMonth = new DateTime(focusedDate.Value.Year, focusedDate.Value.Month, 1).AddDays(-1);
 
-            DateTime prevDate = focusedDate.Value.AddMonths(-1);
-            int firstDayOfMonthView = DateTime.DaysInMonth(prevDate.Year, prevDate.Month) - (dPosIndex > 0 ? dPosIndex - 1 : dPosIndex);
+            int firstDayOfMonthView = DateTime.DaysInMonth(prevMonth.Year, prevMonth.Month) - ((int)(prevMonth).DayOfWeek);
 
-            DateTime startDate = new DateTime(prevDate.Year, prevDate.Month, firstDayOfMonthView);
+            DateTime startDate = new DateTime(prevMonth.Year, prevMonth.Month, firstDayOfMonthView);
             for (int weekRow = 0; weekRow < 6; weekRow++)
             {
                 IHtmlNode rowTag = renderer.RowTag();

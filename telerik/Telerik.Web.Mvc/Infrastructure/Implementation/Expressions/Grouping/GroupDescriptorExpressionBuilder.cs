@@ -1,5 +1,3 @@
-using Telerik.Web.Mvc.Infrastructure;
-using Telerik.Web.Mvc.Infrastructure.Implementation;
 // (c) Copyright 2002-2010 Telerik 
 // This source is subject to the GNU General Public License, version 2
 // See http://www.gnu.org/licenses/gpl-2.0.html. 
@@ -222,7 +220,7 @@ namespace Telerik.Web.Mvc.Infrastructure.Implementation.Expressions
 
         private NewExpression CreateProjectionNewExpression(IEnumerable<Expression> propertyValuesExpressions)
         {
-            var properties = this.groupDescriptor.AggregateFunctions.Zip(
+            var properties = this.groupDescriptor.AggregateFunctions.Consolidate(
                 propertyValuesExpressions, (f, e) => new DynamicProperty(f.FunctionName, e.Type));
             var projectionType = ClassFactory.Instance.GetDynamicClass(properties);
 
@@ -232,7 +230,7 @@ namespace Telerik.Web.Mvc.Infrastructure.Implementation.Expressions
         private IEnumerable<MemberBinding> CreateProjectionMemberBindings(Type projectionType, IEnumerable<Expression> propertyValuesExpressions)
         {
             return
-                this.groupDescriptor.AggregateFunctions.Zip(
+                this.groupDescriptor.AggregateFunctions.Consolidate(
                     propertyValuesExpressions, (f, e) => Expression.Bind(projectionType.GetProperty(f.FunctionName), e)).Cast<MemberBinding>();
         }
     }

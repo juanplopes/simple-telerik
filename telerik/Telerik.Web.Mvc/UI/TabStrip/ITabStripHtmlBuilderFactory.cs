@@ -5,7 +5,6 @@
 
 namespace Telerik.Web.Mvc.UI
 {
-    using System.Web.UI;
 
     public interface ITabStripHtmlBuilderFactory
     {

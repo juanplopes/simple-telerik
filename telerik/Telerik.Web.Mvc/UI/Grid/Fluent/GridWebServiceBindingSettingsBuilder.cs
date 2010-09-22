@@ -5,7 +5,6 @@
 
 namespace Telerik.Web.Mvc.UI.Fluent
 {
-    using System;
 
     public class GridWebServiceBindingSettingsBuilder : IHideObjectMembers
     {

@@ -2,9 +2,9 @@
 
 .t-widget
 {
-	border-color: #768ca5;
-	/*font-size: .75em; /* 12px base, if there are no inherited font-sizes (MVC default) */
-	background-color: #fff;
+    border-color: #768ca5;
+    /*font-size: .75em; /* 12px base, if there are no inherited font-sizes (MVC default) */
+    background-color: #fff;
 }
 
 /* .small .t-widget { font-size: .687em; } /* 11px base, if there are no inherited font-sizes (MVC default) */
@@ -12,14 +12,12 @@
 .t-header,
 .t-grid-header
 {
-	border-color: #426682;
-	background: #7fa5d7 url('WebBlue/sprite.png') repeat-x 0 -352px;
+    border-color: #426682;
+    background: #718ca1 url('WebBlue/sprite.png') repeat-x 0 -368px;
 }
 
-.t-icon
-{
-	background: transparent url('WebBlue/sprite.png') no-repeat;
-}
+.t-icon { background-image: url('WebBlue/sprite.png'); }
+.t-editor .t-tool-icon { background-image: url('WebBlue/editor.png'); }
 
 .t-expand { background-position: 0 -160px; }
 .t-collapse { background-position: 0 -176px; }
@@ -69,7 +67,15 @@
 .t-refresh { background-position: -32px -240px; }
 .t-icon-calendar { background-position: -48px -240px; }
 
-.t-delete { background-position: 0 -288px; }
+.t-edit { background-position: 0 -336px; }
+.t-delete { background-position: -16px -336px; }
+.t-insert, .t-update { background-position: -32px -336px; }
+.t-cancel { background-position: -48px -336px; }
+.t-group-delete { background-position: 0 -288px; }
+
+.t-maximize { background-position: -16px -288px; }
+.t-restore { background-position: -32px -288px; }
+.t-close { background-position: -64px -288px; }
 
 .t-insert-top { background-position: 0 -320px; }
 .t-insert-middle { background-position: -16px -320px; }
@@ -81,38 +87,51 @@
 .t-widget .t-loading { background: transparent url('WebBlue/loading.gif') no-repeat 0 0; }
 
 .t-widget,
-.t-link
+.t-link,
+.t-popup
 {
-	color: #333;
+    color: #333;
 }
 
 .t-header,
 .t-header .t-link
 {
-	color: #fff;
+    color: #fff;
 }
 
 .t-header .t-group,
 .t-group .t-link
 {
-	color: #333;
+    color: #333;
 }
 
 .t-group,
-.t-content
+.t-content,
+.t-editable-area
 {
-	border-color: #426682;
-	background-color: #fff;
+    border-color: #426682;
+    background-color: #fff;
+}
+
+.t-colorpicker .t-arrow-down
+{
+    border-color: #768ca5;
+}
+
+.t-separator
+{
+    border-color: #8aa0b1;
+    background-color: #516273;
 }
 
 .t-alt
 {
-	background-color: #dae2e8;
+    background-color: #dae2e8;
 }
 
 .t-state-default
 {
-	border-color: #426682;
+    border-color: #426682;
 }
 
 .t-active-filter
@@ -122,8 +141,8 @@
 
 .t-state-hover
 {
-	background-color: #acd4e3;
-	border-color: #5d9fb7;
+    background-color: #acd4e3;
+    border-color: #5d9fb7;
 }
 
 .t-state-hover,
@@ -131,90 +150,90 @@
 .t-header .t-state-hover,
 .t-group .t-state-hover
 {
-	color: #333;
+    color: #333;
 }
 
 .t-state-active
 {
-	background-color: #fff;
-	border-color: #426682;
+    background-color: #fff;
+    border-color: #426682;
 }
 
 .t-state-active,
 .t-state-active .t-link
 {
-	color: #333;
+    color: #333;
 }
 
 .t-state-active .t-header
 {
-	color: #fff;
+    color: #fff;
 }
 
 .t-state-active .t-state-hover
 {
-	color: #333;
+    color: #333;
 }
 
 .t-state-selected
 {
-	background-color: #3e94b4;
-	color: #fff;
+    background-color: #3e94b4;
+    color: #fff;
 }
 
 .t-state-error
 {
-	border-style: ridge;
-	border-color: #f00;
-	background-color: #ffc0cb;
+    border-style: ridge;
+    border-color: #f00;
+    background-color: #ffc0cb;
 }
 
 .t-state-disabled,
 .t-state-disabled .t-link
 {
-	color: #bbb;
+    color: #bbb;
 }
 
-.t-grid-toolbar,
+.t-toolbar,
 .t-grouping-header,
-.t-widget .t-footer,
+.t-widget .t-pager-wrapper,
 .t-grid-footer,
 .t-widget .t-status
 {
-	border-color: #a2b3c7;
-	background-color: #dae2e8;
+    border-color: #a2b3c7;
+    background-color: #dae2e8;
 }
 
 .t-button
 {
-	background: #e8e8e8 url('WebBlue/sprite.png') repeat-x 0 -96px;
-	color: #0d202b;
+    background: #e8e8e8 url('WebBlue/sprite.png') repeat-x 0 -96px;
+    color: #0d202b;
 }
 
 .t-button-hover
 {
-	background-position: 0 -128px;
-	color: #0e3d4f;
+    background-position: 0 -128px;
+    color: #0e3d4f;
 }
 
 .t-panelbar .t-link
 {
-	border-color: #333;
+    border-color: #333;
 }
 
 .t-tabstrip li.t-state-active
 {
-	border-bottom-color: #fff;
+    border-bottom-color: #fff;
 }
 
 .t-grid td
 {
-	border-right: 1px solid #dae2e8;
+    border-right: 1px solid #dae2e8;
 }
 
-.t-grid .t-grouping-row
+.t-grouping-row td
 {
-	background: #fff url('WebBlue/sprite.png') repeat-x 0 -48px;
+    background: #fff url('WebBlue/sprite.png') repeat-x 0 -48px;
 }
 
 .t-grouping-header .t-group-indicator
@@ -228,16 +247,16 @@
     background: url('WebBlue/sprite.png') no-repeat -48px -288px;
 }
 
-.t-grouping-row .t-groupcell,
+.t-grouping-row .t-group-cell,
 .t-grouping-row p
 {
-	background: #fff;
+    background: #fff;
 }
 
 .t-treeview .t-drop-clue
 {
     background-image: url('WebBlue/sprite.png');
-    background-position: 0 -342px;
+    background-position: 0 -358px;
 }
 
 .t-treeview .t-state-selected
@@ -247,7 +266,12 @@
 
 .t-panelbar .t-state-hover
 {
-	background-image: none;
+    background-image: none;
+}
+
+.t-editor-button .t-state-active
+{
+    background-color: #a2b9c9;
 }
 
 .t-calendar th
@@ -273,3 +297,15 @@
 
 .t-treeview-lines .t-item { background-image: url('WebBlue/treeview-line.png'); }
 .t-treeview-lines .t-last { background-image: none; }
+
+.t-editor-button .t-state-hover
+{
+    border-color: #5f7c95 #3b576f #3b576f #5f7c95;
+    background-color: #5f7c95;
+}
+
+.t-editor-button .t-state-active
+{
+    border-color: #5b758e #97b5c7 #97b5c7 #5b758e;
+    background-color: #8ca5b8;
+}

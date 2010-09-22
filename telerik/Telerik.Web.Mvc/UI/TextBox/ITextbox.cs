@@ -6,14 +6,17 @@
 namespace Telerik.Web.Mvc.UI
 {
     using System.Collections.Generic;
+    using System;
 
-    public interface ITextbox<T>
+    public interface ITextbox<T> where T : struct
     {
         IDictionary<string, object> InputHtmlAttributes { get; set; }
 
-        T MinValue { get; set; }
+        Nullable<T> Value { get; set; }
+
+        Nullable<T> MinValue { get; set; }
         
-        T MaxValue { get; set; }
+        Nullable<T> MaxValue { get; set; }
         
         T IncrementStep { get; set; }
         

@@ -1,6 +1,6 @@
 ﻿// (c) Copyright 2002-2010 Telerik 
 // This source is subject to the GNU General Public License, version 2
-// See http://www.gnu.org/licenses/gpl-2.0.html. 
+// See http://www.gnu.org/licenses/gpl-2.0.. 
 // All other rights reserved.
 
 namespace Telerik.Web.Mvc.UI
@@ -9,28 +9,20 @@ namespace Telerik.Web.Mvc.UI
 
     public class DatePickerClientEvents
     {
-        public Action OnLoad
+        public DatePickerClientEvents()
         {
-            get;
-            set;
+            OnLoad = new ClientEvent();
+            OnChange = new ClientEvent();
+            OnOpen = new ClientEvent();
+            OnClose = new ClientEvent();
         }
 
-        public Action OnChange
-        {
-            get; 
-            set; 
-        }
+        public ClientEvent OnLoad { get; private set; }
 
-        public Action OnOpen
-        {
-            get;
-            set;
-        }
+        public ClientEvent OnChange { get; private set; }
 
-        public Action OnClose
-        {
-            get;
-            set;
-        }
+        public ClientEvent OnOpen { get; private set; }
+
+        public ClientEvent OnClose { get; private set; }
     }
 }

@@ -5,7 +5,6 @@
 
 namespace Telerik.Web.Mvc
 {
-    using System.ComponentModel;
     using System.Linq.Expressions;
     /// <summary>
     /// Represents a filtering abstraction that knows how to create predicate filtering expression.

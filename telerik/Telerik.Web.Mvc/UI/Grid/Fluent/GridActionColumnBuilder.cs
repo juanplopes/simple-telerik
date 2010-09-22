@@ -5,7 +5,6 @@
 
 namespace Telerik.Web.Mvc.UI.Fluent
 {
-    using System.Collections.Generic;
 
     /// <summary>
     /// Defines the fluent interface for configuring the <see cref="GridActionColumnBuilder"/> component.

@@ -6,6 +6,7 @@
 namespace Telerik.Web.Mvc.UI
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
 
     /// <summary>
@@ -41,7 +42,7 @@ namespace Telerik.Web.Mvc.UI
         /// <param name="value">The value.</param>
         /// <returns></returns>
         IClientSideObjectWriter AppendNullableString(string name, string value);
-
+       
         /// <summary>
         /// Appends the specified name and value to the end of this instance.
         /// </summary>
@@ -180,14 +181,7 @@ namespace Telerik.Web.Mvc.UI
         /// <returns></returns>
         IClientSideObjectWriter Append(string name, IList<int> values);
 
-        /// <summary>
-        /// Appends the collection.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="name">The name.</param>
-        /// <param name="value">The value.</param>
-        /// <returns></returns>
-        IClientSideObjectWriter AppendCollection<T>(string name, IEnumerable<T> value);
+        IClientSideObjectWriter AppendCollection(string name, IEnumerable value);
 
         /// <summary>
         /// Appends the object.
@@ -196,6 +190,14 @@ namespace Telerik.Web.Mvc.UI
         /// <param name="value">The value.</param>
         /// <returns></returns>
         IClientSideObjectWriter AppendObject(string name, object value);
+
+        /// <summary>
+        /// Appends the specified name and Action or String specified in the ClientEvent object.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="event">Client event of the component.</param>
+        /// <returns></returns>
+        IClientSideObjectWriter AppendClientEvent(string name, ClientEvent clientEvent);
 
         /// <summary>
         /// Appends the specified name and value to the end of this instance.

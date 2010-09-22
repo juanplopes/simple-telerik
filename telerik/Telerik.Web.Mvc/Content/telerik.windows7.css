@@ -2,9 +2,9 @@
 
 .t-widget
 {
-	border-color: #a5b3c5;
-	/*font-size: .75em; /* 12px base, if there are no inherited font-sizes (MVC default) */
-	background-color: #fcfcfc;
+    border-color: #a5b3c5;
+    /*font-size: .75em; /* 12px base, if there are no inherited font-sizes (MVC default) */
+    background-color: #fcfcfc;
 }
 
 /* .small .t-widget { font-size: .687em; } /* 11px base, if there are no inherited font-sizes (MVC default) */
@@ -12,14 +12,12 @@
 .t-header,
 .t-grid-header
 {
-	border-color: #a5b3c5;
-	background: #f1f5fb;
+    border-color: #a5b3c5;
+    background: #f1f5fb;
 }
 
-.t-icon
-{
-	background: transparent url('Windows7/sprite.png') no-repeat;
-}
+.t-icon { background-image: url('Windows7/sprite.png'); }
+.t-editor .t-tool-icon { background-image: url('Windows7/editor.png'); }
 
 .t-expand { background-position: 0 -160px; }
 .t-collapse { background-position: 0 -176px; }
@@ -69,50 +67,70 @@
 .t-refresh { background-position: -32px -240px; }
 .t-icon-calendar { background-position: -48px -240px; }
 
-.t-delete { background-position: 0 -288px; }
+.t-edit { background-position: 0 -336px; }
+.t-delete { background-position: -16px -336px; }
+.t-insert, .t-update { background-position: -32px -336px; }
+.t-group-delete { background-position: 0 -288px; }
+
+.t-maximize { background-position: -16px -288px; }
+.t-restore { background-position: -32px -288px; }
+.t-close { background-position: -64px -288px; }
 
 .t-insert-top { background-position: 0 -320px; }
 .t-insert-middle { background-position: -16px -320px; }
 .t-insert-bottom { background-position: -32px -320px; }
 .t-add { background-position: -48px -320px; }
-.t-denied { background-position: -64px -320px; }
+.t-denied, .t-cancel { background-position: -64px -320px; }
 
 .t-loading,
 .t-widget .t-loading { background: transparent url('Windows7/loading.gif') no-repeat 0 0; }
 
 .t-widget,
-.t-link
+.t-link,
+.t-popup
 {
-	color: #000;
+    color: #000;
 }
 
 .t-header,
 .t-header .t-link
 {
-	color: #4c607a;
+    color: #4c607a;
 }
 
 .t-header .t-group,
 .t-group .t-link
 {
-	color: #333;
+    color: #333;
 }
 
 .t-group,
-.t-content
+.t-content,
+.t-editable-area
 {
-	border-color: #a5b3c5;
-	background-color: #fcfcfc;
+    border-color: #a5b3c5;
+    background-color: #fcfcfc;
+}
+
+.t-colorpicker .t-arrow-down
+{
+    border-color: #a5b3c5;
+}
+
+.t-separator
+{
+    border-color: #fff;
+    background-color: #c2cedb;
 }
 
 .t-alt
 {
-	background-color: #ebeff3;
+    background-color: #ebeff3;
 }
 
 .t-state-default
 {
-	border-color: #a5b3c5;
+    border-color: #a5b3c5;
 }
 
 .t-active-filter
@@ -122,8 +140,8 @@
 
 .t-state-hover
 {
-	background-color: #d1e4fc;
-	border-color: #8daed5;
+    background-color: #d1e4fc;
+    border-color: #8daed5;
 }
 
 .t-state-hover,
@@ -131,80 +149,80 @@
 .t-header .t-state-hover,
 .t-group .t-state-hover
 {
-	color: #000;
+    color: #000;
 }
 
 .t-state-active
 {
-	background-color: #fff;
-	border-color: #426682;
+    background-color: #fff;
+    border-color: #426682;
 }
 
 .t-state-selected
 {
-	background-color: #deecfe;
+    background-color: #deecfe;
 }
 
 .t-state-error
 {
-	border-style: ridge;
-	border-color: #f00;
-	background-color: #ffc0cb;
+    border-style: ridge;
+    border-color: #f00;
+    background-color: #ffc0cb;
 }
 
 .t-state-disabled,
 .t-state-disabled .t-link
 {
-	color: #888;
+    color: #888;
 }
 
-.t-grid-toolbar,
+.t-toolbar,
 .t-grouping-header,
-.t-widget .t-footer,
+.t-widget .t-pager-wrapper,
 .t-grid-footer,
 .t-widget .t-status
 {
-	border-color: #aec5d1;
-	background-color: #f1f5fb;
+    border-color: #aec5d1;
+    background-color: #f1f5fb;
 }
 
 .t-button
 {
-	background: #e8e8e8 url('Windows7/sprite.png') repeat-x 0 -96px;
-	color: #0d202b;
-	border-color: #c2cedb;
+    background: #e8e8e8 url('Windows7/sprite.png') repeat-x 0 -96px;
+    color: #0d202b;
+    border-color: #c2cedb;
 }
 
 .t-button-hover
 {
-	background-position: 0 -128px;
-	color: #0e3d4f;
-	border-color: #9bc9ff;
+    background-position: 0 -128px;
+    color: #0e3d4f;
+    border-color: #9bc9ff;
 }
 
 .t-panelbar .t-link
 {
-	border-color: #a5b3c5;
+    border-color: #a5b3c5;
 }
 
 .t-tabstrip .t-item
 {
-	border-bottom-color: #426682;
+    border-bottom-color: #426682;
 }
 
 .t-tabstrip li.t-state-active
 {
-	border-bottom-color: #fff;
+    border-bottom-color: #fff;
 }
 
 .t-grid td
 {
-	border-right: 1px solid #dae2e8;
+    border-right: 1px solid #dae2e8;
 }
 
-.t-grid .t-grouping-row
+.t-grouping-row td
 {
-	background: #fff url('Windows7/sprite.png') repeat-x 0 -48px;
+    background: #fff url('Windows7/sprite.png') repeat-x 0 -48px;
 }
 
 .t-grouping-header .t-group-indicator
@@ -218,16 +236,16 @@
     background: url('Windows7/sprite.png') no-repeat -48px -288px;
 }
 
-.t-grouping-row .t-groupcell,
+.t-grouping-row .t-group-cell,
 .t-grouping-row p
 {
-	background: #fff;
+    background: #fff;
 }
 
 .t-treeview .t-drop-clue
 {
     background-image: url('Windows7/sprite.png');
-    background-position: 0 -342px;
+    background-position: 0 -358px;
 }
 
 .t-treeview .t-state-selected
@@ -237,7 +255,7 @@
 
 .t-panelbar .t-state-hover
 {
-	background-image: none;
+    background-image: none;
 }
 
 .t-calendar th
@@ -248,4 +266,16 @@
 .t-other-month .t-link
 {
     color: #a7a7a7;
+}
+
+.t-editor-button .t-state-hover
+{
+    border-color: #e5f0fd #8ba6c4 #8ba6c4 #e5f0fd;
+    background-color: #d1e4fc;
+}
+
+.t-editor-button .t-state-active
+{
+    border-color: #aec1d6 #e3ebf5 #e3ebf5 #aec1d6;
+    background-color: #ccdbed;
 }

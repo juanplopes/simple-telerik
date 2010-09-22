@@ -1,33 +1,50 @@
-﻿(function($) {
+﻿(function ($) {
     var $t = $.telerik;
     var escapeQuoteRegExp = /'/ig;
-    var filterFunctions = ['startswith', 'substringof', 'endswith'];
     var fx = $t.fx.slide.defaults();
+
+    function getFormat(column) {
+        if (!column.format)
+            return $t.cultureInfo.shortDate;
+
+        return /\{0(:([^\}]+))?\}/.exec(column.format)[2];
+    }
+
+    function value(column, value) {
+        if (column.type == 'Date')
+            return $t.formatString(column.format || '{0:G}', new Date(parseInt(value.replace(/\/Date\((.*?)\)\//, '$1'))));
+
+        return value;
+    }
 
     $t.filtering = {};
 
-    $t.filtering.initialize = function(grid) {
+    $t.filtering.initialize = function (grid) {
         $.extend(grid, $t.filtering.implementation);
 
-        $('.t-grid-content', grid.element).bind('scroll', function() {
+        grid.filterBy = grid.filterExpr();
+
+        $('> .t-grid-content', grid.element).bind('scroll', function() {
             grid.hideFilter();
         });
 
-        $(document).click($t.delegate(grid, grid.filterDocumentClick));
+        $(document).click(function (e) {
+            if (e.which != 3) grid.hideFilter();
+        });
 
-        $('.t-grid-filter', grid.element)
-			.click($t.delegate(grid, grid.showFilter))
-			.live('mouseenter', $t.hover)
-			.live('mouseleave', $t.leave);
+        grid.$header.find('.t-grid-filter').click($.proxy(grid.showFilter, grid))
+            .hover(function() {
+                $(this).toggleClass('t-state-hover');
+            });
     }
 
     /* Here `this` is the Grid instance*/
 
     $t.filtering.implementation = {
-        createFilterCommands: function(html, column) {
+        createFilterCommands: function (html, column) {
             var filters = {};
 
-            $.each(this.localization, function(key, value) {
+            $.each(this.localization, function (key, value) {
                 var prefix = 'filter' + column.type;
                 var index = key.indexOf(prefix);
                 if (index > -1)
@@ -35,7 +52,7 @@
             });
 
             html.cat('<select class="t-filter-operator">');
-            $.each(filters, function(key, value) {
+            $.each(filters, function (key, value) {
                 html.cat('<option value="')
 					.cat(key)
 					.cat('">')
@@ -46,27 +63,25 @@
             html.cat('</select>');
         },
 
-        createTypeSpecificInput: function(html, column, fieldId, value) {
+        createTypeSpecificInput: function (html, column, fieldId, value) {
             if (column.type == 'Date') {
                 html.cat('<div class="t-widget t-datepicker">')
-	                .cat('<input class="t-input" id="')
-	                .cat(fieldId)
-	                .cat('" type="text" value="" />')
+	                .cat('<input class="t-input" id="').cat(fieldId).cat('" type="text" value="" />')
 	                .cat('<label class="t-icon t-icon-calendar" for="')
 	                .cat(fieldId)
-	                .cat('" title="Open the calendar popup." /></div>');
+	                .cat('" title="').cat(this.localization.filterOpenPopupHint).cat('" /></div>');
             } else if (column.type == 'Boolean') {
                 html.cat('<div><input type="radio" style="width:auto;display:inline" id="').cat(fieldId + value)
 				    .cat('" name="').cat(fieldId)
 				    .cat('" value="').cat(value).cat('" />')
-				    .cat('<label style="display:inline" for="').cat(fieldId + value)
-				    .cat('">is ').cat(value)
+				    .cat('<label style="display:inline" for="').cat(fieldId + value).cat('">')
+                    .cat(this.localization[value ? 'filterBoolIsTrue' : 'filterBoolIsFalse'])
 				    .cat('</label></div>');
             } else if (column.type == 'Enum') {
                 html.cat('<div><select><option>')
                     .cat(this.localization.filterSelectValue)
                     .cat('</option>');
-                $.each(column.values, function(key, value) {
+                $.each(column.values, function (key, value) {
                     html.cat('<option value="')
                         .cat(value)
                         .cat('">')
@@ -87,7 +102,7 @@
             }
         },
 
-        createFilterMenu: function(column) {
+        createFilterMenu: function (column) {
             var filterMenuHtml = new $t.stringBuilder();
 
             filterMenuHtml.cat('<div class="t-animation-container"><div class="t-filter-options t-group" style="display:none">')
@@ -118,39 +133,41 @@
 
             var $filterMenu = $(filterMenuHtml.string());
 
-            $.each(column.filters || [], function(i) {
+            $.each(column.filters || [], function (i) {
                 $filterMenu.find('.t-filter-operator:eq(' + i + ')')
                            .val(this.operator)
                            .end()
                            .find(':text:eq(' + i + '),select:not(.t-filter-operator):eq(' + i + ')')
-                           .val(this.value)
-                           .end()
-                           .find(':radio[id$=' + this.value + ']')
-                           .attr('checked', true);
+                           .val(value(column, this.value));
+
+                if (column.type == 'Boolean')
+                    $filterMenu.find(':radio[id$=' + this.value + ']')
+                               .attr('checked', true);
             });
 
             return $filterMenu
                         .find('.t-datepicker')
-                        .each(function() {
-                            var match = /\{0(:([^\}]+))?\}/.exec(column.format);
-                            $(this).tDatePicker({ format: match ? match[2] : $t.cultureInfo.shortDate });
+                        .each(function () {
+                            $(this).tDatePicker({ format: getFormat(column) });
                         })
                         .end()
                         .find('.t-numerictextbox')
                         .each(function() {
-                            $(this).tTextBox({ type: 'numeric', minValue: '-100000', maxValue: '100000', groupSeparator: '' });
+                            $(this).tTextBox({ type: 'numeric', minValue: null, maxValue: null, numFormat: '', groupSeparator: '' });
                         })
                         .end()
                         .appendTo(this.element);
         },
 
-        showFilter: function(e, element) {
+        showFilter: function(e) {
             e.stopPropagation();
+
+            var $element = $(e.target).closest('.t-grid-filter');
+            
             this.hideFilter(function() {
-                return this.parentNode != element;
+                return this.parentNode != $element[0];
             });
 
-            var $element = $(element);
             var $filterMenu = $element.data('filter');
 
             if (!$filterMenu) {
@@ -159,45 +176,47 @@
 
                 $filterMenu = this.createFilterMenu(column)
                         .data('column', column)
-                        .click(function(e) {
+                        .click(function (e) {
                             e.stopPropagation();
 
                             if ($(e.target).parents('.t-datepicker').length == 0) {
                                 $('.t-datepicker', this)
-                                    .each(function() {
+                                    .each(function () {
                                         $(this).data('tDatePicker').hidePopup();
                                     });
                             }
                         })
-                        .find('.t-filter-button').click($t.delegate(this, this.filterClick)).end()
-                        .find('.t-clear-button').click($t.delegate(this, this.clearClick)).end()
-                        .find('input[type=text]').keyup($t.delegate(this, this.filterKeyUp)).end();
+                        .find('.t-filter-button').click($.proxy(this.filterClick, this)).end()
+                        .find('.t-clear-button').click($.proxy(this.clearClick, this)).end()
+                        .find('input[type=text]').keyup($.proxy(function(e) {
+                            if (e.keyCode == 13) this.filterClick(e);
+                        }, this)).end();
 
                 $element.data('filter', $filterMenu);
             }
 
             // position filtering menu
             var top = 0;
-            $('thead, .t-grid-header, .t-grouping-header, .t-grid-toolbar', this.element).each(function() {
+            
+            $(this.element).find('> .t-grouping-header, > .t-grid-toolbar').add(this.$header).each(function() {
                 top += this.offsetHeight;
             });
+            
             var position = { top: top };
-            var parent = $element.parent()[0];
-            var headerRow = $element.parent().parent();
+            
             var width = -this.$headerWrap.scrollLeft() - 1;
 
-            headerRow.find('.t-header').each(function() {
-                width += this.offsetWidth;
-                if (this == parent)
-                    return false;
+            $element.parent().add($element.parent().prevAll('th')).each(function() {
+                if ($(this).css('display') != 'none')
+                    width += this.offsetWidth;
             });
 
-            var left = width - element.offsetWidth;
+            var left = width - $element.outerWidth();
 
             // constrain filtering menu within grid
             var outerWidth = $filterMenu.outerWidth() || $filterMenu.find('.t-group').outerWidth();
 
-            if (left + outerWidth > headerRow.outerWidth())
+            if (left + outerWidth > this.$header.outerWidth())
                 left = width - outerWidth + 1;
 
             if ($(this.element).hasClass('t-grid-rtl'))
@@ -210,46 +229,44 @@
             $t.fx[$filterMenu.find('.t-filter-options').is(':visible') ? 'rewind' : 'play'](fx, $filterMenu.find('.t-filter-options'), { direction: 'bottom' });
         },
 
-        hideFilter: function(filterCallback) {
-            filterCallback = filterCallback || function() { return true; };
+        hideFilter: function (filterCallback) {
+            filterCallback = filterCallback || function () { return true; };
 
-            $('.t-filter-options .t-datepicker', this.element)
-                .each(function() { $(this).data('tDatePicker').hidePopup(); });
-
-            $('.t-filter-options', this.element)
+            $('.t-grid .t-animation-container')
+                .find('.t-datepicker')
+                .each(function() { $(this).data('tDatePicker').hidePopup(); })
+                .end()
+                .find('.t-filter-options')
                 .filter(filterCallback)
-                .each(function() {
+                .each(function () {
                     $t.fx.rewind(fx, $(this), { direction: 'bottom' });
                 });
         },
 
-        getColumn: function($element) {
-            return $element.closest('.t-animation-container').data('column');
-        },
-
-        clearClick: function(e, element) {
+        clearClick: function(e) {
             e.preventDefault();
-            var $element = $(element);
-            var column = this.getColumn($element);
+            var $element = $(e.target);
+            var column = $element.closest('.t-animation-container').data('column');
             column.filters = null;
 
             $element.parent()
                     .find('input, select')
-                    .val('')
                     .removeAttr('checked')
-                    .removeClass('t-state-error');
+                    .removeClass('t-state-error')
+                    .not(':radio')
+                    .val('');
 
             this.filter(this.filterExpr());
         },
 
-        filterClick: function(e, element) {
+        filterClick: function(e) {
             e.preventDefault();
-            var $element = $(element);
-            var column = this.getColumn($(element));
+            var $element = $(e.target);
+            var column = $element.closest('.t-animation-container').data('column');
             column.filters = [];
             var hasErrors = false;
 
-            $element.parent().find('input[type=text],select:not(.t-filter-operator)').each($.proxy(function(index, input) {
+            $element.parent().find('input[type=text]:visible,select:not(.t-filter-operator)').each($.proxy(function (index, input) {
                 var $input = $(input);
                 var value = $.trim($input.val());
 
@@ -266,13 +283,13 @@
                     hasErrors = true;
                     return true;
                 }
-                
+
                 var operator = $input.prev('select').val() || $input.parent().prev('select').val();
                 if (value != this.localization.filterSelectValue)
                     column.filters.push({ operator: operator, value: value });
             }, this));
 
-            $element.parent().find('input:checked').each($.proxy(function(index, input) {
+            $element.parent().find('input:checked').each($.proxy(function (index, input) {
                 var $input = $(input);
                 var value = $(input).attr('value');
                 column.filters.push({ operator: 'eq', value: value });
@@ -286,91 +303,70 @@
             }
         },
 
-        filterKeyUp: function(e, element) {
-            if (e.keyCode != 13)
-                return;
-            this.filterClick(e, element);
-        },
-
-        filterDocumentClick: function(e, element) {
-            if (e.which == 3)
-                return;
-
-            this.hideFilter();
-        },
-
-        isValidFilterValue: function(column, value) {
-            if (column.type == 'Number') {
+        isValidFilterValue: function (column, value) {
+            if (column.type == 'Number')
                 return !isNaN(value);
-            }
 
             return true;
         },
 
-        encodeFilterValue: function(columnIndex, value) {
-            var column = this.columns[columnIndex];
+        encodeFilterValue: function (column, value) {
             switch (column.type) {
                 case 'String':
-                case 'Enum':
                     return "'" + value.replace(escapeQuoteRegExp, "''") + "'";
                 case 'Date':
-                    var ticks;
-                    if (value.indexOf('Date(') > -1) {
-                        ticks = parseInt(value.replace(/^\/Date\((.*?)\)\/$/, '$1'));
-                    } else {
-                        ticks = Date.parse(value);
-                    }
-                    return "datetime'" + $t.formatString('{0:yyyy-MM-ddThh-mm-ss}', new Date(ticks)) + "'";
+                    var date;
+                    if (value.indexOf('Date(') > -1)
+                        date = new Date(parseInt(value.replace(/^\/Date\((.*?)\)\/$/, '$1')));
+                    else
+                        date = $t.datetime.parse(value, getFormat(column)).toDate();
+
+                    return "datetime'" + $t.formatString('{0:yyyy-MM-ddTHH-mm-ss}', date) + "'";
             }
 
             return value;
         },
 
-        filterExpr: function() {
+        filterExpr: function () {
             var result = [];
-            for (var columnIndex = 0, length = this.columns.length; columnIndex < length; columnIndex++) {
-                var column = this.columns[columnIndex];
-
-                if (!column.filters)
-                    continue;
-
-                for (var filterIndex = 0; filterIndex < column.filters.length; filterIndex++) {
-                    var filter = column.filters[filterIndex];
-                    var expr = new $t.stringBuilder();
-                    if ($.inArray(filter.operator, filterFunctions) > -1) {
-                        expr.cat(filter.operator)
-                        .cat('(')
-                        .cat(column.member)
-                        .cat(',')
-                        .cat(this.encodeFilterValue(columnIndex, filter.value))
-                        .cat(')');
-                    } else {
-                        expr.cat(column.member)
-                        .cat('~')
-                        .cat(filter.operator)
-                        .cat('~')
-                        .cat(this.encodeFilterValue(columnIndex, filter.value));
-                    }
-                    result.push(expr.string());
-                }
-            }
+            $.each(this.columns, $.proxy(function (_, column) {
+                if (column.filters)
+                    $.each(column.filters, $.proxy(function (_, filter) {
+                        var expr = new $t.stringBuilder();
+                        var value = this.encodeFilterValue(column, filter.value);
+                        if (/startswith|substringof|endswith/.test(filter.operator)) {
+                            expr.cat(filter.operator)
+                                .cat('(')
+                                .cat(column.member)
+                                .cat(',')
+                                .cat(value)
+                                .cat(')');
+                        } else {
+                            expr.cat(column.member)
+                            .cat('~')
+                            .cat(filter.operator)
+                            .cat('~')
+                            .cat(value);
+                        }
+                        result.push(expr.string());
+                    }, this));
+            }, this));
 
             return result.join('~and~');
         },
 
-        filter: function(filterBy) {
+        filter: function (filterBy) {
             this.currentPage = 1;
             this.filterBy = filterBy;
 
-            if (!this.isAjax())
-                location.href = $t.formatString(unescape(this.urlFormat),
-                    this.currentPage, this.orderBy || '~', this.groupBy || '~', escape(this.filterBy) || '');
-            else {
+            if (this.isAjax()) {
                 this.$columns().each($.proxy(function(index, element) {
-                    $('.t-grid-filter', element)
-                        .toggleClass('t-active-filter', !!this.columns[index].filters);
+                    $('.t-grid-filter', element).toggleClass('t-active-filter', !!this.columns[index].filters);
                 }, this));
+
                 this.ajaxRequest();
+            } else {
+                this.serverRequest();
             }
         }
     };

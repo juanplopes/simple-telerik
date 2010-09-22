@@ -9,16 +9,14 @@ namespace Telerik.Web.Mvc.UI
 
     public class CalendarClientEvents
     {
-        public Action OnLoad
+        public CalendarClientEvents()
         {
-            get;
-            set;
+            OnLoad = new ClientEvent();
+            OnChange = new ClientEvent();
         }
 
-        public Action OnChange
-        {
-            get;
-            set;
-        }
+        public ClientEvent OnLoad { get; private set; }
+
+        public ClientEvent OnChange { get; private set; }
     }
 }

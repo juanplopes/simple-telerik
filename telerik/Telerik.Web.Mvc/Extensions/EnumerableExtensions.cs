@@ -9,9 +9,9 @@ namespace Telerik.Web.Mvc.Extensions
     using System.Collections;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
-    using System.Diagnostics;
     
     public static class EnumerableExtensions
     {
@@ -183,7 +183,7 @@ namespace Telerik.Web.Mvc.Extensions
         /// <exception cref="ArgumentNullException"><c>first</c> is null.</exception>
         /// <exception cref="ArgumentNullException"><c>second</c> is null.</exception>
         /// <exception cref="ArgumentNullException"><c>resultSelector</c> is null.</exception>
-        public static IEnumerable<TResult> Zip<TFirst, TSecond, TResult> (
+        public static IEnumerable<TResult> Consolidate<TFirst, TSecond, TResult> (
             this IEnumerable<TFirst> first, IEnumerable<TSecond> second, Func<TFirst, TSecond, TResult> resultSelector)
         {
             if (first == null) throw new ArgumentNullException("first");

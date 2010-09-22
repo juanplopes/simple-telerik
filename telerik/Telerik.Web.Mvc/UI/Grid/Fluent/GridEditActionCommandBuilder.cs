@@ -5,12 +5,18 @@
 
 namespace Telerik.Web.Mvc.UI.Fluent
 {
-    using System.Web.Routing;
 
-    public class GridEditActionCommandBuilder<T> : GridActionCommandBuilderBase<T, GridEditActionCommand<T>, GridEditActionCommandBuilder<T>>
-        where T : class
+    /// <summary>
+    /// Defines the fluent interface for configuring the edit action command.
+    /// </summary>
+    /// <typeparam name=""></typeparam>
+    public class GridEditActionCommandBuilder : GridActionCommandBuilderBase<GridEditActionCommand, GridEditActionCommandBuilder>
     {
-        public GridEditActionCommandBuilder(GridEditActionCommand<T> command)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GridEditActionCommandBuilder&lt;T&gt;"/> class.
+        /// </summary>
+        /// <param name="command">The command.</param>
+        public GridEditActionCommandBuilder(GridEditActionCommand command)
             : base(command)
         {
         }

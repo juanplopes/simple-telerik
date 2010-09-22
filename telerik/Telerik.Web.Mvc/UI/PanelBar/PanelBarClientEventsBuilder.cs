@@ -52,9 +52,11 @@ namespace Telerik.Web.Mvc.UI
         /// %&gt;
         /// </code>
         /// </example>
-        public PanelBarClientEventsBuilder OnExpand(Action javaScript)
+        public PanelBarClientEventsBuilder OnExpand(Action onExpandInlineCode)
         {
-            clientEvents.OnExpand = javaScript;
+            Guard.IsNotNull(onExpandInlineCode, "onExpandInlineCode");
+
+            clientEvents.OnExpand.InlineCode = onExpandInlineCode;
 
             return this;
         }
@@ -71,9 +73,11 @@ namespace Telerik.Web.Mvc.UI
         /// %&gt;
         /// </code>
         /// </example>
-        public PanelBarClientEventsBuilder OnExpand(string handlerName)
+        public PanelBarClientEventsBuilder OnExpand(string onExpandHandlerName)
         {
-            clientEvents.OnExpand = HandlerAction(handlerName);
+            Guard.IsNotNullOrEmpty(onExpandHandlerName, "onExpandHandlerName");
+
+            clientEvents.OnExpand.HandlerName = onExpandHandlerName;
 
             return this;
         }
@@ -98,9 +102,11 @@ namespace Telerik.Web.Mvc.UI
         /// %&gt;
         /// </code>
         /// </example>
-        public PanelBarClientEventsBuilder OnCollapse(Action javaScript)
+        public PanelBarClientEventsBuilder OnCollapse(Action onCollapseInlineCode)
         {
-            clientEvents.OnCollapse = javaScript;
+            Guard.IsNotNull(onCollapseInlineCode, "onCollapseInlineCode");
+
+            clientEvents.OnCollapse.InlineCode = onCollapseInlineCode;
 
             return this;
         }
@@ -117,9 +123,11 @@ namespace Telerik.Web.Mvc.UI
         /// %&gt;
         /// </code>
         /// </example>
-        public PanelBarClientEventsBuilder OnCollapse(string handlerName)
+        public PanelBarClientEventsBuilder OnCollapse(string onCollapseHandlerName)
         {
-            clientEvents.OnCollapse = HandlerAction(handlerName);
+            Guard.IsNotNullOrEmpty(onCollapseHandlerName, "onCollapseHandlerName");
+
+            clientEvents.OnCollapse.HandlerName = onCollapseHandlerName;
 
             return this;
         }
@@ -144,9 +152,11 @@ namespace Telerik.Web.Mvc.UI
         /// %&gt;
         /// </code>
         /// </example>
-        public PanelBarClientEventsBuilder OnSelect(Action javaScript)
+        public PanelBarClientEventsBuilder OnSelect(Action onSelectInlineCode)
         {
-            clientEvents.OnSelect = javaScript;
+            Guard.IsNotNull(onSelectInlineCode, "onSelectInlineCode");
+
+            clientEvents.OnSelect.InlineCode = onSelectInlineCode;
 
             return this;
         }
@@ -163,9 +173,11 @@ namespace Telerik.Web.Mvc.UI
         /// %&gt;
         /// </code>
         /// </example>
-        public PanelBarClientEventsBuilder OnSelect(string handlerName)
+        public PanelBarClientEventsBuilder OnSelect(string onSelectHandlerName)
         {
-            clientEvents.OnSelect = HandlerAction(handlerName);
+            Guard.IsNotNullOrEmpty(onSelectHandlerName, "onSelectHandlerName");
+
+            clientEvents.OnSelect.HandlerName = onSelectHandlerName;
 
             return this;
         }
@@ -190,9 +202,11 @@ namespace Telerik.Web.Mvc.UI
         /// %&gt;
         /// </code>
         /// </example>
-        public PanelBarClientEventsBuilder OnLoad(Action javaScript)
+        public PanelBarClientEventsBuilder OnLoad(Action onLoadInlineCode)
         {
-            clientEvents.OnLoad = javaScript;
+            Guard.IsNotNull(onLoadInlineCode, "onLoadInlineCode");
+
+            clientEvents.OnLoad.InlineCode = onLoadInlineCode;
 
             return this;
         }
@@ -209,9 +223,11 @@ namespace Telerik.Web.Mvc.UI
         /// %&gt;
         /// </code>
         /// </example>
-        public PanelBarClientEventsBuilder OnLoad(string handlerName)
+        public PanelBarClientEventsBuilder OnLoad(string onLoadHandlerName)
         {
-            clientEvents.OnLoad = HandlerAction(handlerName);
+            Guard.IsNotNullOrEmpty(onLoadHandlerName, "onLoadHandlerName");
+
+            clientEvents.OnLoad.HandlerName = onLoadHandlerName;
 
             return this;
         }
@@ -236,9 +252,11 @@ namespace Telerik.Web.Mvc.UI
         /// %&gt;
         /// </code>
         /// </example>
-        public PanelBarClientEventsBuilder OnError(Action javaScript)
+        public PanelBarClientEventsBuilder OnError(Action onErrorInlineCode)
         {
-            clientEvents.OnError = javaScript;
+            Guard.IsNotNull(onErrorInlineCode, "onErrorInlineCode");
+
+            clientEvents.OnError.InlineCode = onErrorInlineCode;
 
             return this;
         }
@@ -255,16 +273,13 @@ namespace Telerik.Web.Mvc.UI
         /// %&gt;
         /// </code>
         /// </example>
-        public PanelBarClientEventsBuilder OnError(string handlerName)
+        public PanelBarClientEventsBuilder OnError(string onErrorHandlerName)
         {
-            clientEvents.OnError = HandlerAction(handlerName);
+            Guard.IsNotNullOrEmpty(onErrorHandlerName, "onErrorHandlerName");
+
+            clientEvents.OnError.HandlerName = onErrorHandlerName;
 
             return this;
-        }
-
-        private Action HandlerAction(string handlerName)
-        {
-            return () => viewContext.HttpContext.Response.Write(handlerName);
         }
     }
 }

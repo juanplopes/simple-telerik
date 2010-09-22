@@ -5,9 +5,8 @@
 
 namespace Telerik.Web.Mvc.UI
 {
-    using System;
-    using Infrastructure;
     using System.Web.Mvc;
+    using Infrastructure;
 
     /// <summary>
     /// Defines the fluent interface for configuring child tabstrip items.

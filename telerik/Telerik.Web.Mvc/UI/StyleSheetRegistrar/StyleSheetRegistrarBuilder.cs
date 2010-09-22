@@ -13,7 +13,7 @@ namespace Telerik.Web.Mvc.UI
     /// <summary>
     /// Defines the fluent interface for configuring the <see cref="StyleSheetRegistrar"/> component.
     /// </summary>
-    public class StyleSheetRegistrarBuilder : IHideObjectMembers
+    public class StyleSheetRegistrarBuilder : ComponentBuilderBase<StyleSheetRegistrar, StyleSheetRegistrarBuilder>, IHideObjectMembers
     {
         private readonly StyleSheetRegistrar styleSheetRegistrar;
 
@@ -124,11 +124,14 @@ namespace Telerik.Web.Mvc.UI
             styleSheetRegistrar.Render();
         }
 
+        public string ToHtmlString()
+        {
+            return styleSheetRegistrar.ToHtmlString();
+        }
+
         public override string ToString()
         {
-            Render();
-
-            return null;
+            return ToHtmlString();
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Telerik.Web.Mvc.Infrastructure;
-// (c) Copyright 2002-2010 Telerik 
+﻿// (c) Copyright 2002-2010 Telerik 
 // This source is subject to the GNU General Public License, version 2
 // See http://www.gnu.org/licenses/gpl-2.0.html. 
 // All other rights reserved.
@@ -7,10 +6,8 @@
 namespace Telerik.Web.Mvc.UI
 {
     using System;
-    using System.Linq;
     using System.Web.Mvc;
-    using System.Collections.Generic;
-  
+
     using Extensions;
     using Infrastructure;
     using Telerik.Web.Mvc.Resources;
@@ -65,8 +62,7 @@ namespace Telerik.Web.Mvc.UI
             objectWriter.Append("text", this.EmptyMessage);
             objectWriter.Append("type", "currency");
 
-            objectWriter.Append("onLoad", ClientEvents.OnLoad);
-            objectWriter.Append("onChange", ClientEvents.OnChange);
+            ClientEvents.SerializeTo(objectWriter);
 
             objectWriter.Complete();
 
@@ -97,6 +93,7 @@ namespace Telerik.Web.Mvc.UI
             }
 
             rootTag.WriteTo(writer);
+            base.WriteHtml(writer);
         }
 
         private void VerifySettings()

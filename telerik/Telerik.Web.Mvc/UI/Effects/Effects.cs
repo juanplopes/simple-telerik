@@ -5,7 +5,6 @@
 
 namespace Telerik.Web.Mvc.UI
 {
-    using System;
     using System.Collections.Generic;
 
     public class Effects : IEffectContainer

@@ -6,10 +6,9 @@
 namespace Telerik.Web.Mvc.UI
 {
     using System;
-    using System.Collections.Generic;
-
-    using Infrastructure;
     using System.Collections;
+    using System.Collections.Generic;
+    using Infrastructure;
 
     /// <summary>
     /// Defines the fluent interface for configuring the <see cref="PanelBar"/> component.
@@ -105,8 +104,6 @@ namespace Telerik.Web.Mvc.UI
         {
             Guard.IsNotNullOrEmpty(viewDataKey, "viewDataKey");
 
-            Component.isBoundToSiteMap = true;
-
             Component.BindTo(viewDataKey, siteMapAction);
 
             return this;
@@ -127,8 +124,6 @@ namespace Telerik.Web.Mvc.UI
         public PanelBarBuilder BindTo(string viewDataKey)
         {
             Guard.IsNotNullOrEmpty(viewDataKey, "viewDataKey");
-
-            Component.isBoundToSiteMap = true;
 
             Component.BindTo(viewDataKey);
 

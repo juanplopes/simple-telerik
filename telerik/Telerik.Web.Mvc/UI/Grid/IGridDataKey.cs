@@ -6,9 +6,8 @@
 namespace Telerik.Web.Mvc.UI
 {
     using System.Web.Mvc;
-    
-    public interface IGridDataKey<T>
-            where T : class
+
+    public interface IGridDataKey
     {
         string Name
         {
@@ -19,6 +18,11 @@ namespace Telerik.Web.Mvc.UI
         {
             get;
         }
+    }
+    
+    public interface IGridDataKey<T> : IGridDataKey
+            where T : class
+    {
 
         object GetValue(T dataItem);
 #if MVC2

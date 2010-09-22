@@ -6,9 +6,8 @@
 namespace Telerik.Web.Mvc.UI
 {
     using System.Collections.Generic;
-    using Telerik.Web.Mvc.Infrastructure;
 
-    public class TreeViewItem : NavigationItem<TreeViewItem>, INavigationItemContainer<TreeViewItem>
+    public class TreeViewItem : NavigationItem<TreeViewItem>, INavigationItemContainer<TreeViewItem>, ITreeViewItem
     {
         public TreeViewItem()
         {
@@ -18,6 +17,8 @@ namespace Telerik.Web.Mvc.UI
             {
                 Value = Text;
             }
+
+            Checkable = true;
         }
 
         public IList<TreeViewItem> Items
@@ -26,28 +27,14 @@ namespace Telerik.Web.Mvc.UI
             private set;
         }
 
-        public string Value
-        {
-            get;
-            set;
-        }
+        public string Value { get; set; }
 
-        public bool Expanded
-        {
-            get;
-            set;
-        }
+        public bool Expanded { get; set; }
 
-        public bool Checked
-        {
-            get;
-            set;
-        }
+        public bool Checked { get; set; }
 
-        public bool LoadOnDemand
-        {
-            get;
-            set;
-        }
+        public bool Checkable { get; set; }
+
+        public bool LoadOnDemand { get; set; }
     }
 }

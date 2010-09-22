@@ -52,7 +52,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
         {
             Guard.IsNotNull(onLoadInlineCode, "onLoadInlineCode");
 
-            events.OnLoad = onLoadInlineCode;
+            events.OnLoad.InlineCode = onLoadInlineCode;
 
             return this;
         }
@@ -73,41 +73,345 @@ namespace Telerik.Web.Mvc.UI.Fluent
         {
             Guard.IsNotNullOrEmpty(onLoadHandlerName, "onLoadHandlerName");
 
-            events.OnLoad = HandlerAction(onLoadHandlerName);
+            events.OnLoad.HandlerName = onLoadHandlerName;
 
             return this;
         }
 
         /// <summary>
-        ///  Defines the name of the JavaScript function that will handle the the OnRowSelected client-side event.
+        ///  Defines the name of the JavaScript function that will handle the the OnEdit client-side event.
+        /// </summary>
+        /// <param name="onEditHandlerName">The name of the JavaScript function that will handle the event.</param>
+        /// <example>
+        /// <code lang="CS">
+        ///  &lt;%= Html.Telerik().Grid(Model)
+        ///             .Name("Grid")
+        ///             .ClientEvents(events => events.OnEdit("onEdit"))
+        /// %&gt;
+        /// </code>
+        /// </example>
+        public GridClientEventsBuilder OnEdit(string onEditHandlerName)
+        {
+            Guard.IsNotNullOrEmpty(onEditHandlerName, "onEditHandlerName");
+
+            events.OnEdit.HandlerName = onEditHandlerName;
+
+            return this;
+        }
+
+        /// <summary>
+        /// Defines the inline handler of the OnEdit client-side event.
+        /// </summary>
+        /// <param name="onEditInlineCode">The action defining the inline handler.</param>
+        /// <example>
+        /// <code lang="CS">
+        ///  &lt;% Html.Telerik().Grid(Model)
+        ///            .Name("Grid")
+        ///            .ClientEvents(events => events.OnEdit(() =>
+        ///            {
+        ///                 %&gt;
+        ///                 function(e) {
+        ///                     //edit handling code
+        ///                 }
+        ///                 &lt;%
+        ///            }))
+        ///            .Render();
+        /// %&gt;
+        /// </code>
+        /// </example>
+        public GridClientEventsBuilder OnEdit(Action onEditInlineCode)
+        {
+            Guard.IsNotNull(onEditInlineCode, "onEditInlineCode");
+
+            events.OnEdit.InlineCode = onEditInlineCode;
+
+            return this;
+        }
+        /// <summary>
+        ///  Defines the name of the JavaScript function that will handle the the OnSave client-side event.
+        /// </summary>
+        /// <param name="onSaveHandlerName">The name of the JavaScript function that will handle the event.</param>
+        /// <example>
+        /// <code lang="CS">
+        ///  &lt;%= Html.Telerik().Grid(Model)
+        ///             .Name("Grid")
+        ///             .ClientEvents(events => events.OnSave("onSave"))
+        /// %&gt;
+        /// </code>
+        /// </example>
+        public GridClientEventsBuilder OnSave(string onSaveHandlerName)
+        {
+            Guard.IsNotNullOrEmpty(onSaveHandlerName, "onSaveHandlerName");
+
+            events.OnSave.HandlerName = onSaveHandlerName;
+
+            return this;
+        }
+
+        /// <summary>
+        /// Defines the inline handler of the OnSave client-side event.
+        /// </summary>
+        /// <param name="onSaveInlineCode">The action defining the inline handler.</param>
+        /// <example>
+        /// <code lang="CS">
+        ///  &lt;% Html.Telerik().Grid(Model)
+        ///            .Name("Grid")
+        ///            .ClientEvents(events => events.OnSave(() =>
+        ///            {
+        ///                 %&gt;
+        ///                 function(e) {
+        ///                     //edit handling code
+        ///                 }
+        ///                 &lt;%
+        ///            }))
+        ///            .Render();
+        /// %&gt;
+        /// </code>
+        /// </example>
+        public GridClientEventsBuilder OnSave(Action onSaveInlineCode)
+        {
+            Guard.IsNotNull(onSaveInlineCode, "onSaveInlineCode");
+
+            events.OnSave.InlineCode = onSaveInlineCode;
+
+            return this;
+        }
+
+        /// <summary>
+        ///  Defines the name of the JavaScript function that will handle the the OnDetailViewExpand client-side event.
+        /// </summary>
+        /// <param name="onDetailViewExpandHandlerName">The name of the JavaScript function that will handle the event.</param>
+        /// <example>
+        /// <code lang="CS">
+        ///  &lt;%= Html.Telerik().Grid(Model)
+        ///             .Name("Grid")
+        ///             .ClientEvents(events => events.OnDetailViewExpand("onDetailViewExpand"))
+        /// %&gt;
+        /// </code>
+        /// </example>
+        public GridClientEventsBuilder OnDetailViewExpand(string onDetailViewExpandHandlerName)
+        {
+            Guard.IsNotNullOrEmpty(onDetailViewExpandHandlerName, "onDetailViewExpandHandlerName");
+
+            events.OnDetailViewExpand.HandlerName = onDetailViewExpandHandlerName;
+
+            return this;
+        }
+
+        /// <summary>
+        /// Defines the inline handler of the OnDetailViewExpand client-side event.
+        /// </summary>
+        /// <param name="onDetailViewExpandInlineCode">The action defining the inline handler.</param>
+        /// <example>
+        /// <code lang="CS">
+        ///  &lt;% Html.Telerik().Grid(Model)
+        ///            .Name("Grid")
+        ///            .ClientEvents(events => events.OnDetailViewExpand(() =>
+        ///            {
+        ///                 %&gt;
+        ///                 function(e) {
+        ///                     //edit handling code
+        ///                 }
+        ///                 &lt;%
+        ///            }))
+        ///            .Render();
+        /// %&gt;
+        /// </code>
+        /// </example>
+        public GridClientEventsBuilder OnDetailViewExpand(Action onDetailViewExpandInlineCode)
+        {
+            Guard.IsNotNull(onDetailViewExpandInlineCode, "onDetailViewExpandInlineCode");
+
+            events.OnSave.InlineCode = onDetailViewExpandInlineCode;
+
+            return this;
+        }
+        /// <summary>
+        ///  Defines the name of the JavaScript function that will handle the the OnDetailViewCollapse client-side event.
+        /// </summary>
+        /// <param name="onDetailViewCollapseHandlerName">The name of the JavaScript function that will handle the event.</param>
+        /// <example>
+        /// <code lang="CS">
+        ///  &lt;%= Html.Telerik().Grid(Model)
+        ///             .Name("Grid")
+        ///             .ClientEvents(events => events.OnDetailViewCollapse("onDetailViewCollapse"))
+        /// %&gt;
+        /// </code>
+        /// </example>
+        public GridClientEventsBuilder OnDetailViewCollapse(string onDetailViewCollapseHandlerName)
+        {
+            Guard.IsNotNullOrEmpty(onDetailViewCollapseHandlerName, "onDetailViewCollapseHandlerName");
+
+            events.OnDetailViewCollapse.HandlerName = onDetailViewCollapseHandlerName;
+
+            return this;
+        }
+
+        /// <summary>
+        /// Defines the inline handler of the OnDetailViewCollapse client-side event.
+        /// </summary>
+        /// <param name="onDetailViewCollapseInlineCode">The action defining the inline handler.</param>
+        /// <example>
+        /// <code lang="CS">
+        ///  &lt;% Html.Telerik().Grid(Model)
+        ///            .Name("Grid")
+        ///            .ClientEvents(events => events.OnDetailViewCollapse(() =>
+        ///            {
+        ///                 %&gt;
+        ///                 function(e) {
+        ///                     //edit handling code
+        ///                 }
+        ///                 &lt;%
+        ///            }))
+        ///            .Render();
+        /// %&gt;
+        /// </code>
+        /// </example>
+        public GridClientEventsBuilder OnDetailViewCollapse(Action onDetailViewCollapseInlineCode)
+        {
+            Guard.IsNotNull(onDetailViewCollapseInlineCode, "onDetailViewCollapseInlineCode");
+
+            events.OnSave.InlineCode = onDetailViewCollapseInlineCode;
+
+            return this;
+        }
+
+        /// <summary>
+        ///  Defines the name of the JavaScript function that will handle the the OnDelete client-side event.
+        /// </summary>
+        /// <param name="onDeleteHandlerName">The name of the JavaScript function that will handle the event.</param>
+        /// <example>
+        /// <code lang="CS">
+        ///  &lt;%= Html.Telerik().Grid(Model)
+        ///             .Name("Grid")
+        ///             .ClientEvents(events => events.OnSave("onDelete"))
+        /// %&gt;
+        /// </code>
+        /// </example>
+        public GridClientEventsBuilder OnDelete(string onDeleteHandlerName)
+        {
+            Guard.IsNotNullOrEmpty(onDeleteHandlerName, "onDeleteHandlerName");
+
+            events.OnDelete.HandlerName = onDeleteHandlerName;
+
+            return this;
+        }
+
+        /// <summary>
+        /// Defines the inline handler of the OnSave client-side event.
+        /// </summary>
+        /// <param name="onDeleteInlineCode">The action defining the inline handler.</param>
+        /// <example>
+        /// <code lang="CS">
+        ///  &lt;% Html.Telerik().Grid(Model)
+        ///            .Name("Grid")
+        ///            .ClientEvents(events => events.OnSave(() =>
+        ///            {
+        ///                 %&gt;
+        ///                 function(e) {
+        ///                     //edit handling code
+        ///                 }
+        ///                 &lt;%
+        ///            }))
+        ///            .Render();
+        /// %&gt;
+        /// </code>
+        /// </example>
+        public GridClientEventsBuilder OnDelete(Action onDeleteInlineCode)
+        {
+            Guard.IsNotNull(onDeleteInlineCode, "onDeleteInlineCode");
+
+            events.OnDelete.InlineCode = onDeleteInlineCode;
+
+            return this;
+        }
+
+        /// <summary>
+        /// Defines the inline handler of the OnColumnResize client-side event.
+        /// </summary>
+        /// <param name="onLoadInlineCode">The action defining the inline handler.</param>
+        /// <example>
+        /// <code lang="CS">
+        ///  &lt;% Html.Telerik().Grid(Model)
+        ///            .Name("Grid")
+        ///            .ClientEvents(events => events.OnColumnResize(() =>
+        ///            {
+        ///                 %&gt;
+        ///                 function(e) {
+        ///                     //event handling code
+        ///                 }
+        ///                 &lt;%
+        ///            }))
+        ///            .Render();
+        /// %&gt;
+        /// </code>
+        /// </example>
+        public GridClientEventsBuilder OnColumnResize(Action onColumnResizeInlineCode)
+        {
+            Guard.IsNotNull(onColumnResizeInlineCode, "onColumnResizeInlineCode");
+
+            events.OnColumnResize.InlineCode = onColumnResizeInlineCode;
+
+            return this;
+        }
+
+        /// <summary>
+        ///  Defines the name of the JavaScript function that will handle the the OnColumnResize client-side event.
         /// </summary>
         /// <param name="onLoadHandlerName">The name of the JavaScript function that will handle the event.</param>
         /// <example>
         /// <code lang="CS">
         ///  &lt;%= Html.Telerik().Grid(Model)
         ///             .Name("Grid")
-        ///             .ClientEvents(events => events.OnRowSelected("onRowSelected"))
+        ///             .ClientEvents(events => events.OnColumnResize("onColumnResize"))
         /// %&gt;
         /// </code>
         /// </example>
-        public GridClientEventsBuilder OnRowSelected(string onRowSelectedHandlerName)
+        public GridClientEventsBuilder OnColumnResize(string onColumnResizeHandlerName)
         {
-            Guard.IsNotNullOrEmpty(onRowSelectedHandlerName, "onRowSelectedHandlerName");
+            Guard.IsNotNullOrEmpty(onColumnResizeHandlerName, "onColumnResizeHandlerName");
 
-            events.OnRowSelected = HandlerAction(onRowSelectedHandlerName);
+            events.OnColumnResize.HandlerName = onColumnResizeHandlerName;
 
             return this;
         }
 
         /// <summary>
-        /// Defines the inline handler of the OnRowSelected client-side event.
+        ///  Defines the name of the JavaScript function that will handle the the OnRowSelect client-side event.
+        /// </summary>
+        /// <param name="onRowSelectHandlerName">The name of the JavaScript function that will handle the event.</param>
+        /// <example>
+        /// <code lang="CS">
+        ///  &lt;%= Html.Telerik().Grid(Model)
+        ///             .Name("Grid")
+        ///             .ClientEvents(events => events.OnRowSelect("onRowSelect"))
+        /// %&gt;
+        /// </code>
+        /// </example>
+        public GridClientEventsBuilder OnRowSelect(string onRowSelectHandlerName)
+        {
+            Guard.IsNotNullOrEmpty(onRowSelectHandlerName, "onRowSelectHandlerName");
+
+            events.OnRowSelect.HandlerName = onRowSelectHandlerName;
+
+            return this;
+        }
+        
+        [Obsolete("Use OnRowSelect instead")]
+        public GridClientEventsBuilder OnRowSelected(string onRowSelectedHandlerName)
+        {
+            return OnRowSelect(onRowSelectedHandlerName);
+        }
+
+        /// <summary>
+        /// Defines the inline handler of the OnRowSelect client-side event.
         /// </summary>
         /// <param name="onLoadAction">The action defining the inline handler.</param>
         /// <example>
         /// <code lang="CS">
         ///  &lt;% Html.Telerik().Grid(Model)
         ///            .Name("Grid")
-        ///            .ClientEvents(events => events.OnRowSelected(() =>
+        ///            .ClientEvents(events => events.OnRowSelect(() =>
         ///            {
         ///                 %&gt;
         ///                 function(e) {
@@ -119,13 +423,19 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// %&gt;
         /// </code>
         /// </example>
-        public GridClientEventsBuilder OnRowSelected(Action onRowSelectedAction)
+        public GridClientEventsBuilder OnRowSelect(Action onRowSelectInlineCode)
         {
-            Guard.IsNotNull(onRowSelectedAction, "onRowSelectedAction");
+            Guard.IsNotNull(onRowSelectInlineCode, "onRowSelectInlineCode");
 
-            events.OnRowSelected = onRowSelectedAction;
+            events.OnRowSelect.InlineCode = onRowSelectInlineCode;
 
             return this;
+        }
+
+        [Obsolete("Use OnRowSelect instead")]
+        public GridClientEventsBuilder OnRowSelected(Action onRowSelectedInlineCode)
+        {
+            return OnRowSelected(onRowSelectedInlineCode);
         }
 
         /// <summary>
@@ -152,7 +462,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
         {
             Guard.IsNotNull(onErrorInlineCode, "onErrorInlineCode");
 
-            events.OnError = onErrorInlineCode;
+            events.OnError.InlineCode = onErrorInlineCode;
 
             return this;
         }
@@ -173,7 +483,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
         {
             Guard.IsNotNullOrEmpty(onErrorHandlerName, "onErrorHandlerName");
 
-            events.OnError = HandlerAction(onErrorHandlerName);
+            events.OnError.HandlerName = onErrorHandlerName;
 
             return this;
         }
@@ -202,7 +512,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
         {
             Guard.IsNotNull(onDataBoundInlineCode, "onDataBoundInlineCode");
 
-            events.OnDataBound = onDataBoundInlineCode;
+            events.OnDataBound.InlineCode = onDataBoundInlineCode;
 
             return this;
         }
@@ -223,7 +533,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
         {
             Guard.IsNotNullOrEmpty(onDataBoundHandlerName, "onDataBoundHandlerName");
 
-            events.OnDataBound = HandlerAction(onDataBoundHandlerName);
+            events.OnDataBound.HandlerName = onDataBoundHandlerName;
 
             return this;
         }
@@ -251,7 +561,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
         {
             Guard.IsNotNull(onDataBindingInlineCode, "onDataBindingInlineCode");
 
-            events.OnDataBinding = onDataBindingInlineCode;
+            events.OnDataBinding.InlineCode = onDataBindingInlineCode;
 
             return this;
         }
@@ -272,7 +582,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
         {
             Guard.IsNotNullOrEmpty(onDataBindingHandlerName, "onDataBindingHandlerName");
 
-            events.OnDataBinding = HandlerAction(onDataBindingHandlerName);
+            events.OnDataBinding.HandlerName = onDataBindingHandlerName;
 
             return this;
         }
@@ -302,7 +612,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
         {
             Guard.IsNotNull(onRowDataBoundInlineCode, "onRowDataBoundInlineCode");
 
-            events.OnRowDataBound = onRowDataBoundInlineCode;
+            events.OnRowDataBound.InlineCode = onRowDataBoundInlineCode;
 
             return this;
         }
@@ -323,14 +633,9 @@ namespace Telerik.Web.Mvc.UI.Fluent
         {
             Guard.IsNotNullOrEmpty(onRowDataBoundHandlerName, "onRowDataBoundHandlerName");
 
-            events.OnRowDataBound = HandlerAction(onRowDataBoundHandlerName);
+            events.OnRowDataBound.HandlerName = onRowDataBoundHandlerName;
 
             return this;
-        }
-
-        private Action HandlerAction(string handlerName)
-        {
-            return () => viewContext.HttpContext.Response.Write(handlerName);
         }
     }
 }

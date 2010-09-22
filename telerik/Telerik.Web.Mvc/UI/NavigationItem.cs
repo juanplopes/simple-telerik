@@ -6,9 +6,8 @@
 namespace Telerik.Web.Mvc.UI
 {
     using System;
-    using System.Web.Routing;
     using System.Collections.Generic;
-
+    using System.Web.Routing;
     using Infrastructure;
 
     public abstract class NavigationItem<T> : LinkedObjectBase<T>, INavigatable, IHideObjectMembers, IHtmlAttributesContainer, IContentContainer where T : NavigationItem<T>
@@ -24,6 +23,7 @@ namespace Telerik.Web.Mvc.UI
 
         protected NavigationItem()
         {
+            Template = new HtmlTemplate();
             HtmlAttributes = new RouteValueDictionary();
             ImageHtmlAttributes = new RouteValueDictionary();
             LinkHtmlAttributes = new RouteValueDictionary();
@@ -31,39 +31,91 @@ namespace Telerik.Web.Mvc.UI
             ContentHtmlAttributes = new RouteValueDictionary();
             Visible = true;
             Enabled = true;
+            Encoded = true;
         }
 
-        public string RouteName
+        public RouteValueDictionary RouteValues 
+        { 
+            get; 
+            set; 
+        }
+
+        public IDictionary<string, object> HtmlAttributes 
+        { 
+            get; 
+            private set; 
+        }
+
+        public IDictionary<string, object> ImageHtmlAttributes 
+        { 
+            get; 
+            private set; 
+        }
+
+        public IDictionary<string, object> LinkHtmlAttributes 
+        { 
+            get; 
+            private set; 
+        }
+
+        public IDictionary<string, object> ContentHtmlAttributes 
+        { 
+            get; 
+            private set; 
+        }
+
+        public bool Encoded 
+        { 
+            get; 
+            set; 
+        }
+
+        public HtmlTemplate Template
+        {
+            get;
+            private set;
+        }
+
+        public string Html
         {
             get
             {
-                return routeName;
+                return Template.Html;
             }
             set
             {
-                Guard.IsNotNullOrEmpty(value, "value");
-
-                routeName = value;
-                controllerName = actionName = url = null;
+                Template.Html = value;
             }
         }
 
-        public IDictionary<string, object> HtmlAttributes
-        {
-            get;
-            private set;
+        public bool Visible 
+        { 
+            get; 
+            set; 
         }
 
-        public IDictionary<string, object> ImageHtmlAttributes
-        {
-            get;
-            private set;
+        public string ImageUrl 
+        { 
+            get; 
+            set; 
         }
 
-        public IDictionary<string, object> LinkHtmlAttributes
+        public string SpriteCssClasses 
+        { 
+            get; 
+            set; 
+        }
+
+        public Action Content
         {
-            get;
-            private set;
+            get
+            {
+                return Template.Content;
+            }
+            set
+            {
+                Template.Content = value;
+            }
         }
 
         public string Text
@@ -78,24 +130,6 @@ namespace Telerik.Web.Mvc.UI
 
                 text = value;
             }
-        }
-
-        public bool Visible
-        {
-            get;
-            set;
-        }
-
-        public string ImageUrl
-        {
-            get;
-            set;
-        }
-
-        public string SpriteCssClasses 
-        { 
-            get; 
-            set; 
         }
 
         public bool Selected
@@ -164,13 +198,21 @@ namespace Telerik.Web.Mvc.UI
             }
         }
 
-        public RouteValueDictionary RouteValues
+        public string RouteName
         {
-            get;
-            set;
+            get
+            {
+                return routeName;
+            }
+            set
+            {
+                Guard.IsNotNullOrEmpty(value, "value");
+
+                routeName = value;
+                controllerName = actionName = url = null;
+            }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1056:UriPropertiesShouldNotBeStrings", Justification = "Url might not be a valid uri.")]
         public string Url
         {
             get
@@ -186,18 +228,6 @@ namespace Telerik.Web.Mvc.UI
                 routeName = controllerName = actionName = null;
                 RouteValues.Clear();
             }
-        }
-
-        public IDictionary<string, object> ContentHtmlAttributes
-        {
-            get;
-            private set;
-        }
-
-        public Action Content
-        {
-            get;
-            set;
         }
     }
 }

@@ -5,11 +5,10 @@
 
 namespace Telerik.Web.Mvc.UI
 {
-    using System.Web.UI;
 
     using Infrastructure;
 
-    public class PanelBarHtmlBuilderFactory : IPanelBarHtmlBuilderFactory
+    public class PanelBarHtmlBuilderFactory : INavigationComponentHtmlBuilderFactory<PanelBar, PanelBarItem>
     {
         private readonly IActionMethodCache actionMethodCache;
 
@@ -20,7 +19,7 @@ namespace Telerik.Web.Mvc.UI
             this.actionMethodCache = actionMethodCache;
         }
 
-        public IPanelBarHtmlBuilder Create(PanelBar panelBar)
+        public INavigationComponentHtmlBuilder<PanelBarItem> Create(PanelBar panelBar)
         {
             return new PanelBarHtmlBuilder(panelBar, actionMethodCache);
         }

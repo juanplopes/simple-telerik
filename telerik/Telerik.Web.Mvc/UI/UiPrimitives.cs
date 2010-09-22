@@ -3,6 +3,7 @@
 // See http://www.gnu.org/licenses/gpl-2.0.html. 
 // All other rights reserved.
 
+using System;
 namespace Telerik.Web.Mvc.UI
 {
     /// <summary>
@@ -130,6 +131,20 @@ namespace Telerik.Web.Mvc.UI
         /// </summary>
         public const string CheckBox = "t-checkbox";
 
+        /// <summary>
+        /// ToolBar - rendered on all toolbars
+        /// </summary>
+        public const string ToolBar = "t-toolbar";
+        
+        /// <summary>
+        /// Contains CSS classes, used in the Grid
+        /// </summary>
+        public static class Icons
+        {
+            public const string Delete = "t-delete";
+
+            public const string GroupDelete = "t-group-delete";
+        }
 
         /// <summary>
         /// Contains CSS classes, used in the Grid
@@ -155,9 +170,13 @@ namespace Telerik.Web.Mvc.UI
             
             public const string Select = "t-grid-select";
 
-            public const string GroupCell = "t-groupcell";
+            public const string GroupCell = "t-group-cell";
+            
+            public const string HierarchyCell = "t-hierarchy-cell";
 
-            public const string GroupCol = "t-groupcol";
+            public const string GroupCol = "t-group-col";
+            
+            public const string HierarchyCol = "t-hierarchy-col";
 
             public const string GroupIndicator = "t-group-indicator";
 
@@ -188,6 +207,25 @@ namespace Telerik.Web.Mvc.UI
             /// Class that shows treeview lines
             /// </summary>
             public const string Lines = "t-treeview-lines";
+        }
+
+        public static class Editor
+        {
+            /// <summary>
+            /// Editor toolbar button
+            /// </summary>
+            public const string ToolbarButton = "t-editor-button";
+
+            /// <summary>
+            /// Editor toolbar color picker
+            /// </summary>
+            public const string ToolbarColorPicker = "t-editor-colorpicker";
+
+            /// <summary>
+            /// Editor tool icon
+            /// </summary>
+            public const string ToolIcon = "t-tool-icon";
+            public const string Custom = "t-custom";
         }
     }
 }

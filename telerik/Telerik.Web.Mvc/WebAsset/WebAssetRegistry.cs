@@ -8,16 +8,15 @@ namespace Telerik.Web.Mvc
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.IO;
     using System.Linq;
     using System.Text;
     using System.Text.RegularExpressions;
     using System.Threading;
     using System.Web.Script.Serialization;
-
     using Extensions;
     using Infrastructure;
     using UI;
-    using System.IO;
 
     /// <summary>
     /// The default web asset registry.
@@ -248,7 +247,7 @@ namespace Telerik.Web.Mvc
                                 {
                                     string baseDiretory = virtualPathProvider.GetDirectory(virtualPath);
 
-                                    fileContent = ReplaceImagePath(baseDiretory, asset.Version, fileContent);
+                                    fileContent = ReplaceImagePath(baseDiretory, fileContent);
                                 }
 
                                 contentBuilder.AppendLine(fileContent);
@@ -271,55 +270,25 @@ namespace Telerik.Web.Mvc
             return isInDebugMode ? null : cacheManager.GetItem(key) as WebAssetHolder;
         }
 
-        private string ReplaceImagePath(string baseDiretory, string version, string content)
+        private string ReplaceImagePath(string baseDiretory, string content)
         {
-            baseDiretory = AppendVersionNo(baseDiretory, version);
-
-            content = urlRegEx.Replace(
-                                        content,
-                                        new MatchEvaluator(
-                                                                match =>
-                                                                {
-                                                                    //string virtualPath = assetLocator.Locate(path, asset.Version);
-
-                                                                    string path = match.Groups["path"].Value.Trim("'\"".ToCharArray());
-
-                                                                    if (!path.StartsWith("http://", StringComparison.OrdinalIgnoreCase) && !path.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
-                                                                    {
-                                                                        path = virtualPathProvider.CombinePaths(baseDiretory, path);
-
-                                                                        return "url('{0}')".FormatWith(urlResolver.Resolve(path));
-                                                                    }
-
-                                                                    return "url('{0}')".FormatWith(path);
-                                                                }));
-
-            return content;
-        }
-
-        private string AppendVersionNo(string virtualPath, string version)
-        {
-            Func<string, string> fixPath = path =>
+            content = urlRegEx.Replace(content, new MatchEvaluator(match =>
             {
-                if (!path.EndsWith(version + Path.AltDirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
-                {
-                    string newPath = virtualPathProvider.CombinePaths(path, version);
+                string path = match.Groups["path"].Value.Trim("'\"".ToCharArray());
 
-                    if (virtualPathProvider.DirectoryExists(newPath))
-                    {
-                        return newPath;
-                    }
+                if (path.HasValue()
+                    && !path.StartsWith("http://", StringComparison.OrdinalIgnoreCase) 
+                    && !path.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+                {
+                    path = virtualPathProvider.CombinePaths(baseDiretory, path);
+
+                    return "url('{0}')".FormatWith(urlResolver.Resolve(path));
                 }
 
-                return path;
-            };
+                return "url('{0}')".FormatWith(path);
+            }));
 
-            if (!string.IsNullOrEmpty(version))
-            {
-                virtualPath = fixPath(virtualPath);
-            }
-
-            return virtualPath;
+            return content;
         }
 
         [Serializable]

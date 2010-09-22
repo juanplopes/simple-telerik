@@ -6,13 +6,12 @@
 namespace Telerik.Web.Mvc.UI
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Web.UI;
     using System.Web.Mvc;
     using System.Web.Routing;
-    using System.Collections.Generic;
-
+    using System.Web.UI;
     using Extensions;
     using Infrastructure;
     using Telerik.Web.Mvc.Resources;
@@ -23,6 +22,9 @@ namespace Telerik.Web.Mvc.UI
         private readonly IList<IEffect> defaultEffects = new List<IEffect> { new SlideAnimation() };
 
         private readonly IDatePickerHtmlBuilderFactory rendererFactory;
+
+        internal DateTime defaultMinDate = new DateTime(1899, 12, 31);
+        internal DateTime defaultMaxDate = new DateTime(2100, 1, 1);
 
         public DatePicker(ViewContext viewContext, IClientSideObjectWriterFactory clientSideObjectWriterFactory, IDatePickerHtmlBuilderFactory rendererFactory)
             : base(viewContext, clientSideObjectWriterFactory)
@@ -40,8 +42,8 @@ namespace Telerik.Web.Mvc.UI
 
             this.rendererFactory = rendererFactory;
 
-            MinDate = new DateTime(1899, 12, 31);
-            MaxDate = new DateTime(2100, 1, 1);
+            MinDate = defaultMinDate;
+            MaxDate = defaultMaxDate;
             Value = null;
 
             EnableButton = true;
@@ -123,10 +125,10 @@ namespace Telerik.Web.Mvc.UI
             objectWriter.AppendDateOnly("minDate", this.MinDate);
             objectWriter.AppendDateOnly("maxDate", this.MaxDate);
 
-            objectWriter.Append("onLoad", ClientEvents.OnLoad);
-            objectWriter.Append("onChange", ClientEvents.OnChange);
-            objectWriter.Append("onOpen", ClientEvents.OnOpen);
-            objectWriter.Append("onClose", ClientEvents.OnClose);
+            objectWriter.AppendClientEvent("onLoad", ClientEvents.OnLoad);
+            objectWriter.AppendClientEvent("onChange", ClientEvents.OnChange);
+            objectWriter.AppendClientEvent("onOpen", ClientEvents.OnOpen);
+            objectWriter.AppendClientEvent("onClose", ClientEvents.OnClose);
 
             objectWriter.Complete();
 
@@ -153,7 +155,13 @@ namespace Telerik.Web.Mvc.UI
             rootTag.WriteTo(writer);
             base.WriteHtml(writer);
         }
-
+#if MVC2
+        protected override void EnsureRequired()
+        {
+            this.Name = this.Name ?? ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName(string.Empty);
+            base.EnsureRequired();
+        }
+#endif
 		private void VerifySettings()
 		{
             if (MinDate > MaxDate)

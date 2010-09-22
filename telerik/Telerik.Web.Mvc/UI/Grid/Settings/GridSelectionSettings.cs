@@ -5,12 +5,21 @@
 
 namespace Telerik.Web.Mvc.UI
 {
-    public class GridSelectionSettings
+
+    public class GridSelectionSettings : IClientSerializable
     {
         public bool Enabled
         {
             get;
             set;
+        }
+
+        public void SerializeTo(string key, IClientSideObjectWriter writer)
+        {
+            if (Enabled)
+            {
+                writer.Append("selectable", true);
+            }
         }
     }
 }

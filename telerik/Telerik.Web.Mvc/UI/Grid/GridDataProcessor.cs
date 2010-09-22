@@ -62,7 +62,7 @@ namespace Telerik.Web.Mvc.UI
             }
         }
 
-        public IList<GroupDescriptor> GroupDescriptors
+        public virtual IList<GroupDescriptor> GroupDescriptors
         {
             get
             {
@@ -156,7 +156,7 @@ namespace Telerik.Web.Mvc.UI
                 return;
             }
 
-            IQueryable dataSource = bindingContext.DataSource.AsQueryable();
+			IQueryable dataSource = bindingContext.DataSource.AsQueryable();
             GridModel model = null;
             if (!bindingContext.EnableCustomBinding)
             {

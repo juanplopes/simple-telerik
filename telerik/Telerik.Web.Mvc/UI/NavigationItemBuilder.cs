@@ -6,12 +6,9 @@
 namespace Telerik.Web.Mvc.UI
 {
     using System;
-    using System.Linq;
     using System.Linq.Expressions;
-    using System.Reflection;
-    using System.Web.Routing;
     using System.Web.Mvc;
-
+    using System.Web.Routing;
     using Extensions;
     using Infrastructure;
     using Resources;
@@ -35,7 +32,7 @@ namespace Telerik.Web.Mvc.UI
             this.ViewContext = viewContext;
         }
 
-        internal ViewContext ViewContext
+        public ViewContext ViewContext
         {
             get;
             set;
@@ -404,11 +401,19 @@ namespace Telerik.Web.Mvc.UI
         {
             Guard.IsNotNull(value, "value");
 
-            Item.Content = value;
+            Item.Template.Content = value;
 
             return this as TBuilder;
         }
 
+        public TBuilder Content(Func<object,object> value)
+        {
+            Guard.IsNotNull(value, "value");
+
+            Item.Template.InlineTemplate = value;
+
+            return this as TBuilder;
+        }
 
         /// <summary>
         /// Sets the HTML content which the item should display as a string.
@@ -429,7 +434,7 @@ namespace Telerik.Web.Mvc.UI
         {
             Guard.IsNotNull(value, "value");
 
-            Item.Content = () => ViewContext.HttpContext.Response.Write(value);
+            Item.Template.Html = value;
 
             return this as TBuilder;
         }
@@ -478,6 +483,25 @@ namespace Telerik.Web.Mvc.UI
         public TBuilder Action<TController>(Expression<Action<TController>> controllerAction) where TController : Controller
         {
             item.Action(controllerAction);
+            return this as TBuilder;
+        }
+
+        /// <summary>
+        /// Sets whether the Text property should be encoded when the item is rendered.
+        /// </summary>
+        /// <param name="isEncoded">Whether the property should be encoded. Default: true.</param>
+        /// <example>
+        /// <code lang="CS">
+        ///  &lt;%= Html.Telerik().Menu()
+        ///             .Name("Menu")
+        ///             .Items(items => items.Add().Text("&lt;strong&gt;First Item&lt;/strong&gt;").Encoded(false))
+        /// %&gt;
+        /// </code>
+        /// </example>
+        public TBuilder Encoded(bool isEncoded)
+        {
+            item.Encoded = isEncoded;
+
             return this as TBuilder;
         }
 

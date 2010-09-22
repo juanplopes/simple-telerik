@@ -1,4 +1,4 @@
-﻿(function($) {
+﻿(function ($) {
     var $t = $.telerik;
 
     var dropClueOffsetTop = 3;
@@ -6,91 +6,87 @@
 
     $t.grouping = {};
 
-    $t.grouping.initialize = function(grid) {
+    $t.grouping.initialize = function (grid) {
         $.extend(grid, $t.grouping.implementation);
 
         grid.$groupDropClue = $('<div class="t-grouping-dropclue"/>');
-
-        grid.$groupHeader = $('.t-grouping-header', grid.element);
-
+        grid.$groupHeader = $('> .t-grouping-header', grid.element);
+        
         $t.draganddrop(grid.element.id, $.extend({
-            draggables: $('.t-header .t-link, .t-grouping-header .t-link', grid.element)
+            useDragClue: true,
+            draggables: [$('.t-link', grid.$groupHeader[0]), $('.t-header:not(.t-group-cell,.t-hierarchy-cell)', grid.$header[0])]
         }, $t.draganddrop.applyContext($t.draganddrop.grouping, grid)));
 
         if (grid.isAjax()) {
-
-            $('.t-grouping-header .t-button', grid.element).live('click', function(e) {
-                e.preventDefault();
-
-                grid.unGroup($(this).parent().text());
-            });
-
-            $('.t-grouping-header .t-link', grid.element).live('click', function(e) {
-                e.preventDefault();
-                var group = grid.groupFromTitle($(this).parent().text());
-                group.order = group.order == 'asc' ? 'desc' : 'asc';
-                grid.group(group.title);
-            });
+            grid.$groupHeader
+                .delegate('.t-button', 'click', function (e) {
+                    e.preventDefault();
+                    grid.unGroup($(this).parent().text());
+                })
+                .delegate('.t-link', 'click', function (e) {
+                    e.preventDefault();
+                    var group = grid.groupFromTitle($(this).parent().text());
+                    group.order = group.order == 'asc' ? 'desc' : 'asc';
+                    grid.group(group.title);
+                });
         }
 
-        $('.t-group-indicator', grid.element)
-            .live('mouseenter', function() {
+        grid.$groupHeader.delegate('.t-group-indicator', 'mouseenter', function () {
                 grid.$currentGroupItem = $(this);
             })
-            .live('mouseleave', function() {
+            .delegate('.t-group-indicator', 'mouseleave', function () {
                 grid.$currentGroupItem = null;
             });
 
-        $('.t-grouping-row .t-collapse, .t-grouping-row .t-expand', grid.element)
-            .live('click', function(e) {
-                e.preventDefault();
-                var $tr = $(this).closest('tr');
-                if ($(this).hasClass('t-collapse'))
-                    grid.collapseGroup($tr);
-                else
-                    grid.expandGroup($tr);
-            });
+        grid.$tbody.delegate('.t-grouping-row .t-collapse, .t-grouping-row .t-expand', 'click', $t.stop(function (e) {
+            e.preventDefault();
+            var $tr = $(this).closest('tr');
+            if ($(this).hasClass('t-collapse'))
+                grid.collapseGroup($tr);
+            else
+                grid.expandGroup($tr);
+        }));
     }
 
     $t.grouping.implementation = {
 
-        columnFromTitle: function(title) {
-            return $.grep(this.columns, function(c) { return c.title == title; })[0];
+        columnFromTitle: function (title) {
+            return $.grep(this.columns, function (c) { return c.title == title; })[0];
         },
 
-        groupFromTitle: function(title) {
-            return $.grep(this.groups, function(g) { return g.title == title; })[0];
+        groupFromTitle: function (title) {
+            return $.grep(this.groups, function (g) { return g.title == title; })[0];
         },
 
-        expandGroup: function(group) {
+        expandGroup: function (group) {
             var $group = $(group);
-            var depth = $group.find('.t-groupcell').length;
-
-            $group.find('~ tr').each($.proxy(function(i, tr) {
+            var depth = $group.find('.t-group-cell').length;
+            
+            $group.find('~ tr').each($.proxy(function (i, tr) {
                 var $tr = $(tr);
-                var offset = $tr.find('.t-groupcell').length;
+                var offset = $tr.find('.t-group-cell').length;
                 if (offset <= depth)
                     return false;
 
-                if (offset == depth + 1) {
+                if (offset == depth + 1 && !$tr.hasClass('t-detail-row')) {
                     $tr.show();
 
                     if ($tr.hasClass('t-grouping-row') && $tr.find('.t-icon').hasClass('t-collapse'))
                         this.expandGroup($tr);
+                    if ($tr.hasClass('t-master-row') && $tr.find('.t-icon').hasClass('t-minus'))
+                        $tr.next().show();
                 }
-
             }, this));
 
             $group.find('.t-icon').addClass('t-collapse').removeClass('t-expand');
         },
 
-        collapseGroup: function(group) {
+        collapseGroup: function (group) {
             var $group = $(group);
-            var depth = $group.find('.t-groupcell').length;
-
-            $group.find('~ tr').each(function() {
+            var depth = $group.find('.t-group-cell').length;
+            $group.find('~ tr').each(function () {
                 var $tr = $(this);
-                var offset = $tr.find('.t-groupcell').length;
+                var offset = $tr.find('.t-group-cell').length;
                 if (offset <= depth)
                     return false;
 
@@ -99,27 +95,11 @@
             $group.find('.t-icon').addClass('t-expand').removeClass('t-collapse');
         },
 
-        toggleGroup: function(element) {
-            var $group = $(element);
-            var depth = $group.find('.t-groupcell').length;
-            $group.find('~ tr').each(function() {
-                var $tr = $(this);
-                if ($tr.hasClass('t-grouping-row')) {
-                    if ($tr.find('.t-groupcell').length <= depth)
-                        return false;
-                }
-                $tr.toggle();
-            });
-
-            var $icon = $group.find('.t-icon');
-            $icon.toggleClass('t-collapse').toggleClass('t-expand');
-        },
-
-        group: function(title, position) {
+        group: function (title, position) {
             if (this.groups.length == 0 && this.isAjax())
                 this.$groupHeader.empty();
 
-            var group = $.grep(this.groups, function(group) {
+            var group = $.grep(this.groups, function (group) {
                 return group.title == title;
             })[0];
 
@@ -134,18 +114,15 @@
                 this.groups.splice(position, 0, group);
             }
 
-            this.groupBy = $.map(this.groups, function(g) { return g.member + '-' + g.order; }).join('~')
+            this.groupBy = $.map(this.groups, function (g) { return g.member + '-' + g.order; }).join('~')
 
-            if (!this.isAjax()) {
-                location.href = $t.formatString(unescape(this.urlFormat),
-                    this.currentPage, this.orderBy || '~', escape(this.groupBy) || '~', escape(this.filterBy) || '');
-            } else {
+            if (this.isAjax()) {
                 var $groupItem = this.$groupHeader.find('div:contains("' + title + '")');
                 if ($groupItem.length == 0) {
                     var html = new $.telerik.stringBuilder()
                         .cat('<div class="t-group-indicator">')
                             .cat('<a href="#" class="t-link"><span class="t-icon" />').cat(title).cat('</a>')
-                            .cat('<a class="t-button t-state-default"><span class="t-icon t-delete" /></a>')
+                            .cat('<a class="t-button t-state-default"><span class="t-icon t-group-delete" /></a>')
                         .cat('</div>')
                     .string();
                     $groupItem = $(html).appendTo(this.$groupHeader);
@@ -159,83 +136,87 @@
                           .toggleClass('t-arrow-down-small', group.order == 'desc');
 
                 this.ajaxRequest();
+            } else {
+                this.serverRequest();
             }
         },
 
-        unGroup: function(title) {
+        unGroup: function (title) {
             var group = this.groupFromTitle(title);
             this.groups.splice($.inArray(group, this.groups), 1);
 
             if (this.groups.length == 0)
                 this.$groupHeader.html(this.localization.groupHint);
 
-            this.groupBy = $.map(this.groups, function(g) { return g.member + '-' + g.order; }).join('~');
+            this.groupBy = $.map(this.groups, function (g) { return g.member + '-' + g.order; }).join('~');
 
-            if (!this.isAjax()) {
-                location.href = $t.formatString(unescape(this.urlFormat),
-                    this.currentPage, this.orderBy || '~', escape(this.groupBy) || '~', escape(this.filterBy) || '');
-            } else {
+            if (this.isAjax()) {
                 this.$groupHeader.find('div:contains("' + group.title + '")').remove();
                 this.ajaxRequest();
+            } else {
+                this.serverRequest();
             }
         },
 
-        normalizeColumns: function() {
+        normalizeColumns: function(colspan) {
             var groups = this.groups.length;
-            var colspan = groups + this.columns.length;
-            var $cols = $('table:first col', this.element);
-            var diff = colspan - $cols.length;
+            var diff = colspan - this.$tbody.parent().find('col').length;
             if (diff == 0) return;
 
+            var $tables = this.$tbody.parent().add(this.$headerWrap.find('table'));
             if ($.browser.msie) {
                 // ie8 goes into compatibility mode if the columns get removed
                 if (diff > 0) {
-                    $(new $t.stringBuilder().rep('<col class="t-groupcol" />', diff).string())
-                            .prependTo($('colgroup', this.element))
-                    $(new $t.stringBuilder().rep('<th class="t-groupcell t-header">&nbsp;</th>', diff).string())
-                        .insertBefore($('th.t-header:first', this.element));
+                    $(new $t.stringBuilder().rep('<col class="t-group-col" />', diff).string())
+                            .prependTo($tables.find('colgroup'))
+                    $(new $t.stringBuilder().rep('<th class="t-group-cell t-header">&nbsp;</th>', diff).string())
+                        .insertBefore($tables.find('th.t-header:first'));
 
                 } else {
-                    $('th:lt(' + Math.abs(diff) + ')', this.element).remove();
-                    $('table', this.element).find('col:lt(' + Math.abs(diff) + ')').remove();
+                    $tables.find('th:lt(' + Math.abs(diff) + ')')
+                           .remove()
+                           .end()
+                           .find('col:lt(' + Math.abs(diff) + ')')
+                           .remove();
                 }
 
                 // ie8 does not resize columns in scrollable grids correctly
-                if (document.documentMode == 8 && $('div > table', this.element).length > 0) {
-                    $('table', this.element).css('table-layout', 'auto');
-                    
+                if (document.documentMode == 8) {
+                    if (this.scrollable)
+                        $tables.css('table-layout', 'auto');
+
                     var me = this;
                     var groupWidth = 30;
-                    
-                    $('.t-grid-content col, .t-grid-header-wrap col', this.element)
-                        .css('width', function() {
-                            return $(this).is('.t-groupcell,.t-groupcol') ? groupWidth : 
+
+                    $tables.find('col').css('width', function () {
+                        return $(this).is('.t-group-col,.t-hierarchy-col') ? groupWidth :
                                           ($(me.element).width() - groups * groupWidth - 16) / me.columns.length;
-                        });
+                    });
                 }
             } else {
-                $('col.t-groupcol', this.element).remove();
-                $(new $t.stringBuilder().rep('<col class="t-groupcol" />', groups).string())
-                        .prependTo($('colgroup', this.element));
-                
-                $('th.t-groupcell', this.element).remove();
-                $(new $t.stringBuilder().rep('<th class="t-groupcell t-header">&nbsp;</th>', groups).string())
-                        .insertBefore($('th.t-header:first', this.element));
+                $tables.find('col.t-group-col').remove();
+
+                $(new $t.stringBuilder().rep('<col class="t-group-col" />', groups).string())
+                        .prependTo($tables.find('colgroup'));
+
+                $tables.find('th.t-group-cell').remove();
+                $(new $t.stringBuilder().rep('<th class="t-group-cell t-header">&nbsp;</th>', groups).string())
+                        .insertBefore($tables.find('th.t-header:first'));
             }
 
-            $('table .t-footer', this.element).attr('colspan', colspan);
+            this.$footer.attr('colspan', colspan);
         },
 
-        bindGroup: function(dataItem, colspan, html, level) {
+        bindGroup: function (dataItem, colspan, html, level) {
             var group = this.groups[level];
             var key = dataItem.Key;
-            var column = $.grep(this.columns, function(column) { return group.member == column.member })[0];
+            var column = $.grep(this.columns, function (column) { return group.member == column.member })[0];
 
             if (column && (column.format || column.type == 'Date'))
                 key = $t.formatString(column.format || '{0:G}', key);
 
             html.cat('<tr class="t-grouping-row">')
-                .rep('<td class="t-groupcell"></td>', level)
+                .rep('<td class="t-group-cell"></td>', level)
                 .cat('<td colspan="')
                 .cat(colspan - level)
                 .cat('"><p class="t-reset"><a class="t-icon t-collapse" href="#"></a>')
@@ -255,39 +236,44 @@
 
     $.extend($t.draganddrop, {
         grouping: {
-            shouldDrag: function($element) {
+            shouldDrag: function ($element) {
                 if ($element.closest('.t-grid-filter, .t-filter').length)
                     return false;
-
+                
+                if ($element.closest('.t-grid')[0] != this.element)
+                    return false;
+                
                 var column = this.columnFromTitle($element.text());
                 if (column && column.groupable === false)
                     return false;
 
                 return true;
             },
-            
-            createDragClue: function($draggedElement) {
+
+            createDragClue: function ($draggedElement) {
                 return $draggedElement.text();
             },
-            
-            onDragStart: function() { return false; },
 
-            onDragMove: function(e, $source) {
+            onDragStart: function () { return false; },
+
+            onDragMove: function (e, $source) {
+                e.stopPropagation();
 
                 // change status & show drop clue
-                if (!$(e.target).closest('.t-grouping-header').length
-                || (this.groupFromTitle($source.text()) && $source.parent().is('.t-header'))) {
+                if (!$.contains(this.element, e.target) ||
+                !$(e.target).closest('.t-grouping-header').length
+                || (this.groupFromTitle($source.text()) && $source.closest('.t-header').length)) {
                     this.$groupDropClue.remove();
                     return 't-denied';
                 }
 
-                var groupIndicators = $.map(this.$groupHeader.find('.t-group-indicator'), function(group) {
+                var groupIndicators = $.map(this.$groupHeader.find('.t-group-indicator'), function (group) {
                     var $group = $(group);
                     var left = $group.offset().left;
                     return { left: left, right: left + $group.outerWidth(), $group: $group };
                 });
 
-                var top = $('.t-grid-toolbar', this.element).outerHeight() + dropClueOffsetTop;
+                var top = $('> .t-grid-toolbar', this.element).outerHeight() + dropClueOffsetTop;
 
                 if (!groupIndicators.length) {
                     this.$groupDropClue.css({ top: top, left: dropClueOffsetLeft }).appendTo(this.$groupHeader);
@@ -299,7 +285,7 @@
                 var leftMargin = parseInt(firstGroupIndicator.$group.css('marginLeft'));
                 var rightMargin = parseInt(firstGroupIndicator.$group.css('marginRight'));
 
-                var currentGroupIndicator = $.grep(groupIndicators, function(g) {
+                var currentGroupIndicator = $.grep(groupIndicators, function (g) {
                     return e.pageX >= g.left - leftMargin - rightMargin && e.pageX <= g.right;
                 })[0];
 
@@ -313,18 +299,20 @@
                 else
                     this.$groupDropClue.css({ top: top, left: lastGroupIndicator.$group.position().left + lastGroupIndicator.$group.outerWidth() + rightMargin + dropClueOffsetLeft })
                                    .appendTo(this.$groupHeader);
+
+
                 return 't-add';
             },
-            
-            onDragCancelled: function() {
+
+            onDragCancelled: function () {
                 this.$groupDropClue.remove();
             },
 
-            onDrop: function(e, $draggedElement) {
+            onDrop: function (e, $draggedElement) {
                 var groupingHeader = $(e.target).closest('.t-grouping-header');
                 var title = $draggedElement.text();
                 var group = this.groupFromTitle(title);
-                
+
                 var groupIndex = $.inArray(group, this.groups);
 
                 if (groupingHeader.length > 0) {

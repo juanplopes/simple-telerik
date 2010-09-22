@@ -5,14 +5,19 @@
 
 namespace Telerik.Web.Mvc.UI.Fluent
 {
-    using System;
-    
-    using Infrastructure;
-    
+
+
+    /// <summary>
+    /// Defines the fluent interface for configuring the <see cref="TreeView"/> data binding.
+    /// </summary>
     public class TreeViewDataBindingConfigurationBuilder : IHideObjectMembers
     {
         private readonly TreeViewDataBindingConfiguration configuration;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TreeViewDataBindingConfigurationBuilder"/> class.
+        /// </summary>
+        /// <param name="settings">The configuration.</param>
         public TreeViewDataBindingConfigurationBuilder(TreeViewDataBindingConfiguration configuration)
         {
             this.configuration = configuration;
@@ -21,7 +26,6 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// <summary>
         /// Use it to configure Ajax binding.
         /// </summary>
-        /// <param name="configurator">Use builder to set different ajax binding settings.</param>
         /// <example>
         /// <code lang="CS">
         ///  &lt;%= Html.Telerik().TreeView()
@@ -40,9 +44,8 @@ namespace Telerik.Web.Mvc.UI.Fluent
         }
 
         /// <summary>
-        /// Use it to configure Ajax binding.
+        /// Use it to configure web service binding.
         /// </summary>
-        /// <param name="configurator">Use builder to set different ajax binding settings.</param>
         /// <example>
         /// <code lang="CS">
         ///  &lt;%= Html.Telerik().TreeView()

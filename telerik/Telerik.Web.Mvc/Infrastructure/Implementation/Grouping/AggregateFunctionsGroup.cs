@@ -3,17 +3,14 @@
 // See http://www.gnu.org/licenses/gpl-2.0.html. 
 // All other rights reserved.
 
-namespace Telerik.Web.Mvc.Infrastructure.Implementation
+namespace Telerik.Web.Mvc.Infrastructure
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Telerik.Web.Mvc.Extensions;
     using System.Runtime.Serialization;
+    using Telerik.Web.Mvc.Extensions;
 
-    /// <summary>
-    /// Represents group with aggregate functions.
-    /// </summary>
     [KnownType(typeof(AggregateFunctionsGroup))]
     public class AggregateFunctionsGroup : Group
     {

@@ -5,12 +5,11 @@
 
 namespace Telerik.Web.Mvc.Infrastructure.Implementation
 {
-    using System.Collections.Generic;
     using System;
-    using System.Linq.Expressions;
+    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
-
+    using System.Linq.Expressions;
     using Expressions;
 
     internal class SortDescriptorCollectionExpressionBuilder

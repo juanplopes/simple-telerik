@@ -17,6 +17,41 @@ namespace Telerik.Web.Mvc.UI
 
     public static class NavigationItemContainerExtensions
     {
+        //where TComponent : ViewComponentBase, INavigationItemComponent<TItem>
+
+        public static void WriteItem<TComponent, TItem>(this TItem item, TComponent component, IHtmlNode parentTag, INavigationComponentHtmlBuilder<TItem> builder)
+            where TItem : NavigationItem<TItem>, IContentContainer, INavigationItemContainer<TItem>
+            where TComponent : ViewComponentBase, INavigationItemComponent<TItem>
+        {
+            if (component.ItemAction != null)
+            {
+                component.ItemAction(item);
+            }
+
+            if (item.Visible && item.IsAccessible(component.Authorization, component.ViewContext))
+            {
+                var hasAccessibleChildren = item.Items.Any()
+                                            && item.Items.IsAccessible(component.Authorization, component.ViewContext)
+                                            && item.Items.Any(i => i.Visible);
+
+                IHtmlNode itemTag = builder.ItemTag(item).AppendTo(parentTag);
+
+                builder.ItemInnerContentTag(item, hasAccessibleChildren).AppendTo(itemTag);
+
+                if (item.Template.HasValue() ||
+                    (item is IAsyncContentContainer ? !string.IsNullOrEmpty(((IAsyncContentContainer)item).ContentUrl) : false))
+                {
+                    builder.ItemContentTag(item).AppendTo(itemTag);
+                }
+                else if (hasAccessibleChildren)
+                {
+                    IHtmlNode ul = builder.ChildrenTag(item).AppendTo(itemTag);
+
+                    item.Items.Each(child => child.WriteItem(component, ul, builder));
+                }
+            }
+        }
+
         public static string GetItemUrl<TComponent, TItem>(this TComponent component, TItem item)
             where TComponent : ViewComponentBase, INavigationItemComponent<TItem>
             where TItem : NavigationItem<TItem>, IContentContainer
@@ -30,21 +65,16 @@ namespace Telerik.Web.Mvc.UI
         {
             IAsyncContentContainer asyncContentContainer = item as IAsyncContentContainer;
 
-            if (asyncContentContainer != null && !string.IsNullOrEmpty(asyncContentContainer.ContentUrl))
+            if (asyncContentContainer != null && !asyncContentContainer.ContentUrl.IsNullOrEmpty())
             {
-                return asyncContentContainer.ContentUrl;
+                return component.IsSelfInitialized ? System.Web.HttpUtility.UrlDecode(asyncContentContainer.ContentUrl) : asyncContentContainer.ContentUrl;
             }
 
-            if (item.Content != null)
+            if (item.Template.HasValue() &&
+                item.RouteName.IsNullOrEmpty() && item.Url.IsNullOrEmpty() &&
+                item.ActionName.IsNullOrEmpty() && item.ControllerName.IsNullOrEmpty())
             {
-                if (string.IsNullOrEmpty(item.Url))
-                {
-                    return "#" + component.GetItemContentId(item);
-                }
-                else
-                {
-                    return item.Url;
-                }
+                return "#" + component.GetItemContentId(item);
             }
 
             return item.GenerateUrl(component.ViewContext, component.UrlGenerator) ?? defaultValue;
@@ -92,13 +122,14 @@ namespace Telerik.Web.Mvc.UI
             return text;
         }
 
-        public static void BindTo<T>(this INavigationItemComponent<T> component, string sitemapViewDataKey, Action<T, SiteMapNode> siteMapAction) where T : NavigationItem<T>, new()
+        public static void BindTo<T>(this INavigationItemComponent<T> component, string sitemapName, Action<T, SiteMapNode> siteMapAction) where T : NavigationItem<T>, new()
         {
-            var siteMap = component.ViewContext.ViewData.Eval(sitemapViewDataKey) as SiteMapBase;
+            var siteMap = component.ViewContext.ViewData.Eval(sitemapName) as SiteMapBase ??
+                 (SiteMapManager.SiteMaps.ContainsKey(sitemapName) ? SiteMapManager.SiteMaps[sitemapName] : null);
 
             if (siteMap == null)
             {
-                throw new NotSupportedException(TextResource.SiteMapShouldBeDefinedInViewData.FormatWith(sitemapViewDataKey));
+                throw new NotSupportedException(TextResource.SiteMapShouldBeDefinedInViewData.FormatWith(sitemapName));
             }
 
             component.Items.Clear();
@@ -146,7 +177,7 @@ namespace Telerik.Web.Mvc.UI
             NavigationBindingFactory<TNavigationItem> factory)
                 where TNavigationItem : NavigationItem<TNavigationItem>, INavigationItemContainer<TNavigationItem>, new()
         {
-            INavigationBinding<TNavigationItem> binding = factory.container.Where(b => b.Type == dataItem.GetType()).First();
+            INavigationBinding<TNavigationItem> binding = factory.container.Where(b => b.Type.IsAssignableFrom(dataItem.GetType())).First();
 
             binding.ItemDataBound(component, dataItem);
             IEnumerable children = binding.Children(dataItem);

@@ -5,8 +5,6 @@
 
 namespace Telerik.Web.Mvc.Extensions
 {
-    using System;
-    using System.Text.RegularExpressions;
     using System.Linq.Expressions;
 
     public static class ExpressionExtensions
@@ -37,6 +35,18 @@ namespace Telerik.Web.Mvc.Extensions
             return memberExpression.Member.Name;
         }
 
+        public static bool IsBindable(this LambdaExpression expression)
+        {
+            switch(expression.Body.NodeType)
+            {
+                case ExpressionType.MemberAccess:
+                case ExpressionType.Parameter:
+                    return true;
+            }
+
+            return false;
+        }
+        
         public static MemberExpression ToMemberExpression(this LambdaExpression expression)
         {
             MemberExpression memberExpression = expression.Body as MemberExpression;
@@ -53,5 +63,7 @@ namespace Telerik.Web.Mvc.Extensions
 
             return memberExpression;
         }
+
+
     }
 }

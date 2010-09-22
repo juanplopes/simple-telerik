@@ -3,10 +3,11 @@
 // See http://www.gnu.org/licenses/gpl-2.0.html. 
 // All other rights reserved.
 
-namespace Telerik.Web.Mvc.Infrastructure.Implementation
+namespace Telerik.Web.Mvc.Extensions
 {
     using System.Collections.Generic;
-
+    using Telerik.Web.Mvc.Infrastructure.Implementation;
+    
     public static class FilterTokenExtensions
     {
         private static readonly IDictionary<string, FilterOperator> tokenToOperator = new Dictionary<string, FilterOperator>
@@ -39,7 +40,7 @@ namespace Telerik.Web.Mvc.Infrastructure.Implementation
         {
             return tokenToOperator[token.Value];
         }
-        
+
         public static string ToToken(this FilterOperator filterOperator)
         {
             return operatorToToken[filterOperator];

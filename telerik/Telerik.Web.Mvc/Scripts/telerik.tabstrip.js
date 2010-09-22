@@ -1,85 +1,96 @@
-﻿(function($) {
+﻿(function ($) {
 
     var $t = $.telerik;
 
     $.extend($t, {
-        tabstrip: function(element, options) {
+        tabstrip: function (element, options) {
             this.element = element;
 
-            // attach options to object
+            var $element = $(element);
+
             $.extend(this, options);
 
-            // attach event handlers
+            var enabledItems = '.t-tabstrip-items > .t-item:not(.t-state-disabled)';
 
-            $('.t-item:not(.t-state-disabled)', element)
-				.live('mouseenter', $t.hover)
-				.live('mouseleave', $t.leave)
-				.live(options.activateEvent, $t.delegate(this, this._click))
+            $element
+                .delegate(enabledItems, 'mouseenter', $t.hover)
+				.delegate(enabledItems, 'mouseleave', $t.leave)
+				.delegate(enabledItems, options.activateEvent, $t.delegate(this, this._click))
+                .delegate('> .t-reset > .t-item.t-state-disabled > .t-link', 'click', $t.preventDefault);
 
             $t.bind(this, {
-                select: this.onSelect,
+                select: $.proxy(function (e) {
+                    if (e.target == this.element && this.onSelect) this.onSelect(e);
+                }, this),
                 error: this.onError,
                 load: this.onLoad
             });
 
-            var selectedItems = $('li.t-state-active', element);
-            var content = this.getContentElement($('> .t-content', element), selectedItems.parent().children().index(selectedItems));
+            var selectedItems = $element.find('li.t-state-active');
+            var content = this.getContentElement($element.find('> .t-content'), selectedItems.parent().children().index(selectedItems));
             if (content && content.length > 0 && content.children().length == 0) {
-                this.activateTab($(selectedItems[0]));
+                this.activateTab(selectedItems.eq(0));
             }
-            
-            $(element).trigger('load');
         }
     });
 
     $.extend($t.tabstrip.prototype, {
 
-        select: function(li) {
-            $(li).each($.proxy(function(index, item) {
+        select: function (li) {
+            $(li).each($.proxy(function (index, item) {
                 var $item = $(item);
-                if ($item.hasClass('t-state-disabled') || $item.hasClass('t-state-active'))
+                if ($item.is('.t-state-disabled,.t-state-active'))
                     return;
 
                 this.activateTab($item);
             }, this));
         },
 
-        enable: function(li) {
-            $(li).each(function() {
-                $(this)
-                    .addClass('t-state-default')
-				    .removeClass('t-state-disabled');
+        enable: function (li) {
+            $(li).addClass('t-state-default')
+                 .removeClass('t-state-disabled');
+        },
+
+        disable: function (li) {
+            $(li).removeClass('t-state-default')
+                 .removeClass('t-state-active')
+				 .addClass('t-state-disabled');
+        },
+
+        reload: function (li) {
+            var tabstrip = this;
+
+            var contentElements = $('> .t-content', this.element);
+
+            $(li).each(function () {
+                var $item = $(this);
+                var contentUrl = $item.find('.t-link').data('ContentUrl');
+                if (contentUrl) {
+                    tabstrip.ajaxRequest($item, tabstrip.getContentElement(contentElements, $item.index()), null, contentUrl);
+                }
             });
         },
 
-        disable: function(li) {
-            $(li).each(function() {
-                $(this)
-                    .removeClass('t-state-default')
-                    .removeClass('t-state-active')
-				    .addClass('t-state-disabled');
-            });
-        },
-
-        _click: function(e, element) {
-
+        _click: function (e, element) {
             var $item = $(element);
+
             var $link = $item.find('.t-link');
             var href = $link.attr('href');
 
-            var content = this.getContentElement($('> .t-content', this.element), $item.parent().children().index($item));
+            var $content = $(this.getContentElement($('> .t-content', this.element), $item.parent().children().index($item)));
 
-            if ($item.hasClass('t-state-disabled') || $item.hasClass('t-state-active')) {
+            if ($item.is('.t-state-disabled,.t-state-active')) {
                 e.preventDefault();
                 return;
             }
 
-            if ($t.trigger(this.element, 'select', { item: $item[0], contentElement: content })) {
+            if ($t.trigger(this.element, 'select', { item: $item[0], contentElement: $content[0] })) {
                 e.preventDefault();
             }
 
-            if ((href && (href.charAt(href.length - 1) == '#' || href.indexOf('#' + this.element.id + '-') != -1)) ||
-                    ($(content).length > 0 && $(content).children().length == 0))
+            var isAnchor = (href && (href.charAt(href.length - 1) == '#' || href.indexOf('#' + this.element.id + '-') != -1));
+
+            if (isAnchor || ($content.length > 0 && $content.children().length == 0) || $content.length == 0)
                 e.preventDefault();
             else return;
 
@@ -87,7 +98,7 @@
                 e.preventDefault();
         },
 
-        activateTab: function($item) {
+        activateTab: function ($item) {
             // deactivate previously active tab
             var itemIndex =
 				$item.parent().children()
@@ -118,7 +129,7 @@
 
                 var isAjaxContent = $.trim(contentElement.html()).length == 0;
 
-                var showContentElement = function() {
+                var showContentElement = function () {
                     contentElement.addClass('t-state-active');
 
                     $t.fx.play(tabstrip.effects, contentElement, {});
@@ -129,12 +140,12 @@
                 $t.fx.rewind(
                     tabstrip.effects,
 			        visibleContentElements, {},
-			        function() {
+			        function () {
 			            if ($item.hasClass('t-state-active')) {
 			                if (!isAjaxContent) {
 			                    showContentElement();
 			                } else if (isAjaxContent) {
-			                    tabstrip.ajaxRequest($item, contentElement, function() {
+			                    tabstrip.ajaxRequest($item, contentElement, function () {
 			                        if ($item.hasClass('t-state-active')) {
 			                            showContentElement();
 			                        }
@@ -148,7 +159,7 @@
             return false;
         },
 
-        getContentElement: function(contentTabElements, itemIndex) {
+        getContentElement: function (contentTabElements, itemIndex) {
             var idTest = new RegExp('-' + (itemIndex + 1) + '$');
 
             for (var i = 0, len = contentTabElements.length; i < len; i++) {
@@ -158,38 +169,41 @@
             }
         },
 
-        ajaxRequest: function($element, contentElement, complete) {
+        ajaxRequest: function ($element, contentElement, complete, url) {
             var me = this;
 
             var statusIcon = null;
-            var loadingIconTimeout = setTimeout(function() {
+            var loadingIconTimeout = setTimeout(function () {
                 statusIcon = $('<span class="t-icon t-loading"></span>').prependTo($element.find('.t-link'))
             }, 100);
 
             var data = {};
             $.ajax({
                 type: 'GET',
-                url: $element.find('.t-link').attr('href'),
+                cache: false,
+                url: url || $element.find('.t-link').attr('href'),
                 dataType: 'html',
                 data: data,
 
-                error: $.proxy(function(xhr, status) {
+                error: $.proxy(function (xhr, status) {
                     if ($t.ajaxError(this.element, 'error', xhr, status))
                         return;
                 }, this),
 
-                complete: function() {
+                complete: function () {
                     clearTimeout(loadingIconTimeout);
                     if (statusIcon !== null)
                         statusIcon.remove();
                 },
 
-                success: $.proxy(function(data, textStatus) {
+                success: $.proxy(function (data, textStatus) {
                     contentElement.html(data);
 
                     var $link = $element.find('.t-link');
-                    $link.data('ContentUrl', $link.attr('href'))
-                         .attr('href', '#');
+                    var href = $link.attr('href');
+
+                    if (href && href != '#')
+                        $link.data('ContentUrl', href).attr('href', '#');
 
                     if (complete)
                         complete.call(me, contentElement);
@@ -199,16 +213,13 @@
     });
 
     // Plugin declaration
-    $.fn.tTabStrip = function(options) {
-        options = $.extend({}, $.fn.tTabStrip.defaults, options);
-
-        return this.each(function() {
-            // support for Metadata plugin
-            options = $.meta ? $.extend({}, options, $(this).data()) : options;
-
-            //Initialize only if needed
-            if (!$(this).data('tTabStrip'))
-                $(this).data('tTabStrip', new $t.tabstrip(this, options));
+    $.fn.tTabStrip = function (options) {
+        return $t.create(this, {
+            name: 'tTabStrip',
+            init: function (element, options) {
+                return new $t.tabstrip(element, options);
+            },
+            options: options
         });
     }
 

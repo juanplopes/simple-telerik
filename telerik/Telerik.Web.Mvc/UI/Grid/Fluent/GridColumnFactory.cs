@@ -6,29 +6,49 @@
 namespace Telerik.Web.Mvc.UI.Fluent
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
-    using Extensions;
-    using Infrastructure;
-    using Infrastructure.Implementation.Expressions;
-    
+    using Telerik.Web.Mvc.Extensions;
+    using Telerik.Web.Mvc.Infrastructure;
+    using Telerik.Web.Mvc.UI;
+
     /// <summary>
-    /// Creates columns for the <see cref="Grid{T}" />.
+    /// Creates columns for the <see cref="Grid{TModel}" />.
     /// </summary>
     /// <typeparam name="TModel">The type of the data item to which the grid is bound to</typeparam>
-    public class GridColumnFactory<TModel> : IHideObjectMembers where TModel : class
+    public class GridColumnFactory<TModel> : IHideObjectMembers 
+        where TModel : class
     {
-        private readonly Grid<TModel> container;
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GridColumnFactory{TModel}"/> class.
+        /// </summary>
+        /// <param name="container">The container.</param>
         public GridColumnFactory(Grid<TModel> container)
         {
             Guard.IsNotNull(container, "container");
 
-            this.container = container;
+            Container = container;
         }
-        
+
+        public Grid<TModel> Container
+        {
+            get;
+            private set;
+        }
+
+        public void LoadSettings(IEnumerable<GridColumnSettings> settings)
+        {
+            var generator = new GridColumnGenerator<TModel>(Container);
+
+            foreach (var setting in settings)
+            {
+                Container.Columns.Add(generator.CreateColumn(setting));
+            }
+        }
+
         /// <summary>
         /// Defines a bound column.
         /// </summary>
@@ -52,9 +72,9 @@ namespace Telerik.Web.Mvc.UI.Fluent
         {
             Guard.IsNotNull(expression, "expression");
 
-            GridBoundColumn<TModel, TValue> column = new GridBoundColumn<TModel, TValue>(container, expression);
+            GridBoundColumn<TModel, TValue> column = new GridBoundColumn<TModel, TValue>(Container, expression);
 
-            container.Columns.Add(column);
+            Container.Columns.Add(column);
 
             return new GridBoundColumnBuilder<TModel>(column);
         }
@@ -74,28 +94,30 @@ namespace Telerik.Web.Mvc.UI.Fluent
         {
             bool liftMemberAccess = false;
 
-            if (container.DataSource != null)
+            if (Container.DataSource != null)
             {
-                liftMemberAccess = container.DataSource.AsQueryable().Provider.IsLinqToObjectsProvider();
+                liftMemberAccess = Container.DataSource.AsQueryable().Provider.IsLinqToObjectsProvider();
             }
 
             LambdaExpression lambdaExpression = ExpressionBuilder.Lambda<TModel>(memberType, memberName, liftMemberAccess);
 
             Type columnType = typeof(GridBoundColumn<,>).MakeGenericType(new[] { typeof(TModel), lambdaExpression.Body.Type });
 
-            ConstructorInfo constructor = columnType.GetConstructor(new[] { container.GetType(), lambdaExpression.GetType() });
+            ConstructorInfo constructor = columnType.GetConstructor(new[] { Container.GetType(), lambdaExpression.GetType() });
 
-            GridColumnBase<TModel> column = (GridColumnBase<TModel>)constructor.Invoke(new object[] { container, lambdaExpression });
+            IGridBoundColumn column = (IGridBoundColumn)constructor.Invoke(new object[] { Container, lambdaExpression });
+            
             column.Member = memberName;
+            column.Title = memberName.AsTitle();
             
             if (memberType != null)
             {
                 column.MemberType = memberType;
             }
 
-            container.Columns.Add(column);
+            Container.Columns.Add((GridColumnBase<TModel>)column);
 
-            return new GridBoundColumnBuilder<TModel>((IGridBoundColumn)column);
+            return new GridBoundColumnBuilder<TModel>(column);
         }
 
         /// <summary>
@@ -105,7 +127,7 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// <returns></returns>
         [Obsolete("Use Template(Action<TModel>) instead")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public virtual GridTemplateColumnBuilder Add(Action<TModel> templateAction)
+        public virtual GridTemplateColumnBuilder<TModel> Add(Action<TModel> templateAction)
         {
             return Template(templateAction);
         }
@@ -115,14 +137,24 @@ namespace Telerik.Web.Mvc.UI.Fluent
         /// </summary>
         /// <param name="templateAction"></param>
         /// <returns></returns>
-        public virtual GridTemplateColumnBuilder Template(Action<TModel> templateAction)
+        public virtual GridTemplateColumnBuilder<TModel> Template(Action<TModel> templateAction)
         {
             Guard.IsNotNull(templateAction, "templateAction");
 
-            GridTemplateColumn<TModel> column = new GridTemplateColumn<TModel>(container, templateAction);
-            container.Columns.Add(column);
+            GridTemplateColumn<TModel> column = new GridTemplateColumn<TModel>(Container, templateAction);
+            Container.Columns.Add(column);
 
-            return new GridTemplateColumnBuilder(column);
+            return new GridTemplateColumnBuilder<TModel>(column);
+        }
+
+        public virtual GridTemplateColumnBuilder<TModel> Template(Func<TModel, object> template)
+        {
+            Guard.IsNotNull(template, "templateAction");
+
+            GridTemplateColumn<TModel> column = new GridTemplateColumn<TModel>(Container, template);
+            Container.Columns.Add(column);
+
+            return new GridTemplateColumnBuilder<TModel>(column);
         }
 
         /// <summary>
@@ -134,11 +166,11 @@ namespace Telerik.Web.Mvc.UI.Fluent
         {
             Guard.IsNotNull(commandAction, "commandAction");
 
-            GridActionColumn<TModel> column = new GridActionColumn<TModel>(container);
+            GridActionColumn<TModel> column = new GridActionColumn<TModel>(Container);
             
             commandAction(new GridActionCommandFactory<TModel>(column));
 
-            container.Columns.Add(column);
+            Container.Columns.Add(column);
 
             return new GridActionColumnBuilder(column);
         }

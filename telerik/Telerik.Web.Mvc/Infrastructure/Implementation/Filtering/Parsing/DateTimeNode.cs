@@ -5,7 +5,6 @@
 
 namespace Telerik.Web.Mvc.Infrastructure.Implementation
 {
-    using System;
 
     public class DateTimeNode : IFilterNode, IValueNode
     {

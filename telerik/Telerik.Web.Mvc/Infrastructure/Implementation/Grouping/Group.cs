@@ -3,7 +3,7 @@
 // See http://www.gnu.org/licenses/gpl-2.0.html. 
 // All other rights reserved.
 
-namespace Telerik.Web.Mvc.Infrastructure.Implementation
+namespace Telerik.Web.Mvc.Infrastructure
 {
     using System.Collections;
     using System.Collections.Generic;
@@ -11,9 +11,6 @@ namespace Telerik.Web.Mvc.Infrastructure.Implementation
     using System.Linq;
     using System.Web.Script.Serialization;
 
-    /// <summary>
-    /// Represents an item that is created after grouping.
-    /// </summary>
     public class Group : IGroup
     {
         private ReadOnlyCollection<IGroup> subgroups;

@@ -5,12 +5,18 @@
 
 namespace Telerik.Web.Mvc.UI.Fluent
 {
-    using System.Web.Routing;
 
-    public class GridDeleteActionCommandBuilder<T> : GridActionCommandBuilderBase<T, GridDeleteActionCommand<T>, GridDeleteActionCommandBuilder<T>>
-        where T : class
+    /// <summary>
+    /// Defines the fluent interface for configuring delete action command.
+    /// </summary>
+    /// <typeparam name=""></typeparam>
+    public class GridDeleteActionCommandBuilder : GridActionCommandBuilderBase<GridDeleteActionCommand, GridDeleteActionCommandBuilder>
     {
-        public GridDeleteActionCommandBuilder(GridDeleteActionCommand<T> command)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GridDeleteActionCommandBuilder&lt;T&gt;"/> class.
+        /// </summary>
+        /// <param name="command">The command.</param>
+        public GridDeleteActionCommandBuilder(GridDeleteActionCommand command)
             : base(command)
         {
         }

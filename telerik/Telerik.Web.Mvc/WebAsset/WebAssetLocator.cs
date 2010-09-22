@@ -33,6 +33,10 @@ namespace Telerik.Web.Mvc
     {
         private readonly bool isInDebugMode;
         private readonly IVirtualPathProvider virtualPathProvider;
+        private static string[] DebugJavaScriptExtensions = new[] { ".debug.js", ".js", ".min.js" };
+        private static string[] ReleaseJavaScriptExtensions = new[] { ".min.js", ".js", ".debug.js" };
+        private static string[] DebugCssExtensions = new[] { ".css", ".min.css" };
+        private static string[] ReleaseCssExtensions = new[] { ".min.css", ".css" };
 
         public WebAssetLocator(bool isInDebugMode, IVirtualPathProvider virtualPathProvider) : base(StringComparer.OrdinalIgnoreCase)
         {
@@ -52,73 +56,72 @@ namespace Telerik.Web.Mvc
         {
             Guard.IsNotNullOrEmpty(virtualPath, "virtualPath");
 
-            return isInDebugMode ? InternalLocate(virtualPath, version) : GetOrCreate("{0}:{1}".FormatWith(virtualPath, version), () => InternalLocate(virtualPath, version));
+            if (virtualPath.IndexOf("://") > -1)
+            {
+                return virtualPath;
+            }
+            
+            if (isInDebugMode)
+            {
+                return Resolve(virtualPath, version);
+            }
+
+            return GetOrCreate("{0}:{1}".FormatWith(virtualPath, version), () => Resolve(virtualPath, version));
         }
 
-        private string InternalLocate(string virtualPath, string version)
+        private string Resolve(string virtualPath, string version)
         {
             string result = virtualPath;
 
             string extension = virtualPathProvider.GetExtension(virtualPath);
+            string[] extensions = null;
 
             if (extension.IsCaseInsensitiveEqual(".js"))
             {
-                result = isInDebugMode ? ProbePath(virtualPath, version, new[] { ".debug.js", ".js", ".min.js" }) : ProbePath(virtualPath, version, new[] { ".min.js", ".js", ".debug.js" });
+                extensions = isInDebugMode ? DebugJavaScriptExtensions : ReleaseJavaScriptExtensions;
             }
             else if (extension.IsCaseInsensitiveEqual(".css"))
             {
-                result = isInDebugMode ? ProbePath(virtualPath, version, new[] { ".css", ".min.css" }) : ProbePath(virtualPath, version, new[] { ".min.css", ".css" });
+                extensions = isInDebugMode ? DebugCssExtensions : ReleaseCssExtensions;
+            }
+
+            if (extensions != null)
+            {
+                result = ProbePath(virtualPath, version, extensions);
             }
 
             return result;
         }
+        
+        private bool TryPath(string path, string modifier, out string result)
+        {
+            var directory = virtualPathProvider.GetDirectory(path);
+            var fileName = virtualPathProvider.GetFile(path);
+            var pathToProbe = modifier.HasValue() ? virtualPathProvider.CombinePaths(directory, modifier) + Path.AltDirectorySeparatorChar + fileName : path;
+
+            result = virtualPathProvider.FileExists(pathToProbe) ? pathToProbe : null;
+
+            return result != null;
+        }
 
         private string ProbePath(string virtualPath, string version, IEnumerable<string> extensions)
         {
-            string result = null;
-
-            Func<string ,string> fixPath = path =>
-                                           {
-                                               string directory = virtualPathProvider.GetDirectory(path);
-                                               string fileName = virtualPathProvider.GetFile(path);
-
-                                               if (!directory.EndsWith(version + Path.AltDirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
-                                               {
-                                                   string newDirectory = virtualPathProvider.CombinePaths(directory, version);
-                                                   string newPath = newDirectory + Path.AltDirectorySeparatorChar + fileName;
-
-                                                   if (virtualPathProvider.FileExists(newPath))
-                                                   {
-                                                       return newPath;
-                                                   }
-                                               }
-
-                                               return path;
-                                           };
-
-            foreach (string extension in extensions)
+            foreach (var modifier in new[] { version, "" })
             {
-                string changedPath = Path.ChangeExtension(virtualPath, extension);
-                string newVirtualPath = string.IsNullOrEmpty(version) ? changedPath : fixPath(changedPath);
-
-                if (virtualPathProvider.FileExists(newVirtualPath))
+                foreach (var extension in extensions)
                 {
-                    result = newVirtualPath;
-                    break;
+                    var changedPath = Path.ChangeExtension(virtualPath, extension);
+
+                    string result = null;
+
+                    if (TryPath(changedPath, modifier, out result))
+                    {
+                        return result;
+                    }
                 }
             }
 
-            if (string.IsNullOrEmpty(result))
-            {
-                result = virtualPath;
-
-                if (!virtualPathProvider.FileExists(result))
-                {
-                    throw new FileNotFoundException(Resources.TextResource.SpecifiedFileDoesNotExist.FormatWith(result));
-                }
-            }
-
-            return result;
+            throw new FileNotFoundException(Resources.TextResource.SpecifiedFileDoesNotExist.FormatWith(virtualPath));
         }
     }
 }

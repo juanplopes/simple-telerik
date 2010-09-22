@@ -6,8 +6,8 @@
 namespace Telerik.Web.Mvc
 {
     using System;
-    using System.ComponentModel;
     using System.Linq.Expressions;
+    using Telerik.Web.Mvc.Infrastructure.Implementation.Expressions;
     /// <summary>
     /// Base class for all <see cref="IFilterDescriptor"/> used for 
     /// handling the logic for property changed notifications.
@@ -43,5 +43,20 @@ namespace Telerik.Web.Mvc
         {
             return parameterExpression;
         }
+
+        private ExpressionBuilderOptions options;
+        internal ExpressionBuilderOptions ExpressionBuilderOptions
+        {
+            get
+            {
+                if (this.options == null)
+                {
+                    this.options = new ExpressionBuilderOptions();
+                }
+
+                return this.options;
+            }
+        }
+
     }
 }

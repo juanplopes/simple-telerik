@@ -7,13 +7,15 @@ namespace Telerik.Web.Mvc.UI
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
+    using System.Web;
 
-    public class GridBindingSettings
+    public class GridBindingSettings : IClientSerializable
     {
-        public GridBindingSettings()
+        private readonly IGrid grid;
+
+        public GridBindingSettings(IGrid grid)
         {
+            this.grid = grid;
             Select = new GridRequestSettings();
             Insert = new GridRequestSettings();
             Update = new GridRequestSettings();
@@ -48,6 +50,37 @@ namespace Telerik.Web.Mvc.UI
         {
             get;
             private set;
+        }
+        
+        public void SerializeTo(string key, IClientSideObjectWriter writer)
+        {
+            if (Enabled)
+            {
+                Func<string,string> encoder = (string url) => grid.IsSelfInitialized ? HttpUtility.UrlDecode(url) : url;
+
+                var urlBuilder = new GridUrlBuilder(grid);
+                
+                var urls = new Dictionary<string, string>();
+
+                urls["selectUrl"] = encoder(urlBuilder.Url(Select));
+
+                if (Insert.HasValue())
+                {
+                    urls["insertUrl"] = encoder(urlBuilder.Url(Insert));
+                }
+
+                if (Update.HasValue())
+                {
+                    urls["updateUrl"] = encoder(urlBuilder.Url(Update));
+                }
+
+                if (Delete.HasValue())
+                {
+                    urls["deleteUrl"] = encoder(urlBuilder.Url(Delete));
+                }
+                
+                writer.AppendObject(key, urls);
+            }
         }
     }
 }

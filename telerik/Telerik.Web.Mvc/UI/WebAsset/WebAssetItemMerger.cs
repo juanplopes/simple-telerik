@@ -56,91 +56,79 @@ namespace Telerik.Web.Mvc.UI
 
             IList<string> mergedList = new List<string>();
 
-            Func<string, string, string> getRelativePath = (source, version) => urlResolver.Resolve(assetRegistry.Locate(source, version));
-
-            Action<WebAssetItemGroup> processGroup = group =>
-                                                     {
-                                                         if (group.Combined)
-                                                         {
-                                                             string id = assetRegistry.Store(contentType, group);
-                                                             string virtualPath = "{0}?{1}={2}".FormatWith(assetHandlerPath, urlEncoder.Encode(WebAssetHttpHandler.IdParameterName), urlEncoder.Encode(id));
-                                                             string relativePath = urlResolver.Resolve(virtualPath);
-
-                                                             if (!mergedList.Contains(relativePath, StringComparer.OrdinalIgnoreCase))
-                                                             {
-                                                                 mergedList.Add(relativePath);
-                                                             }
-                                                         }
-                                                         else
-                                                         {
-                                                             group.Items.Each(i =>
-                                                             {
-                                                                 if (!mergedList.Contains(i.Source, StringComparer.OrdinalIgnoreCase))
-                                                                 {
-                                                                     mergedList.Add(getRelativePath(i.Source, group.Version));
-                                                                 }
-                                                             });
-                                                         }
-                                                     };
-            if (!assets.IsEmpty())
+            foreach (IWebAssetItem asset in assets)
             {
-                foreach (IWebAssetItem asset in assets)
+                WebAssetItem item = asset as WebAssetItem;
+                WebAssetItemGroup itemGroup = asset as WebAssetItemGroup;
+
+                if (item != null)
                 {
-                    WebAssetItem item = asset as WebAssetItem;
-                    WebAssetItemGroup itemGroup = asset as WebAssetItemGroup;
+                    mergedList.Add(Resolve(item.Source, null));
+                }
+                else if (itemGroup != null)
+                {
+                    IList<string> groupResult = MergeGroup(contentType, assetHandlerPath, isSecured, canCompress, itemGroup);
 
-                    if (item != null)
+                    if (groupResult != null)
+                        mergedList.AddRange(groupResult);
+                }
+            }
+
+            return mergedList.ToList();
+        }
+
+        public IList<string> MergeGroup(string contentType, string assetHandlerPath, bool isSecured, bool canCompress, WebAssetItemGroup group)
+        {
+            Guard.IsNotNullOrEmpty(contentType, "contentType");
+            Guard.IsNotNullOrEmpty(assetHandlerPath, "assetHandlerPath");
+            Guard.IsNotNull(group, "group");
+
+            IList<string> mergedList = new List<string>();
+
+            WebAssetItemGroup itemGroup = group;
+
+            if (itemGroup != null)
+            {
+                if (!itemGroup.Enabled)
+                {
+                    return null;
+                }
+
+                if (!string.IsNullOrEmpty(itemGroup.ContentDeliveryNetworkUrl))
+                {
+                    mergedList.Add(itemGroup.ContentDeliveryNetworkUrl);
+                }
+                else
+                {
+                    WebAssetItemGroup frameworkGroup = null;
+
+                    if (itemGroup.UseTelerikContentDeliveryNetwork)
                     {
-                        mergedList.Add(getRelativePath(item.Source, null));
+                        frameworkGroup = FilterFrameworkGroup(itemGroup);
                     }
-                    else if (itemGroup != null)
+
+                    if ((frameworkGroup != null) && !frameworkGroup.Items.IsEmpty())
                     {
-                        if (itemGroup.Enabled)
+                        ProcessGroup(frameworkGroup, contentType, assetHandlerPath, mergedList);
+                    }
+
+                    if (itemGroup.UseTelerikContentDeliveryNetwork)
+                    {
+                        var nativeFiles = FilterNativeFiles(itemGroup);
+                        foreach (string nativefile in nativeFiles)
                         {
-                            if (!string.IsNullOrEmpty(itemGroup.ContentDeliveryNetworkUrl))
+                            string fullUrl = GetNativeFileCdnUrl(nativefile, isSecured, canCompress);
+
+                            if (!mergedList.Contains(fullUrl, StringComparer.OrdinalIgnoreCase))
                             {
-                                mergedList.Add(itemGroup.ContentDeliveryNetworkUrl);
-                            }
-                            else
-                            {
-                                WebAssetItemGroup frameworkGroup = null;
-
-                                if (itemGroup.UseTelerikContentDeliveryNetwork)
-                                {
-                                    frameworkGroup = RemoveAndGetFrameworkGroup(itemGroup);
-                                }
-
-                                if ((frameworkGroup != null) && !frameworkGroup.Items.IsEmpty())
-                                {
-                                    processGroup(frameworkGroup);
-                                }
-
-                                IList<string> nativeFiles = null;
-
-                                if (itemGroup.UseTelerikContentDeliveryNetwork)
-                                {
-                                    nativeFiles = RemoveAndGetNativeFiles(itemGroup);
-                                }
-
-                                if (nativeFiles != null)
-                                {
-                                    foreach (string nativefile in nativeFiles)
-                                    {
-                                        string fullUrl = GetNativeFileCdnUrl(nativefile, isSecured, canCompress);
-
-                                        if (!mergedList.Contains(fullUrl, StringComparer.OrdinalIgnoreCase))
-                                        {
-                                            mergedList.Add(fullUrl);
-                                        }
-                                    }
-                                }
-
-                                if (!itemGroup.Items.IsEmpty())
-                                {
-                                    processGroup(itemGroup);
-                                }
+                                mergedList.Add(fullUrl);
                             }
                         }
+                    }
+
+                    if (!itemGroup.Items.IsEmpty())
+                    {
+                        ProcessGroup(itemGroup, contentType, assetHandlerPath, mergedList);
                     }
                 }
             }
@@ -148,7 +136,46 @@ namespace Telerik.Web.Mvc.UI
             return mergedList.ToList();
         }
 
-        private static WebAssetItemGroup RemoveAndGetFrameworkGroup(WebAssetItemGroup itemGroup)
+        private string Resolve(string path, string version)
+        {
+            return urlResolver.Resolve(assetRegistry.Locate(path, version));
+        }
+
+        private void ProcessGroup(WebAssetItemGroup group, string contentType, string assetHandlerPath, IList<string> urls)
+        {
+            if (group.Combined)
+            {
+                var fullUrls = FilterFullUrls(group);
+                foreach (string fullUrl in fullUrls)
+                {
+                    if (!urls.Contains(fullUrl, StringComparer.OrdinalIgnoreCase))
+                    {
+                        urls.Add(fullUrl);
+                    }
+                }
+
+                string id = assetRegistry.Store(contentType, group);
+                string virtualPath = "{0}?{1}={2}".FormatWith(assetHandlerPath, urlEncoder.Encode(WebAssetHttpHandler.IdParameterName), urlEncoder.Encode(id));
+                string relativePath = urlResolver.Resolve(virtualPath);
+
+                if (!urls.Contains(relativePath, StringComparer.OrdinalIgnoreCase))
+                {
+                    urls.Add(relativePath);
+                }
+            }
+            else
+            {
+                group.Items.Each(i =>
+                {
+                    if (!urls.Contains(i.Source, StringComparer.OrdinalIgnoreCase))
+                    {
+                        urls.Add(Resolve(i.Source, group.Version));
+                    }
+                });
+            }
+        }
+
+        private static WebAssetItemGroup FilterFrameworkGroup(WebAssetItemGroup itemGroup)
         {
             WebAssetItemGroup frameworkGroup = new WebAssetItemGroup("framework", false) { Combined = itemGroup.Combined, Compress = itemGroup.Compress, CacheDurationInDays = itemGroup.CacheDurationInDays, DefaultPath = itemGroup.DefaultPath, Version = itemGroup.Version, UseTelerikContentDeliveryNetwork = itemGroup.UseTelerikContentDeliveryNetwork, Enabled = itemGroup.Enabled };
 
@@ -170,7 +197,7 @@ namespace Telerik.Web.Mvc.UI
             return frameworkGroup;
         }
 
-        private static IList<string> RemoveAndGetNativeFiles(WebAssetItemGroup itemGroup)
+        private static IList<string> FilterNativeFiles(WebAssetItemGroup itemGroup)
         {
             List<string> nativeFiles = new List<string>();
 
@@ -188,6 +215,26 @@ namespace Telerik.Web.Mvc.UI
             nativeFiles.Reverse();
 
             return nativeFiles;
+        }
+
+        private static IEnumerable<string> FilterFullUrls(WebAssetItemGroup itemGroup)
+        {
+            List<string> fullUrls = new List<string>();
+
+            for (int i = itemGroup.Items.Count - 1; i >= 0; i--)
+            {
+                WebAssetItem item = itemGroup.Items[i];
+
+                if (item.Source.IndexOf("://") > -1)
+                {
+                    fullUrls.Add(item.Source);
+                    itemGroup.Items.RemoveAt(i);
+                }
+            }
+
+            fullUrls.Reverse();
+
+            return fullUrls;
         }
 
         private static bool IsNativeFile(WebAssetItem item)

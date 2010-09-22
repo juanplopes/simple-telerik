@@ -5,7 +5,6 @@
 
 namespace Telerik.Web.Mvc.Infrastructure.Implementation.Expressions
 {
-    using System;
     internal class ExpressionBuilderOptions
     {
         /// <summary>

@@ -201,9 +201,12 @@ namespace Telerik.Web.Mvc.UI
         {
             Guard.IsNotNullOrEmpty(source, "source");
 
-            string itemSource = source.StartsWith("~/", StringComparison.OrdinalIgnoreCase) ? source : PathHelper.CombinePath(assetItemGroup.DefaultPath, source);
+            if (source.IndexOf("://") < 0)
+            {
+                source = source.StartsWith("~/", StringComparison.OrdinalIgnoreCase) ? source : PathHelper.CombinePath(assetItemGroup.DefaultPath, source);
+            }
 
-            return new WebAssetItem(itemSource);
+            return new WebAssetItem(source);
         }
     }
 }

@@ -6,21 +6,16 @@
 namespace Telerik.Web.Mvc.UI
 {
     using System;
-    using System.Collections.Generic;
-    using System.Web.Routing;
-
-    using Extensions;
-    using Infrastructure;
     using System.Web.Mvc;
+    using System.Web.Routing;
+    using Extensions;
 
-    public class GridUrlBuilder<T> where T : class
+    public class GridUrlBuilder
     {
-        private readonly Grid<T> grid;
+        private readonly IGrid grid;
 
-        public GridUrlBuilder(Grid<T> grid)
+        public GridUrlBuilder(IGrid grid)
         {
-            Guard.IsNotNull(grid, "grid");
-
             this.grid = grid;
         }
 
@@ -58,10 +53,15 @@ namespace Telerik.Web.Mvc.UI
             RouteValueDictionary result = new RouteValueDictionary(routeValues);
 
             result.Merge(grid.ViewContext.RouteData.Values, false);
+            
+            if (grid.EnableCustomBinding)
+            {
+                result[grid.Prefix(GridUrlParameters.PageSize)] = grid.PageSize;
+            }
 
             foreach (string key in grid.ViewContext.HttpContext.Request.QueryString)
             {
-                if (!result.ContainsKey(key))
+                if (key != null && !result.ContainsKey(key))
                 {
                     result[key] = grid.ViewContext.HttpContext.Request.QueryString[key];
                 }

@@ -13,7 +13,7 @@ namespace Telerik.Web.Mvc.UI
     /// <summary>
     /// Defines the fluent interface for configuring the <see cref="ScriptRegistrar"/> component.
     /// </summary>
-    public class ScriptRegistrarBuilder : IHideObjectMembers
+    public class ScriptRegistrarBuilder : ComponentBuilderBase<ScriptRegistrar, ScriptRegistrarBuilder>, IHideObjectMembers
     {
         private readonly ScriptRegistrar scriptRegistrar;
 
@@ -250,11 +250,15 @@ namespace Telerik.Web.Mvc.UI
             scriptRegistrar.Render();
         }
 
+        public string ToHtmlString()
+        {
+            return scriptRegistrar.ToHtmlString();
+        }
+        
         public override string ToString()
         {
             Render();
-            
             return null;
-        }
+        }        
     }
 }

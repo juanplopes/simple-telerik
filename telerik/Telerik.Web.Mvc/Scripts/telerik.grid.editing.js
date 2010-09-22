@@ -1,12 +1,30 @@
-﻿(function($) {
+﻿(function ($) {
 
-    $.validator.addMethod("regex", function(value, element, params) {
-        if (this.optional(element)) {
+    var $t = $.telerik;
+
+    $.validator.addMethod("regex", function (value, element, params) {
+        if (this.optional(element))
             return true;
-        }
 
         var match = new RegExp(params).exec(value);
-        return (match && (match.index == 0) && (match[0].length == value.length));
+        return match && match.index == 0 && match[0].length == value.length;
+    });
+
+    $.validator.addMethod('number', function (value, element) {
+        var groupSize = $t.cultureInfo.numericgroupsize;
+        var builder = new $t.stringBuilder();
+
+        builder.cat('^-?(?:\\d+|\\d{1,')
+               .cat(groupSize)
+               .cat('}(?:')
+               .cat($t.cultureInfo.numericgroupseparator)
+               .cat('\\d{')
+               .cat(groupSize)
+               .cat('})+)(?:\\')
+               .cat($t.cultureInfo.numericdecimalseparator)
+               .cat('\\d+)?$');
+
+        return this.optional(element) || new RegExp(builder.string()).test(value);
     });
 
     function __MVC_ApplyValidator_Range(object, min, max) {
@@ -130,7 +148,7 @@
         var options = {
             errorClass: "input-validation-error",
             errorElement: "span",
-            errorPlacement: function(error, element) {
+            errorPlacement: function (error, element) {
                 var messageSpan = fieldToMessageMappings[element.attr("name")];
                 $(messageSpan).empty()
                                 .removeClass("field-validation-valid")
@@ -142,7 +160,7 @@
             },
             messages: errorMessagesObj,
             rules: rulesObj,
-            success: function(label) {
+            success: function (label) {
                 var messageSpan = $(label.attr("_for_validation_message"));
                 $(messageSpan).empty()
                               .addClass("field-validation-valid")
@@ -152,119 +170,238 @@
         theForm.validate(options);
     }
 
-    var $t = $.telerik;
+    function getCommand(columns, name) {
+        for (var i = 0, len = columns.length; i < len; i++) {
+            if (columns[i].commands) {
+                var commands = columns[i].commands;
+                for (var j = 0, length = commands.length; j < length; j++) {
+                    if (commands[j].name == name) return commands[j];
+                }
+            }
+        }
+        return {};
+    }
 
     $t.editing = {};
 
-    $t.editing.initialize = function(grid) {
+    $t.editing.initialize = function (grid) {
         $.extend(grid, this.implementation);
+        var $element = $(grid.element);
 
         if (grid.isAjax()) {
-
-            $('.t-grid-edit', grid.element).live('click', function(e) {
-                e.preventDefault();
+            $element.delegate('.t-grid-edit', 'click', $t.stopAll(function (e) {
                 grid.editRow($(this).closest('tr'));
-            });
-
-            $('.t-grid-cancel', grid.element).live('click', function(e) {
-                e.preventDefault();
+            }))
+            .delegate('.t-grid-cancel', 'click', $t.stopAll(function (e) {
                 grid.cancel();
-            });
-
-            $('.t-grid-delete', grid.element).live('click', function(e) {
-                e.preventDefault();
+            }))
+            .delegate('.t-grid-delete', 'click', $t.stopAll(function (e) {
                 grid.deleteRow($(this).closest('tr'));
-            });
-
-            $('.t-grid-update', grid.element).live('click', function(e) {
-                e.preventDefault();
-                grid.save(this, grid.updateRow);
-            });
-
-            $('.t-grid-add', grid.element).live('click', function(e) {
-                e.preventDefault();
+            }))
+            .delegate('.t-grid-update', 'click', $t.stopAll(function (e) {
+                grid.save(this, $.proxy(function () {
+                    grid.updateRow($(this).closest('form').closest('tr'));
+                }, this));
+            }))
+            .delegate('.t-grid-add', 'click', $t.stopAll(function (e) {
                 grid.addRow();
-            });
-
-            $('.t-edit-form .t-grid-insert', grid.element).live('click', function(e) {
-                e.preventDefault();
-                grid.save(this, grid.insertRow);
-            });
+            }))
+            .delegate('.t-grid-insert', 'click', $t.stopAll(function (e) {
+                grid.save(this, $.proxy(function () {
+                    grid.insertRow($(this).closest('form').closest('tr'));
+                }, this));
+            }))
         } else {
-            $('.t-grid-delete', grid.element).live('click', function(e) {
+            $element.delegate('.t-grid-delete', 'click', $t.stop(function (e) {
                 if (grid.editing.confirmDelete !== false && !confirm(grid.localization.deleteConfirmation))
                     e.preventDefault();
-            });
+            }));
 
             grid.validation();
         }
 
-        $(':input', grid.element).live('keydown', function(e) {
+        $element.delegate(':input:not(.t-button)', 'keydown', $t.stop(function (e) {
             var keyMap = { 13: '.t-grid-update, .t-grid-insert', 27: '.t-grid-cancel' };
             $(this).closest('tr').find(keyMap[e.keyCode]).click();
+        }));
+    }
+
+    function popup(options) {
+        var result = $('#' + options.element.id + 'PopUp');
+        if (!result.length)
+            result = $('<div />', { id: options.element.id + 'PopUp' })
+                .appendTo(options.element)
+                .css({ top: 0, left: '50%', marginLeft: -90 })
+                .tWindow(options.settings)
+                .delegate('.t-grid-cancel', 'click', $t.stopAll(function () {
+                    result.data('tWindow').close()
+                }));
+        $.each(['insert', 'update'], function (index, value) {
+            if (options[value])
+                result.undelegate('.t-grid-' + value, 'click')
+                      .delegate('.t-grid-' + value, 'click', $t.stopAll(function (e) {
+                          options[value](e.target, result);
+                      }));
         });
+
+        result.find('> .t-content')
+              .empty()
+              .append(options.content);
+
+        var wnd = result.data('tWindow');
+        wnd.title(options.title);
+        wnd.open();
+
+        return result;
     }
 
     $t.editing.implementation = {
-        insertRow: function($tr) {
-            this.sendValues(this.extractValues($tr), 'insertUrl');
+        insertRow: function ($tr) {
+            var values = this.extractValues($tr);
+
+            if ($t.trigger(this.element, 'save', { mode: 'insert', values: values, form: $tr.find('form')[0] }))
+                return;
+
+            this.sendValues(values, 'insertUrl');
         },
 
-        updateRow: function($tr) {
-            this.sendValues(this.extractValues($tr, true), 'updateUrl');
+        updateRow: function ($tr) {
+            var dataItem = this.dataItem($tr.data('tr') || $tr);
+            var values = this.extractValues($tr, true);
+            if ($t.trigger(this.element, 'save', { mode: 'edit', dataItem: dataItem, values: values, form: $tr.find('form')[0] }))
+                return;
+
+            this.sendValues(values, 'updateUrl');
         },
 
-        deleteRow: function($tr) {
+        deleteRow: function ($tr) {
+            if ($t.trigger(this.element, 'delete', { dataItem: this.dataItem($tr) }))
+                return;
+
             if (this.editing.confirmDelete === false || confirm(this.localization.deleteConfirmation))
                 this.sendValues(this.extractValues($tr, true), 'deleteUrl');
         },
 
-        editRow: function($tr) {
+        editRow: function ($tr) {
             this.cancel();
-
             var html = new $t.stringBuilder();
-            this.form(html, [{ name: 'update' }, { name: 'cancel'}]);
+
+            var edit = getCommand(this.columns, 'edit');
+
+            this.form(html,
+                      [{ name: 'update', attr: edit.attr, buttonType: edit.buttonType, imageAttr: edit.imageAttr },
+                       { name: 'cancel', attr: edit.attr, buttonType: edit.buttonType, imageAttr: edit.imageAttr}],
+                      $tr.find('.t-hierarchy-cell').find('.t-icon').hasClass('t-plus'));
 
             var dataItem = this.dataItem($tr);
             var $td = $(html.string());
-            var cells = $td.find('tr:first td:not(.t-groupcell)');
+            $td.children().hide();
 
-            $.each(this.columns, function(i) {
-                if (this.editor)
-                    cells.eq(i).find(':input[name="' + this.member + '"]')
-                         .val(this.edit(dataItem) + "");
-                if (this.readonly)
+            var cells = $td.find('tr:first td:not(.t-group-cell, .t-hierarchy-cell)');
+
+            var mode = this.editing.mode;
+
+            if (mode != 'PopUp') {
+                $tr.html($td);
+            } else {
+                popup({
+                    title: this.localization.edit,
+                    element: this.element,
+                    settings: this.editing.popup,
+                    content: $td,
+                    update: $.proxy(function (target, $popup) {
+                        this.save(target, $.proxy(function () {
+                            $popup.data('tr', $tr);
+                            this.updateRow($popup);
+                            $popup.data('tWindow')
+                                  .close();
+                        }, this));
+                    }, this)
+                });
+            }
+
+            $.each(this.columns, function (i) {
+                if (this.edit)
+                    $td.find(':input[name$="' + this.member + '"]')
+                       .val(this.edit(dataItem) + '')
+                       .parent()
+                       .filter('.t-numerictextbox')
+                       .each($.proxy(function (index, element) {
+                           $(element).data('tTextBox').value(this.edit(dataItem));
+                       }, this))
+                       .end()
+                       .find(':checkbox[name$="' + this.member + '"]')
+                       .attr('checked', this.edit(dataItem) == true);
+
+                if (mode == 'InLine' && this.readonly)
                     cells.eq(i).html(this.display(dataItem));
             });
 
-            $tr.html($td);
-
-            this.validation();
-        },
-
-        dataItem: function($tr) {
-            return this.data[this.$tbody.find('tr:not(t-grouping-row)').index($tr)];
-        },
-
-        addRow: function() {
-            this.cancel();
-
-            var html = new $t.stringBuilder();
-            html.cat('<tr class="t-grid-new-row">');
-            this.form(html, [{ name: 'insert' }, { name: 'cancel'}]);
-            html.cat('</tr>');
-            $(html.string()).prependTo(this.$tbody);
-            this.validation();
-        },
-
-        extractValues: function($tr, extractKeys) {
-            var values = {};
-            $tr.find(':input').each(function() {
-                values[this.name] = $(this).val();
+            $td.children().show();
+            $t.trigger(this.element, 'edit', {
+                mode: 'edit',
+                form: $td.find('form')[0] || $td[0],
+                dataItem: dataItem
             });
 
+            this.validation();
+        },
+
+        addRow: function () {
+            this.cancel();
+            var html = new $t.stringBuilder();
+            var mode = this.editing.mode;
+            var edit = getCommand(this.columns, 'edit');
+            var $td;
+
+            if (mode != 'PopUp') {
+                html.cat('<tr class="t-grid-new-row">');
+                this.form(html, [{ name: 'insert', attr: edit.attr, buttonType: edit.buttonType, imageAttr: edit.imageAttr },
+                                 { name: 'cancel', attr: edit.attr, buttonType: edit.buttonType, imageAttr: edit.imageAttr}]);
+                html.cat('</tr>');
+                $td = $(html.string()).prependTo(this.$tbody);
+            } else {
+                this.form(html, [{ name: 'insert', attr: edit.attr, buttonType: edit.buttonType, imageAttr: edit.imageAttr },
+                                 { name: 'cancel', attr: edit.attr, buttonType: edit.buttonType, imageAttr: edit.imageAttr}]);
+
+                $td = $(html.string());
+
+                popup({
+                    title: this.localization.insert,
+                    element: this.element,
+                    settings: this.editing.popup,
+                    content: $td,
+                    insert: $.proxy(function (target, $popup) {
+                        this.save(target, $.proxy(function () {
+                            this.insertRow($popup);
+                            $popup.data('tWindow').close()
+                        }, this));
+                    }, this)
+                });
+            }
+
+            $t.trigger(this.element, 'edit', { mode: 'insert', form: $td.find('form')[0] || $td[0] })
+
+            this.validation();
+        },
+
+        extractValues: function ($tr, extractKeys) {
+            var values = {};
+            $.each(this.columns, function () {
+                var member = this.member;
+                if (this.edit)
+                    $tr.find(':input[name$="' + member + '"]')
+                       .each(function () {
+                           values[member] = $(this).val();
+                       })
+                       .end()
+                       .find(':checkbox[name$="' + member + '"]')
+                       .each(function () {
+                           values[member] = $(this).attr('checked');
+                       });
+            });
             if (extractKeys) {
-                var dataItem = this.dataItem($tr);
+                var dataItem = this.dataItem($tr.data('tr') || $tr);
 
                 for (var dataKey in this.dataKeys)
                     values[this.ws ? dataKey : this.dataKeys[dataKey]] = this.valueFor({ member: dataKey })(dataItem);
@@ -272,7 +409,7 @@
             return values;
         },
 
-        cancelRow: function($tr) {
+        cancelRow: function ($tr) {
             if (!$tr.length)
                 return;
 
@@ -284,15 +421,18 @@
             var dataItem = this.dataItem($tr);
             var html = new $t.stringBuilder();
 
-            html.rep('<td class="t-groupcell" />', this.groups.length);
+            var expanding = $tr.find('.t-hierarchy-cell').find('.t-icon').hasClass('t-plus');
 
-            $.each(this.columns, $.proxy(function(i, c) {
+            html.rep('<td class="t-groupcell" />', this.groups.length)
+                .catIf('<td class="t-hierarchy-cell"><a href="#" class="t-icon ' + (expanding ? 't-plus' : 't-minus') + '"></a></td>', this.detail);
+
+            $.each(this.columns, $.proxy(function (i, c) {
                 html.cat('<td')
                   .cat(c.attr)
                   .catIf(' class="t-last"', i == this.columns.length - 1)
                   .cat('>');
 
-                if (c.editor)
+                if (c.display)
                     html.cat(c.display(dataItem));
 
                 this.appendCommandHtml(c.commands, html);
@@ -302,65 +442,95 @@
             }, this));
 
             $tr.html(html.string());
+
+            $t.trigger(this.element, 'rowDataBound', { row: $tr[0], dataItem: dataItem });
         },
 
-        form: function(html, commands) {
+        form: function (html, commands, expanding) {
             var colgroup = this.$tbody.siblings('colgroup');
 
-            html.cat('<td class="t-edit-container" colspan="')
-                .cat(this.columns.length + this.groups.length)
-                .cat('"><form class="t-edit-form" action="#" method="post" id="')
+            var mode = this.editing.mode;
+
+            if (mode != 'PopUp')
+                html.cat('<td class="t-edit-container" colspan="')
+                    .cat(this.columns.length + this.groups.length + (this.detail ? 1 : 0))
+                    .cat('">');
+
+            html.cat('<form class="t-edit-form" action="#" method="post" id="')
                 .cat(this.formId())
-                .cat('"><table cellspacing="0">');
+                .cat('">');
 
-            var columnPrototype = $.browser.mozilla ? this.$tbody.siblings('colgroup').children()
-                                                    : this.$tbody.children(':not(.t-grouping-row)').eq(0).find('> td');
+            if (mode == 'InLine') {
+                html.cat('<table cellspacing="0"><colgroup>');
 
-            columnPrototype.each(function(i) {
-                html.cat('<col style="width:')
-                    .catIf($(this).width(), $.browser.mozilla)
-                    .catIf(this.offsetWidth - (document.documentMode < 8), !$.browser.mozilla)
-                    .cat('px" />');
-            });
+                this.$tbody.siblings('colgroup').children()
+                    .each(function () {
+                        var width = $(this).css('width');
 
-            html.cat('<tr>')
-                .rep('<td class="t-groupcell" />', this.groups.length);
+                        if (width != '0px')
+                            html.cat('<col style="width:').cat(width).cat('" />');
+                        else
+                            html.cat('<col />');
+                    });
 
-            $.each(this.columns, $.proxy(function(i, c) {
-                html.cat('<td')
-                    .cat(c.attr)
-                    .catIf(' class="t-last"', i == this.columns.length - 1)
-                    .cat('>')
-                    .catIf(c.editor, c.editor);
+                var hierarchyCellHtml = new $t.stringBuilder();
+                hierarchyCellHtml.cat('<td class="t-hierarchy-cell">')
+                                 .catIf('<a href="#" class="t-icon ' + (expanding ? 't-plus' : 't-minus') + '"></a>', expanding != undefined)
+                                 .cat('</td>');
 
-                if (c.commands)
-                    this.appendCommandHtml(commands, html);
+                html.cat('</colgroup><tbody><tr>')
+                    .rep('<td class="t-groupcell" />', this.groups.length)
+                    .catIf(hierarchyCellHtml.string(), this.detail);
 
-                html.cat('</td>');
-            }, this));
+                $.each(this.columns, $.proxy(function (i, c) {
+                    html.cat('<td')
+                        .cat(c.attr)
+                        .catIf(' class="t-last"', i == this.columns.length - 1)
+                        .cat('>')
+                        .catIf(c.editor, c.editor)
+                        .catIf('&nbsp;', !c.editor && !c.commands);
 
-            html.cat('</tr></table></form></td>');
+                    if (c.commands)
+                        this.appendCommandHtml(commands, html);
+
+                    html.cat('</td>');
+                }, this));
+
+                html.cat('</tr></tbody></table>');
+            } else {
+                html.cat('<div class="t-edit-form-container">')
+                    .cat(this.editing.editor)
+                    .cat('<div>');
+
+                $.each(this.columns, $.proxy(function (i, c) {
+                    if (c.commands)
+                        this.appendCommandHtml(commands, html);
+                }, this));
+
+                html.cat('</div></div>');
+            }
+
+            html.cat('</form>')
+            html.catIf('</td>', mode != 'PopUp');
         },
 
-        save: function(element, callback) {
-            var $form = $(element).closest('form');
-            if ($form.validate().form())
-                callback.call(this, $form.closest('tr'));
+        save: function (element, callback) {
+            $(element).closest('form').validate().form() && callback();
         },
 
-        cancel: function() {
+        cancel: function () {
             this.cancelRow($('#' + this.formId()).closest('tr'));
         },
 
-        sendValues: function(values, url) {
+        sendValues: function (values, url) {
             if (this.ws)
                 for (var key in values) {
-                var column = this.columnFromMember(key);
-                if (column && column.type == 'Date') {
-                    var date = new Date(Date.parse(values[key]));
-                    values[key] = '\\/Date(' + date.getTime() + ')\\/';
+                    var column = this.columnFromMember(key);
+                    if (column && column.type == 'Date') {
+                        var date = $t.datetime.parse(values[key], $t.cultureInfo.shortDate).toDate();
+                        values[key] = '\\/Date(' + date.getTime() + ')\\/';
+                    }
                 }
-            }
 
             $.ajax(this.ajaxOptions({
                 data: this.ws ? { value: values} : values,
@@ -368,19 +538,28 @@
             }));
         },
 
-        formId: function() {
+        formId: function () {
             return $(this.element).attr('id') + 'form';
         },
 
-        validation: function() {
+        validation: function () {
             if (window.mvcClientValidationMetadata) {
+
                 var formId = this.formId();
-                var metadata = $.grep(window.mvcClientValidationMetadata, function(item) {
+                var metadata = $.grep(window.mvcClientValidationMetadata, function (item) {
                     return item.FormId == formId;
                 })[0];
 
-                if (metadata && __MVC_EnableClientValidation)
+                if (metadata) {
+                    // filter required fields for boolean columns
+                    metadata.Fields = $.grep(metadata.Fields, $.proxy(function (rule) {
+                        var column = this.columnFromMember(rule.FieldName);
+
+                        return !column || column.type != 'Boolean';
+                    }, this));
+
                     __MVC_EnableClientValidation(metadata);
+                }
             }
         }
     }

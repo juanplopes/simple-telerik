@@ -5,10 +5,6 @@
 
 namespace Telerik.Web.Mvc.Infrastructure.Implementation
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Globalization;
 
     /// <summary>
 	/// Represents a function that returns the number of items in a set of items, including nested sets.

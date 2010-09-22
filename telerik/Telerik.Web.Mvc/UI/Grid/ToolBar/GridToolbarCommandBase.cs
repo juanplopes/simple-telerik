@@ -10,15 +10,29 @@ namespace Telerik.Web.Mvc.UI
     
     public abstract class GridToolBarCommandBase<T> where T : class
     {
-        public IDictionary<string, object> HtmlAttributes
+        public GridButtonType ButtonType
         {
             get;
             set;
         }
+
+        public IDictionary<string, object> HtmlAttributes
+        {
+            get;
+            private set;
+        }
+
+        public IDictionary<string, object> ImageHtmlAttributes
+        {
+            get;
+            private set;
+        }
         
         public GridToolBarCommandBase()
         {
+            ButtonType = GridButtonType.Text;
             HtmlAttributes = new RouteValueDictionary();
+            ImageHtmlAttributes = new RouteValueDictionary();
         }
         
         public abstract void Html(Grid<T> context, IHtmlNode parent);

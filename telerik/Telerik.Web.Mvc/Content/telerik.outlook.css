@@ -2,9 +2,9 @@
 
 .t-widget
 {
-	border-color: #5d8cc9;
-	/*font-size: .75em; /* 12px base, if there are no inherited font-sizes (MVC Outlook) */
-	background-color: #fff;
+    border-color: #5d8cc9;
+    /*font-size: .75em; /* 12px base, if there are no inherited font-sizes (MVC Outlook) */
+    background-color: #fff;
 }
 
 /* .small .t-widget { font-size: .687em; } /* 11px base, if there are no inherited font-sizes (MVC Outlook) */
@@ -12,14 +12,12 @@
 .t-header,
 .t-grid-header
 {
-	border-color: #5d8cc9;
-	background: #7da5e0 url('Outlook/sprite.png') repeat-x 0 -352px;
+    border-color: #5d8cc9;
+    background: #7da5e0 url('Outlook/sprite.png') repeat-x 0 -368px;
 }
 
-.t-icon
-{
-	background: transparent url('Outlook/sprite.png') no-repeat;
-}
+.t-icon { background-image: url('Outlook/sprite.png'); }
+.t-editor .t-tool-icon { background-image: url('Outlook/editor.png'); }
 
 .t-expand { background-position: 0 -160px; }
 .t-collapse { background-position: 0 -176px; }
@@ -63,7 +61,15 @@
 .t-refresh { background-position: -32px -240px; }
 .t-icon-calendar { background-position: -48px -240px; }
 
-.t-delete { background-position: 0 -288px; }
+.t-edit { background-position: 0 -336px; }
+.t-delete { background-position: -16px -336px; }
+.t-insert, .t-update { background-position: -32px -336px; }
+.t-cancel { background-position: -48px -336px; }
+.t-group-delete { background-position: 0 -288px; }
+
+.t-maximize { background-position: -16px -288px; }
+.t-restore { background-position: -32px -288px; }
+.t-close { background-position: -64px -288px; }
 
 .t-insert-top { background-position: 0 -320px; }
 .t-insert-middle { background-position: -16px -320px; }
@@ -77,26 +83,39 @@
 .t-widget,
 .t-link:link,
 .t-link:active,
-.t-link:visited
+.t-link:visited,
+.t-popup
 {
-	color: #000;
+    color: #000;
 }
 
 .t-group,
-.t-content
+.t-content,
+.t-editable-area
 {
-	border-color: #5d8cc9;
-	background-color: #fff;
+    border-color: #5d8cc9;
+    background-color: #fff;
+}
+
+.t-colorpicker .t-arrow-down
+{
+    border-color: #5d8cc9;
+}
+
+.t-separator
+{
+    border-color: #cfdef4;
+    background-color: #7e98bc;
 }
 
 .t-alt
 {
-	background-color: #f7f7f7;
+    background-color: #f7f7f7;
 }
 
 .t-state-default
 {
-	border-color: #5d8cc9;
+    border-color: #5d8cc9;
 }
 
 .t-active-filter
@@ -106,69 +125,69 @@
 
 .t-state-hover
 {
-	background-color: #d6e5f3;
-	border-color: #5d8cc9;
+    background-color: #d6e5f3;
+    border-color: #5d8cc9;
 }
 
 .t-state-active
 {
-	background-color: #fff;
-	border-color: #5d8cc9;
+    background-color: #fff;
+    border-color: #5d8cc9;
 }
 
 .t-state-selected
 {
-	background-color: #bcd3f3;
+    background-color: #bcd3f3;
 }
 
 .t-state-error
 {
-	border-style: ridge;
-	border-color: #f00;
-	background-color: #ffc0cb;
+    border-style: ridge;
+    border-color: #f00;
+    background-color: #ffc0cb;
 }
 
 .t-state-disabled,
 .t-state-disabled .t-link
 {
-	color: #666;
+    color: #666;
 }
 
-.t-grid-toolbar,
+.t-toolbar,
 .t-grouping-header,
-.t-widget .t-footer,
+.t-widget .t-pager-wrapper,
 .t-grid-footer,
 .t-widget .t-status
 {
-	border-color: #5d8cc9;
-	background-color: #d6e5f3;
+    border-color: #5d8cc9;
+    background-color: #d6e5f3;
 }
 
 .t-button
 {
-	background: #e8e8e8 url('Outlook/sprite.png') repeat-x 0 -96px;
-	color: #333;
+    background: #e8e8e8 url('Outlook/sprite.png') repeat-x 0 -96px;
+    color: #333;
 }
 
 .t-button-hover
 {
-	background-position: 0 -128px;
+    background-position: 0 -128px;
 }
 
 .t-tabstrip li.t-state-active
 {
-	border-bottom-color: #fff;
+    border-bottom-color: #fff;
 }
 
 .t-grid td
 {
-	border-color: #ddd;
-	border-right: 1px solid #eee;
+    border-color: #ddd;
+    border-right: 1px solid #eee;
 }
 
-.t-grid .t-grouping-row
+.t-grouping-row td
 {
-	background: #fff url('Outlook/sprite.png') repeat-x 0 -48px;
+    background: #fff url('Outlook/sprite.png') repeat-x 0 -48px;
 }
 
 .t-grouping-header .t-group-indicator
@@ -182,16 +201,16 @@
     background: url('Outlook/sprite.png') no-repeat -48px -288px;
 }
 
-.t-grouping-row .t-groupcell,
+.t-grouping-row .t-group-cell,
 .t-grouping-row p
 {
-	background: #fff;
+    background: #fff;
 }
 
 .t-treeview .t-drop-clue
 {
     background-image: url('Outlook/sprite.png');
-    background-position: 0 -342px;
+    background-position: 0 -358px;
 }
 
 .t-treeview .t-state-selected
@@ -203,12 +222,12 @@
 .t-panelbar .t-group,
 .t-panelbar .t-content
 {
-	border-color: #5d8cc9;
+    border-color: #5d8cc9;
 }
 
 .t-panelbar .t-state-hover
 {
-	background-image: none;
+    background-image: none;
 }
 
 .t-calendar th
@@ -233,3 +252,15 @@
 
 .t-treeview-lines .t-item { background-image: url('Outlook/treeview-line.png'); }
 .t-treeview-lines .t-last { background-image: none; }
+
+.t-editor-button .t-state-hover
+{
+    border-color: #dae8fa #668dcf #668dcf #dae8fa;
+    background-color: #93b5e7;
+}
+
+.t-editor-button .t-state-active
+{
+    border-color: #5781c9 #a3c1ea #a3c1ea #5781c9;
+    background-color: #7da5e0;
+}

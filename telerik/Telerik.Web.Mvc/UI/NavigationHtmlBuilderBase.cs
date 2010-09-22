@@ -5,13 +5,11 @@
 
 namespace Telerik.Web.Mvc.UI
 {
-    using Infrastructure;
-    using Extensions;
-    
     using System;
     using System.Web.Mvc;
-    using System.Web;
-    
+    using Extensions;
+    using Infrastructure;
+
     public abstract class NavigationHtmlBuilderBase<TComponent, TItem> : INavigationHtmlBuilder<TComponent, TItem>
         where TComponent : ViewComponentBase, INavigationItemComponent<TItem>
         where TItem : NavigationItem<TItem>
@@ -50,15 +48,18 @@ namespace Telerik.Web.Mvc.UI
         public IHtmlNode ImageTag(TItem item)
         {
             return new HtmlTag("img", TagRenderMode.SelfClosing)
+                    .Attribute("alt", "image", false)
                     .Attributes(item.ImageHtmlAttributes)
-                    .Attribute("alt", string.Empty, false)
-                    .AddClass(UIPrimitives.Image)
+                    .PrependClass(UIPrimitives.Image)
                     .Attribute("src", item.GetImageUrl(Component.ViewContext));
         }
 
         public IHtmlNode Text(TItem item)
         {
-            return new TextNode(Component.GetItemText(item, ActionMethodCache));
+            if (item.Encoded)
+                return new TextNode(Component.GetItemText(item, ActionMethodCache));
+            else
+                return new LiteralNode(Component.GetItemText(item, ActionMethodCache));
         }
 
         public IHtmlNode SpriteTag(TItem item)
@@ -69,11 +70,16 @@ namespace Telerik.Web.Mvc.UI
 
         public IHtmlNode ContentTag(TItem item)
         {
-            return new HtmlTag("div")
-                .Attributes(item.ContentHtmlAttributes)
+            var content = new HtmlTag("div").Attributes(item.ContentHtmlAttributes)
                 .PrependClass(UIPrimitives.Content)
-                .Template(item.Content)
                 .Attribute("id", Component.GetItemContentId(item));
+            
+            if (item.Template.HasValue())
+            {
+                item.Template.Apply(content);
+            }
+
+            return content;
         }
 
         public IHtmlNode ListItemTag(TItem item, Action<IHtmlNode> configure)
@@ -95,12 +101,19 @@ namespace Telerik.Web.Mvc.UI
 
         public IHtmlNode LinkTag(TItem item, Action<IHtmlNode> configure)
         {
-            IHtmlNode a = new HtmlTag("a");
+            var url = Component.GetItemUrl(item);
 
-            if (item.Enabled)
+            IHtmlNode a;
+
+            if (url != "#")
             {
-                string url = Component.GetItemUrl(item);
+                a = new HtmlTag("a");
+
                 a.Attribute("href", url);
+            }
+            else
+            {
+                a = new HtmlTag("span");
             }
 
             a.Attributes(item.LinkHtmlAttributes);
@@ -113,12 +126,12 @@ namespace Telerik.Web.Mvc.UI
             {
                 ImageTag(item).AppendTo(a);
             }
-            
+
             if (!string.IsNullOrEmpty(item.SpriteCssClasses))
             {
                 SpriteTag(item).AppendTo(a);
             }
-            
+
             Text(item).AppendTo(a);
 
             return a;

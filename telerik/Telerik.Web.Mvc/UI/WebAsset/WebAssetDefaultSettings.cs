@@ -163,7 +163,12 @@ namespace Telerik.Web.Mvc
 
                             if (ServiceLocator.Current != null)
                             {
-                                section = ServiceLocator.Current.Resolve<IConfigurationManager>().GetSection<WebAssetConfigurationSection>(WebAssetConfigurationSection.SectionName);
+                                IConfigurationManager configurationManager = ServiceLocator.Current.Resolve<IConfigurationManager>();
+
+                                if (configurationManager != null)
+                                {
+                                    section = configurationManager.GetSection<WebAssetConfigurationSection>(WebAssetConfigurationSection.SectionName);
+                                }
                             }
 
                             useTelerikCdn = (section != null) && section.UseTelerikContentDeliveryNetwork;

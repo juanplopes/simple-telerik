@@ -5,12 +5,10 @@
 
 namespace Telerik.Web.Mvc.Extensions
 {
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
-    using System.Data;
     using System.Linq;
     using System.Reflection;
-    using Telerik.Web.Mvc.Extensions;
-    using System.ComponentModel;
 
     public static class CustomAttributeProviderExtensions
     {

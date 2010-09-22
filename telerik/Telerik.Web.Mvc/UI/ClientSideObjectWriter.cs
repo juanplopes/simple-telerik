@@ -6,12 +6,12 @@
 namespace Telerik.Web.Mvc.UI
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Text;
     using System.Web.Script.Serialization;
-
     using Extensions;
     using Infrastructure;
 
@@ -55,7 +55,10 @@ namespace Telerik.Web.Mvc.UI
                 throw new InvalidOperationException(Resources.TextResource.YouCannotCallStartMoreThanOnce);
             }
 
-            writer.Write("jQuery('#{0}').{1}(".FormatWith(id, type));
+            //Escape meta characters: http://api.jquery.com/category/selectors/
+            var selector = @";&,.+*~':""!^$[]()|/".ToCharArray().Aggregate(id, (current, chr) => current.Replace(chr.ToString(), @"\\" + chr));
+
+            writer.Write("jQuery('#{0}').{1}(".FormatWith(selector, type));
             hasStarted = true;
 
             return this;
@@ -277,7 +280,7 @@ namespace Telerik.Web.Mvc.UI
         {
             if (!string.IsNullOrEmpty(name) && (value != DateTime.MinValue))
             {
-                string dateValue = "new $.telerik.datetime({0},{1},{2})".FormatWith(value.Year.ToString("0000", Culture.Invariant), (value.Month - 1).ToString("00", Culture.Invariant), value.Day.ToString("00", Culture.Invariant));
+                string dateValue = "new jQuery.telerik.datetime({0},{1},{2})".FormatWith(value.Year.ToString("0000", Culture.Invariant), (value.Month - 1).ToString("00", Culture.Invariant), value.Day.ToString("00", Culture.Invariant));
 
                 Append("{0}:{1}".FormatWith(name, dateValue));
             }
@@ -295,7 +298,7 @@ namespace Telerik.Web.Mvc.UI
         {
             if (!string.IsNullOrEmpty(name) && (value != null && value != DateTime.MinValue))
             {
-                string dateValue = "new $.telerik.datetime({0},{1},{2})".FormatWith(value.Value.Year.ToString("0000", Culture.Invariant), (value.Value.Month - 1).ToString("00", Culture.Invariant), value.Value.Day.ToString("00", Culture.Invariant));
+                string dateValue = "new jQuery.telerik.datetime({0},{1},{2})".FormatWith(value.Value.Year.ToString("0000", Culture.Invariant), (value.Value.Month - 1).ToString("00", Culture.Invariant), value.Value.Day.ToString("00", Culture.Invariant));
 
                 Append("{0}:{1}".FormatWith(name, dateValue));
             }
@@ -391,7 +394,7 @@ namespace Telerik.Web.Mvc.UI
         {
             if (!string.IsNullOrEmpty(name) && (value != DateTime.MinValue))
             {
-                string dateValue = "new $.telerik.datetime({0},{1},{2},{3},{4},{5},{6})".FormatWith(value.Year.ToString("0000", Culture.Invariant), (value.Month - 1).ToString("00", Culture.Invariant), value.Day.ToString("00", Culture.Invariant), value.Hour.ToString("00", Culture.Invariant), value.Minute.ToString("00", Culture.Invariant), value.Second.ToString("00", Culture.Invariant), value.Millisecond.ToString("000", Culture.Invariant));
+                string dateValue = "new jQuery.telerik.datetime({0},{1},{2},{3},{4},{5},{6})".FormatWith(value.Year.ToString("0000", Culture.Invariant), (value.Month - 1).ToString("00", Culture.Invariant), value.Day.ToString("00", Culture.Invariant), value.Hour.ToString("00", Culture.Invariant), value.Minute.ToString("00", Culture.Invariant), value.Second.ToString("00", Culture.Invariant), value.Millisecond.ToString("000", Culture.Invariant));
 
                 Append("{0}:{1}".FormatWith(name, dateValue));
             }
@@ -521,7 +524,7 @@ namespace Telerik.Web.Mvc.UI
             return this;
         }
 
-        public IClientSideObjectWriter AppendCollection<T>(string name, IEnumerable<T> value)
+        public IClientSideObjectWriter AppendCollection(string name, IEnumerable value)
         {
             return Append("{0}:{1}".FormatWith(name, new JavaScriptSerializer().Serialize(value)));
         }
@@ -529,6 +532,29 @@ namespace Telerik.Web.Mvc.UI
         public IClientSideObjectWriter AppendObject(string name, object value)
         {
             return Append("{0}:{1}".FormatWith(name, new JavaScriptSerializer().Serialize(value)));
+        }
+
+        /// <summary>
+        /// Appends the specified name and Action or String specified in the ClientEvent object.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="event">Client event of the component.</para>
+        /// <returns></returns>
+        public IClientSideObjectWriter AppendClientEvent(string name, ClientEvent clientEvent)
+        {
+            if (name.HasValue()) 
+            {
+                if (clientEvent.InlineCode != null)
+                {
+                    Append(name, clientEvent.InlineCode);
+                }
+                else if (clientEvent.HandlerName.HasValue())
+                {
+                    Append("{0}:{1}".FormatWith(name, clientEvent.HandlerName));
+                }
+            }
+
+            return this;
         }
 
         /// <summary>

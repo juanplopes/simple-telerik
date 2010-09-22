@@ -52,11 +52,11 @@ namespace Telerik.Web.Mvc.UI
         /// %&gt;
         /// </code>
         /// </example>
-        public virtual MenuClientEventsBuilder OnOpen(Action onOpenAction)
+        public virtual MenuClientEventsBuilder OnOpen(Action onOpenInlineCode)
         {
-            Guard.IsNotNull(onOpenAction, "onOpenAction");
+            Guard.IsNotNull(onOpenInlineCode, "onOpenInlineCode");
 
-            clientEvents.OnOpen = onOpenAction;
+            clientEvents.OnOpen.InlineCode = onOpenInlineCode;
 
             return this;
         }
@@ -77,7 +77,7 @@ namespace Telerik.Web.Mvc.UI
         {
             Guard.IsNotNullOrEmpty(onOpenHandlerName, "onOpenHandlerName");
 
-            clientEvents.OnOpen = HandlerAction(onOpenHandlerName);
+            clientEvents.OnOpen.HandlerName = onOpenHandlerName;
 
             return this;
         }
@@ -102,11 +102,11 @@ namespace Telerik.Web.Mvc.UI
         /// %&gt;
         /// </code>
         /// </example>
-        public virtual MenuClientEventsBuilder OnClose(Action onCloseAction)
+        public virtual MenuClientEventsBuilder OnClose(Action onCloseInlineCode)
         {
-            Guard.IsNotNull(onCloseAction, "onCloseAction");
+            Guard.IsNotNull(onCloseInlineCode, "onCloseInlineCode");
 
-            clientEvents.OnClose = onCloseAction;
+            clientEvents.OnClose.InlineCode = onCloseInlineCode;
 
             return this;
         }
@@ -127,7 +127,7 @@ namespace Telerik.Web.Mvc.UI
         {
             Guard.IsNotNullOrEmpty(onCloseHandlerName, "onCloseHandlerName");
 
-            clientEvents.OnClose = HandlerAction(onCloseHandlerName);
+            clientEvents.OnClose.HandlerName = onCloseHandlerName;
 
             return this;
         }
@@ -152,11 +152,11 @@ namespace Telerik.Web.Mvc.UI
         /// %&gt;
         /// </code>
         /// </example>
-        public virtual MenuClientEventsBuilder OnSelect(Action onSelectAction)
+        public virtual MenuClientEventsBuilder OnSelect(Action onSelectInlineCode)
         {
-            Guard.IsNotNull(onSelectAction, "onSelectAction");
+            Guard.IsNotNull(onSelectInlineCode, "onSelectInlineCode");
 
-            clientEvents.OnSelect = onSelectAction;
+            clientEvents.OnSelect.InlineCode = onSelectInlineCode;
 
             return this;
         }
@@ -177,7 +177,7 @@ namespace Telerik.Web.Mvc.UI
         {
             Guard.IsNotNullOrEmpty(onSelectHandlerName, "onSelectHandlerName");
 
-            clientEvents.OnSelect = HandlerAction(onSelectHandlerName);
+            clientEvents.OnSelect.HandlerName = onSelectHandlerName;
 
             return this;
         }
@@ -202,11 +202,11 @@ namespace Telerik.Web.Mvc.UI
         /// %&gt;
         /// </code>
         /// </example>
-        public virtual MenuClientEventsBuilder OnLoad(Action onLoadAction)
+        public virtual MenuClientEventsBuilder OnLoad(Action onLoadInlineCode)
         {
-            Guard.IsNotNull(onLoadAction, "onLoadAction");
+            Guard.IsNotNull(onLoadInlineCode, "onLoadInlineCode");
 
-            clientEvents.OnLoad = onLoadAction;
+            clientEvents.OnLoad.InlineCode = onLoadInlineCode;
 
             return this;
         }
@@ -227,15 +227,9 @@ namespace Telerik.Web.Mvc.UI
         {
             Guard.IsNotNullOrEmpty(onLoadHandlerName, "onLoadHandlerName");
 
-            clientEvents.OnLoad = HandlerAction(onLoadHandlerName);
+            clientEvents.OnLoad.HandlerName = onLoadHandlerName;
 
             return this;
         }
-
-        private Action HandlerAction(string handlerName)
-        {
-            return () => viewContext.HttpContext.Response.Write(handlerName);
-        }
-
     }
 }

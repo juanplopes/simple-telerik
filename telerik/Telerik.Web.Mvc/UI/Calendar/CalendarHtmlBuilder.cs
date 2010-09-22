@@ -6,7 +6,6 @@
 namespace Telerik.Web.Mvc.UI
 {
     using System;
-    using System.Web.Mvc;
     using Extensions;
     using Infrastructure;
 
@@ -26,9 +25,9 @@ namespace Telerik.Web.Mvc.UI
         public IHtmlNode Build()
         {
             return new HtmlTag("div")
-                   .AddClass(UIPrimitives.Widget, "t-calendar")
                    .Attributes(Calendar.HtmlAttributes)
-                   .Attribute("id", Calendar.Id);
+                   .Attribute("id", Calendar.Id)
+                   .PrependClass(UIPrimitives.Widget, "t-calendar");
         }
 
         public IHtmlNode NavigationTag()
@@ -39,12 +38,12 @@ namespace Telerik.Web.Mvc.UI
             DateTime? focusedDate = Calendar.DetermineFocusedDate();
 
             tag.Children.Add(NavigationLink(CalendarNavigation.Prev, focusedDate,
-                 focusedDate.Value.AddMonths(-1) < Calendar.MinDate ? true : false));
+                CompareDates(focusedDate, Calendar.MinDate, true) <= 0 ? true : false));
 
             tag.Children.Add(NavigationLink(CalendarNavigation.Fast, focusedDate, false));
 
             tag.Children.Add(NavigationLink(CalendarNavigation.Next, focusedDate,
-                 focusedDate.Value.AddMonths(1) > Calendar.MaxDate ? true : false));
+                CompareDates(focusedDate, Calendar.MaxDate, false) >= 0 ? true : false));
 
             return tag;
         }
@@ -161,6 +160,33 @@ namespace Telerik.Web.Mvc.UI
                 }
             }
             return url;
+        }
+
+        private int CompareDates(DateTime? focusedDate, DateTime? boundaryDate, bool isPrev)
+        {
+            if (!focusedDate.HasValue || !boundaryDate.HasValue)
+                return isPrev ? 1 : -1;
+
+            DateTime focusedDateValue = focusedDate.Value;
+            DateTime boundaryDateValue = boundaryDate.Value;
+
+            int result;
+            if (focusedDateValue.Year > boundaryDateValue.Year)
+            {
+                result = 1;
+            }
+            else if (focusedDateValue.Year < boundaryDateValue.Year)
+            {
+                result = -1;
+            }
+            else
+            {
+                result = focusedDateValue.Month == boundaryDateValue.Month ? 0
+                       : focusedDateValue.Month > boundaryDateValue.Month ? 1
+                       : -1;
+            }
+
+            return result;
         }
     }
 }

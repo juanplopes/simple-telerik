@@ -6,7 +6,6 @@
 namespace Telerik.Web.Mvc.UI
 {
     using System;
-    using Infrastructure;
 
     public interface ICalendarHtmlBuilder
     {

@@ -52,9 +52,11 @@ namespace Telerik.Web.Mvc.UI
         /// %&gt;
         /// </code>
         /// </example>
-        public DatePickerClientEventsBuilder OnChange(Action javaScript)
+        public DatePickerClientEventsBuilder OnChange(Action onChangeInlineCode)
         {
-            clientEvents.OnChange = javaScript;
+            Guard.IsNotNull(onChangeInlineCode, "onChangeInlineCode");
+
+            clientEvents.OnChange.InlineCode = onChangeInlineCode;
 
             return this;
         }
@@ -71,9 +73,11 @@ namespace Telerik.Web.Mvc.UI
         /// %&gt;
         /// </code>
         /// </example>
-        public DatePickerClientEventsBuilder OnChange(string handlerName)
+        public DatePickerClientEventsBuilder OnChange(string onChangeHandlerName)
         {
-            clientEvents.OnChange = HandlerAction(handlerName);
+            Guard.IsNotNullOrEmpty(onChangeHandlerName, "onChangeHandlerName");
+
+            clientEvents.OnChange.HandlerName = onChangeHandlerName;
 
             return this;
         }
@@ -98,9 +102,11 @@ namespace Telerik.Web.Mvc.UI
         /// %&gt;
         /// </code>
         /// </example>
-        public DatePickerClientEventsBuilder OnLoad(Action javaScript)
+        public DatePickerClientEventsBuilder OnLoad(Action onLoadInlineCode)
         {
-            clientEvents.OnLoad = javaScript;
+            Guard.IsNotNull(onLoadInlineCode, "onLoadInlineCode");
+
+            clientEvents.OnLoad.InlineCode = onLoadInlineCode;
 
             return this;
         }
@@ -117,9 +123,11 @@ namespace Telerik.Web.Mvc.UI
         /// %&gt;
         /// </code>
         /// </example>
-        public DatePickerClientEventsBuilder OnLoad(string handlerName)
+        public DatePickerClientEventsBuilder OnLoad(string onLoadHandlerName)
         {
-            clientEvents.OnLoad = HandlerAction(handlerName);
+            Guard.IsNotNullOrEmpty(onLoadHandlerName, "onLoadHandlerName");
+
+            clientEvents.OnLoad.HandlerName = onLoadHandlerName;
 
             return this;
         }
@@ -144,9 +152,11 @@ namespace Telerik.Web.Mvc.UI
         /// %&gt;
         /// </code>
         /// </example>
-        public DatePickerClientEventsBuilder OnOpen(Action javaScript)
+        public DatePickerClientEventsBuilder OnOpen(Action onOpenInlineCode)
         {
-            clientEvents.OnOpen = javaScript;
+            Guard.IsNotNull(onOpenInlineCode, "onOpenInlineCode");
+
+            clientEvents.OnOpen.InlineCode = onOpenInlineCode;
 
             return this;
         }
@@ -163,9 +173,11 @@ namespace Telerik.Web.Mvc.UI
         /// %&gt;
         /// </code>
         /// </example>
-        public DatePickerClientEventsBuilder OnOpen(string handlerName)
+        public DatePickerClientEventsBuilder OnOpen(string onOpenHandlerName)
         {
-            clientEvents.OnOpen = HandlerAction(handlerName);
+            Guard.IsNotNullOrEmpty(onOpenHandlerName, "onOpenHandlerName");
+
+            clientEvents.OnOpen.HandlerName = onOpenHandlerName;
 
             return this;
         }
@@ -190,9 +202,11 @@ namespace Telerik.Web.Mvc.UI
         /// %&gt;
         /// </code>
         /// </example>
-        public DatePickerClientEventsBuilder OnClose(Action javaScript)
+        public DatePickerClientEventsBuilder OnClose(Action onCloseInlineCode)
         {
-            clientEvents.OnClose = javaScript;
+            Guard.IsNotNull(onCloseInlineCode, "onCloseInlineCode");
+
+            clientEvents.OnClose.InlineCode = onCloseInlineCode;
 
             return this;
         }
@@ -209,16 +223,13 @@ namespace Telerik.Web.Mvc.UI
         /// %&gt;
         /// </code>
         /// </example>
-        public DatePickerClientEventsBuilder OnClose(string handlerName)
+        public DatePickerClientEventsBuilder OnClose(string onCloseHandlerName)
         {
-            clientEvents.OnClose = HandlerAction(handlerName);
+            Guard.IsNotNullOrEmpty(onCloseHandlerName, "onCloseHandlerName");
+
+            clientEvents.OnClose.HandlerName = onCloseHandlerName;
 
             return this;
-        }
-
-        private Action HandlerAction(string handlerName)
-        {
-            return () => viewContext.HttpContext.Response.Write(handlerName);
         }
     }
 }

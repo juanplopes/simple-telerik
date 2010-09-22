@@ -3,59 +3,56 @@
 // See http://www.gnu.org/licenses/gpl-2.0.html. 
 // All other rights reserved.
 
-namespace Telerik.Web.Mvc.Infrastructure.Implementation
+namespace Telerik.Web.Mvc.Infrastructure
 {
-    using System;
     using System.Globalization;
     using System.Linq.Expressions;
     using System.Reflection;
-    /// <summary>
-	/// Represents the basic class that supports creating functions that provide statistical information about a set of items.
-	/// </summary>
-	public abstract class AggregateFunction
-	{
-	    private string functionName;
 
-	    /// <summary>
-		/// Gets or sets the informative message to display as an illustration of the aggregate function.
-		/// </summary>
-		/// <value>The caption to display as an illustration of the aggregate function.</value>
-		public string Caption
-		{
-			get;
-			set;
-		}
+    public abstract class AggregateFunction
+    {
+        private string functionName;
 
-	    /// <summary>
-		/// Gets or sets the name of the aggregate function, which appears as a property of the group record on which records the function works.
-		/// </summary>
-		/// <value>The name of the function as visible from the group record.</value>
-		public virtual string FunctionName
-	    {
-	        get
-	        {
+        /// <summary>
+        /// Gets or sets the informative message to display as an illustration of the aggregate function.
+        /// </summary>
+        /// <value>The caption to display as an illustration of the aggregate function.</value>
+        public string Caption
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets the name of the aggregate function, which appears as a property of the group record on which records the function works.
+        /// </summary>
+        /// <value>The name of the function as visible from the group record.</value>
+        public virtual string FunctionName
+        {
+            get
+            {
                 if (string.IsNullOrEmpty(this.functionName))
                 {
                     this.functionName = this.GenerateFunctionName();
                 }
 
-	            return this.functionName;
-	        }
-	        set
-	        {
-	            this.functionName = value;
-	        }
-	    }
+                return this.functionName;
+            }
+            set
+            {
+                this.functionName = value;
+            }
+        }
 
-	    /// <summary>
-		/// Gets or sets a string that is used to format the result value.
-		/// </summary>
-		/// <value>The format string.</value>
-		public virtual string ResultFormatString
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// Gets or sets a string that is used to format the result value.
+        /// </summary>
+        /// <value>The format string.</value>
+        public virtual string ResultFormatString
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Creates the aggregate expression that is used for constructing expression 
@@ -63,7 +60,7 @@ namespace Telerik.Web.Mvc.Infrastructure.Implementation
         /// </summary>
         /// <param name="enumerableExpression">The grouping expression.</param>
         /// <returns></returns>
-	    public abstract Expression CreateAggregateExpression(Expression enumerableExpression);
+        public abstract Expression CreateAggregateExpression(Expression enumerableExpression);
 
         /// <summary>
         /// Generates default name for this function using this type's name.
@@ -72,9 +69,9 @@ namespace Telerik.Web.Mvc.Infrastructure.Implementation
         /// Function name generated with the following pattern: 
         /// {<see cref="object.GetType()"/>.<see cref="MemberInfo.Name"/>}_{<see cref="object.GetHashCode"/>}
         /// </returns>
-	    protected virtual string GenerateFunctionName()
-	    {
-	        return string.Format(CultureInfo.InvariantCulture, "{0}_{1}", this.GetType().Name, this.GetHashCode());
-	    }
-	}
+        protected virtual string GenerateFunctionName()
+        {
+            return string.Format(CultureInfo.InvariantCulture, "{0}_{1}", this.GetType().Name, this.GetHashCode());
+        }
+    }
 }

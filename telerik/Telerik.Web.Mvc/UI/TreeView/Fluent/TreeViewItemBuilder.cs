@@ -136,6 +136,33 @@ namespace Telerik.Web.Mvc.UI.Fluent
         }
 
         /// <summary>
+        /// Enables/disables the rendering of a checkbox for this item.
+        /// </summary>
+        /// <param name="value">If false, no checkbox will be rendered.</param>
+        /// <example>
+        /// <code lang="CS">
+        ///  &lt;%= Html.Telerik().TreeView()
+        ///             .Name("TreeView")
+        ///             .Items(items =>
+        ///             {
+        ///                 items.Add().Text("First Item").Items(firstItemChildren => 
+        ///                 {
+        ///                     firstItemChildren.Add().Text("Child Item 1");
+        ///                     firstItemChildren.Add().Text("Child Item 2");
+        ///                 })
+        ///                 .Checkable(false);
+        ///             })
+        /// %&gt;
+        /// </code>
+        /// </example>
+        public TreeViewItemBuilder Checkable(bool value)
+        {
+            item.Checkable = value;
+
+            return this;
+        }
+
+        /// <summary>
         /// Sets the expand mode of the treeview item.
         /// </summary>
         /// <param name="value">If true then item will be load on demand from client side.</param>

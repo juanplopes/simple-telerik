@@ -1,4 +1,3 @@
-using Telerik.Web.Mvc.Infrastructure;
 // (c) Copyright 2002-2010 Telerik 
 // This source is subject to the GNU General Public License, version 2
 // See http://www.gnu.org/licenses/gpl-2.0.html. 
@@ -6,26 +5,23 @@ using Telerik.Web.Mvc.Infrastructure;
 
 namespace Telerik.Web.Mvc.UI
 {
-    using System.Reflection;
-    using System.Web.Mvc;
-    using System.Web.UI;
+    using System.Linq;
 
-    using Extensions;
     using Infrastructure;
 
-    public class MenuHtmlBuilder : NavigationHtmlBuilderBase<Menu, MenuItem>, IMenuHtmlBuilder
+    public class MenuHtmlBuilder : NavigationHtmlBuilderBase<Menu, MenuItem>, INavigationComponentHtmlBuilder<MenuItem>
     {
         public MenuHtmlBuilder(Menu menu, IActionMethodCache actionMethodCache)
             : base(menu, actionMethodCache)
         {
         }
 
-        public IHtmlNode ChildrenTag()
+        public IHtmlNode ChildrenTag(MenuItem item)
         {
             return ListTag();
         }
 
-        public IHtmlNode MenuTag()
+        public IHtmlNode Build()
         {
             IHtmlNode rootTag = ComponentTag("ul")
                 .PrependClass(UIPrimitives.Widget, UIPrimitives.ResetStyle, UIPrimitives.Header, "t-menu")
@@ -63,11 +59,11 @@ namespace Telerik.Web.Mvc.UI
             return ul;
         }
 
-        public IHtmlNode ItemInnerContentTag(MenuItem item)
+        public IHtmlNode ItemInnerContentTag(MenuItem item, bool hasAccessibleChildren)
         {
             IHtmlNode a = this.LinkTag(item, delegate { });
 
-            if (item.Items.Count > 0 || item.Content != null)
+            if (hasAccessibleChildren || item.Template.HasValue())
             {
                 string iconClass = "t-arrow-next";
 

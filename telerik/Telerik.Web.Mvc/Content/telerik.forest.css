@@ -2,9 +2,9 @@
 
 .t-widget
 {
-	border-color: #486b23;
-	/*font-size: .75em; /* 12px base, if there are no inherited font-sizes (MVC default) */
-	background-color: #d1deb6;
+    border-color: #486b23;
+    /*font-size: .75em; /* 12px base, if there are no inherited font-sizes (MVC default) */
+    background-color: #d1deb6;
 }
 
 /* .small .t-widget { font-size: .687em; } /* 11px base, if there are no inherited font-sizes (MVC default) */
@@ -12,15 +12,13 @@
 .t-header,
 .t-grid-header
 {
-	border-color: #486b23;
-	color: #fff;
-	background: #4c7822 url('Forest/sprite.png') repeat-x 0 -352px;
+    border-color: #486b23;
+    color: #fff;
+    background: #4c7822 url('Forest/sprite.png') repeat-x 0 -368px;
 }
 
-.t-icon
-{
-	background: transparent url('Forest/sprite.png') no-repeat;
-}
+.t-icon { background-image: url('Forest/sprite.png'); }
+.t-editor .t-tool-icon { background-image: url('Forest/editor.png'); }
 
 .t-expand { background-position: 0 -160px; }
 .t-collapse { background-position: 0 -176px; }
@@ -64,7 +62,15 @@
 .t-refresh { background-position: -32px -240px; }
 .t-icon-calendar { background-position: -48px -240px; }
 
-.t-delete { background-position: 0 -288px; }
+.t-edit { background-position: 0 -336px; }
+.t-delete { background-position: -16px -336px; }
+.t-insert, .t-update { background-position: -32px -336px; }
+.t-cancel { background-position: -48px -336px; }
+.t-group-delete { background-position: 0 -288px; }
+
+.t-maximize { background-position: -16px -288px; }
+.t-restore { background-position: -32px -288px; }
+.t-close { background-position: -64px -288px; }
 
 .t-insert-top { background-position: 0 -320px; }
 .t-insert-middle { background-position: -16px -320px; }
@@ -76,39 +82,52 @@
 .t-widget .t-loading { background: transparent url('Forest/loading.gif') no-repeat 0 0; }
 
 .t-widget,
-.t-link
+.t-link,
+.t-popup
 {
-	color: #2b2c20;
+    color: #2b2c20;
 }
 
 .t-header,
 .t-header .t-link
 {
-	color: #fff;
+    color: #fff;
 }
 
 .t-content,
 .t-content .t-link,
 .t-group .t-link
 {
-	color: #2b2c20;
+    color: #2b2c20;
 }
 
 .t-group,
-.t-content
+.t-content,
+.t-editable-area
 {
-	border-color: #486b23;
-	background-color: #d1deb6;
+    border-color: #486b23;
+    background-color: #d1deb6;
+}
+
+.t-colorpicker .t-arrow-down
+{
+    border-color: #486b23;
+}
+
+.t-separator
+{
+    border-color: #719652;
+    background-color: #4c6d3b;
 }
 
 .t-alt
 {
-	background-color: #c7d6a7;
+    background-color: #c7d6a7;
 }
 
 .t-state-default
 {
-	border-color: #486b23;
+    border-color: #486b23;
 }
 
 .t-active-filter
@@ -118,17 +137,16 @@
 
 .t-state-hover
 {
-	background-color: #6c9f4f;
-	border-color: #486b23;
+    background-color: #6c9f4f;
+    border-color: #486b23;
 }
 
-.t-header .t-state-hover,
 .t-panelbar .t-state-hover,
 .t-panelbar .t-state-selected
 {
-	background-image: url('Forest/sprite.png');
-	background-repeat: repeat-x;
-	background-position: 0 0;
+    background-image: url('Forest/sprite.png');
+    background-repeat: repeat-x;
+    background-position: 0 0;
 }
 
 .t-tabstrip .t-state-hover,
@@ -141,14 +159,14 @@
 .t-state-selected,
 .t-state-selected .t-state-hover
 {
-	background-color: #3a5621;
-	border-color: #486b23;
+    background-color: #3a5621;
+    border-color: #486b23;
 }
 
 .t-state-active
 {
-	background-color: #d1deb6;
-	border-color: #486b23;
+    background-color: #d1deb6;
+    border-color: #486b23;
 }
 
 .t-state-hover,
@@ -156,12 +174,12 @@
 .t-state-selected,
 .t-state-selected .t-link
 {
-	color: #fff;
+    color: #fff;
 }
 
 .t-tabstrip .t-state-active .t-link
 {
-	color: #2b2c20;
+    color: #2b2c20;
 }
 
 .t-group .t-state-hover,
@@ -173,52 +191,57 @@
 
 .t-state-error
 {
-	border-style: ridge;
-	border-color: #f00;
-	background-color: #ffc0cb;
+    border-style: ridge;
+    border-color: #f00;
+    background-color: #ffc0cb;
 }
 
 .t-state-disabled,
 .t-state-disabled .t-link
 {
-	color: #606060;
+    color: #606060;
 }
 
-.t-grid-toolbar,
+.t-toolbar,
 .t-grouping-header,
-.t-widget .t-footer,
+.t-widget .t-pager-wrapper,
 .t-grid-footer,
 .t-widget .t-status
 {
-	border-color: #486b23;
-	background-color: #a7bc75;
+    border-color: #486b23;
+    background-color: #a7bc75;
 }
 
 .t-button
 {
-	background: #e8e8e8 url('Forest/sprite.png') repeat-x 0 -96px;
-	color: #fff;
+    background: #e8e8e8 url('Forest/sprite.png') repeat-x 0 -96px;
+    color: #fff;
 }
 
 .t-button-hover
 {
-	background-position: 0 -128px;
+    background-position: 0 -128px;
 }
 
 .t-tabstrip li.t-state-active
 {
-	border-bottom-color: #d1deb6;
+    border-bottom-color: #d1deb6;
+}
+
+.t-editor-button .t-state-active
+{
+    background-color: #527c30;
 }
 
 .t-grid td
 {
-	border-color: #bdcb9e;
-	border-right: 1px solid #bdcb9e;
+    border-color: #bdcb9e;
+    border-right: 1px solid #bdcb9e;
 }
 
-.t-grid .t-grouping-row
+.t-grouping-row td
 {
-	background: #d1deb6 url('Forest/sprite.png') repeat-x 0 -48px;
+    background: #d1deb6 url('Forest/sprite.png') repeat-x 0 -48px;
 }
 
 .t-grouping-header .t-group-indicator
@@ -232,23 +255,23 @@
     background: url('Forest/sprite.png') no-repeat -48px -288px;
 }
 
-.t-grouping-row .t-groupcell,
+.t-grouping-row .t-group-cell,
 .t-grouping-row p
 {
-	background: #d1deb6;
+    background: #d1deb6;
 }
 
 .t-treeview .t-drop-clue
 {
     background-image: url('Forest/sprite.png');
-    background-position: 0 -342px;
+    background-position: 0 -358px;
 }
 
 .t-panelbar .t-link,
 .t-panelbar .t-group,
 .t-panelbar .t-content
 {
-	border-color: #486b23;
+    border-color: #486b23;
 }
 
 .t-calendar th
@@ -279,3 +302,22 @@
 
 .t-treeview-lines .t-item { background-image: url('Forest/treeview-line.png'); }
 .t-treeview-lines .t-last { background-image: none; }
+
+.t-window
+{
+    -moz-box-shadow: 0 0 5px 2px #6f855a;
+    -webkit-box-shadow: 0 0 5px 2px #6f855a;
+    box-shadow: 0 0 5px 2px #6f855a;
+}
+
+.t-editor-button .t-state-hover
+{
+    border-color: #88ab72 #416926 #416926 #88ab72;
+    background-color: #548231;
+}
+
+.t-editor-button .t-state-active
+{
+    border-color: #2a4b17 #7f9c6d #7f9c6d #2a4b17;
+    background-color: #446e29;
+}

@@ -205,10 +205,10 @@
     <value>The specified method is not an action method.</value>
   </data>
   <data name="CannotUseAjaxAndWebServiceAtTheSameTime" xml:space="preserve">
-    <value>Cannot use Ajax and WebService binding at the same time</value>
+    <value>Cannot use Ajax and WebService binding at the same time.</value>
   </data>
   <data name="CannotUseTemplatesInAjaxOrWebService" xml:space="preserve">
-    <value>Cannot use templates in Ajax or WebService binding mode</value>
+    <value>Cannot use only server templates in Ajax or WebService binding mode. Please specify a client template as well.</value>
   </data>
   <data name="WebServiceUrlRequired" xml:space="preserve">
     <value>The Url of the WebService must be set</value>
@@ -217,7 +217,7 @@
     <value>Cannot find a public property of primitive type to sort by.</value>
   </data>
   <data name="DateOutOfRange" xml:space="preserve">
-    <value>Date should be less than MinDate and bigger than MaxDate.</value>
+    <value>Date should be bigger than MinDate and less than MaxDate.</value>
   </data>
   <data name="MinDateShouldBeLessThanMaxDate" xml:space="preserve">
     <value>MinDate should be less than MaxDate.</value>
@@ -229,7 +229,7 @@
     <value>MinValue should be less than MaxValue</value>
   </data>
   <data name="ValueOutOfRange" xml:space="preserve">
-    <value>Value should be less than MinValue and bigger than MaxValue.</value>
+    <value>Value should be bigger than MinValue and less than MaxValue.</value>
   </data>
   <data name="PropertyShouldBeInRange" xml:space="preserve">
     <value>{0} should be bigger than {1} and less then {2}</value>
@@ -254,5 +254,21 @@
   </data>
   <data name="MemberExpressionRequired" xml:space="preserve">
     <value>Bound columns require a field or property access expression.</value>
+  </data>
+  <data name="ControllerNameAmbiguousWithoutRouteUrl" xml:space="preserve">
+    <value>Multiple types were found that match the controller named '{0}'. This can happen if the route that services this request does not specify namespaces to search for a controller that matches the request. If this is the case, register this route by calling an overload of the 'MapRoute' method that takes a 'namespaces' parameter.
+
+The request for '{0}' has found the following matching controllers:{1}</value>
+  </data>
+  <data name="ControllerNameAmbiguousWithRouteUrl" xml:space="preserve">
+    <value>Multiple types were found that match the controller named '{0}'. This can happen if the route that services this request ('{1}') does not specify namespaces to search for a controller that matches the request. If this is the case, register this route by calling an overload of the 'MapRoute' method that takes a 'namespaces' parameter.
+
+The request for '{0}' has found the following matching controllers:{2}</value>
+  </data>
+  <data name="MinHeightShouldBeLessThanMaxHeight" xml:space="preserve">
+    <value>MinHeight should be less than MaxHeight.</value>
+  </data>
+  <data name="MinWidthShouldBeLessThanMaxWidth" xml:space="preserve">
+    <value>MinWidth should be less than MaxWidth.</value>
   </data>
 </root>

@@ -11,12 +11,12 @@ namespace Telerik.Web.Mvc.UI
     using System.Globalization;
     using System.IO;
     using System.Linq;
+    using System.Text;
+    using System.Web;
     using System.Web.Mvc;
     using System.Web.Script.Serialization;
-
-    using Extensions;
-    using Infrastructure;
-    using System.Text;
+    using Telerik.Web.Mvc.Extensions;
+    using Telerik.Web.Mvc.Infrastructure;
 
     /// <summary>
     /// Manages ASP.NET MVC javascript files and statements.
@@ -75,6 +75,14 @@ namespace Telerik.Web.Mvc.UI
             OnDocumentReadyStatements = new List<string>();
             OnWindowUnloadActions = new List<Action>();
             OnWindowUnloadStatements = new List<string>();
+        }
+
+        public static ScriptRegistrar Current
+        {
+            get
+            {
+                return (ScriptRegistrar)HttpContext.Current.Items[Key];
+            }
         }
 
         /// <summary>
@@ -231,10 +239,15 @@ namespace Telerik.Web.Mvc.UI
         {
             Guard.IsNotNull(component, "component");
 
-            if (!scriptableComponents.Contains(component))
+            if (!IsRegistered(component))
             {
                 scriptableComponents.Add(component);
             }
+        }
+
+        public bool IsRegistered(IScriptableComponent component)
+        {
+            return scriptableComponents.Contains(component);
         }
 
         /// <summary>
@@ -247,10 +260,7 @@ namespace Telerik.Web.Mvc.UI
                 throw new InvalidOperationException(Resources.TextResource.YouCannotCallRenderMoreThanOnce);
             }
 
-            if (ViewContext.HttpContext.Request.Browser.EcmaScriptVersion.Major >= 1)
-            {
-                Write(ViewContext.HttpContext.Response.Output);
-            }
+            Write(ViewContext.HttpContext.Response.Output);
 
             hasRendered = true;
         }
@@ -265,48 +275,55 @@ namespace Telerik.Web.Mvc.UI
             WriteScriptStatements(writer);
         }
 
+        public string ToHtmlString()
+        {
+            using (var output = new StringWriter())
+            {
+                Write(output);
+                return output.ToString();
+            }
+        }
+
         private void WriteScriptSources(TextWriter writer)
         {
-            IList<string> mergedList = new List<string>();
+            var scriptFiles = CollectScriptFiles();
 
+            foreach (string script in scriptFiles)
+            {
+                writer.WriteLine("<script type=\"text/javascript\" src=\"{0}\"></script>".FormatWith(script));
+            }
+        }
+        
+        internal IEnumerable<string> CollectScriptFiles()
+        {
             bool isSecured = ViewContext.HttpContext.Request.IsSecureConnection;
             bool canCompress = ViewContext.HttpContext.Request.CanCompress();
-
-            Action<WebAssetItemCollection> append =
-                assets =>
-                {
-                    IList<string> result = AssetMerger.Merge("application/x-javascript", AssetHandlerPath, isSecured, canCompress, assets);
-
-                    if (!result.IsNullOrEmpty())
-                    {
-                        mergedList.AddRange(result);
-                    }
-                };
 
             CopyFrameworkScriptFiles();
 
             CopyScriptFilesFromComponents();
 
+            var scriptFiles = new List<string>();
+
             if (!Scripts.IsEmpty())
             {
-                append(Scripts);
-            }
+                var result = AssetMerger.Merge("application/x-javascript", AssetHandlerPath, isSecured, canCompress, Scripts);
 
-            if (!mergedList.IsEmpty())
-            {
-                foreach (string script in mergedList)
+                if (!result.IsNullOrEmpty())
                 {
-                    writer.WriteLine("<script type=\"text/javascript\" src=\"{0}\"></script>".FormatWith(script));
+                    scriptFiles.AddRange(result);
                 }
             }
+            
+            return scriptFiles.Distinct();
         }
 
         private void WriteScriptStatements(TextWriter writer)
         {
-            StringBuilder cleanUpScripts = WriteCleanUpScripts();
+            string cleanUpScripts = WriteCleanUpScripts().ToString();
 
             bool shouldWriteOnDocumentReady = !scriptableComponents.IsEmpty() || !OnDocumentReadyActions.IsEmpty() || !OnDocumentReadyStatements.IsEmpty();
-            bool shouldWriteOnWindowUnload = !OnWindowUnloadActions.IsEmpty() || !OnWindowUnloadStatements.IsEmpty() || cleanUpScripts.Length > 0;
+            bool shouldWriteOnWindowUnload = !OnWindowUnloadActions.IsEmpty() || !OnWindowUnloadStatements.IsEmpty() || cleanUpScripts.Trim().HasValue();
 
             if (shouldWriteOnDocumentReady || shouldWriteOnWindowUnload)
             {
@@ -408,7 +425,7 @@ namespace Telerik.Web.Mvc.UI
                         isFirst = false;
                     }
 
-                    writer.WriteLine(cleanUpScripts.ToString()); // write clean up scripts
+                    writer.WriteLine(cleanUpScripts); // write clean up scripts
 
                     writer.WriteLine(ScriptWrapper.OnPageUnloadEnd);
                 }

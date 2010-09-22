@@ -1,4 +1,3 @@
-using Telerik.Web.Mvc.Infrastructure;
 // (c) Copyright 2002-2010 Telerik 
 // This source is subject to the GNU General Public License, version 2
 // See http://www.gnu.org/licenses/gpl-2.0.html. 
@@ -21,10 +20,10 @@ namespace Telerik.Web.Mvc.UI
     {
         private readonly IList<IEffect> defaultEffects = new List<IEffect> { new SlideAnimation() };
 
-        private readonly IMenuHtmlBuilderFactory rendererFactory;
+        private readonly INavigationComponentHtmlBuilderFactory<Menu, MenuItem> rendererFactory;
         internal bool isPathHighlighted;
 
-        public Menu(ViewContext viewContext, IClientSideObjectWriterFactory clientSideObjectWriterFactory, IUrlGenerator urlGenerator, INavigationItemAuthorization authorization, IMenuHtmlBuilderFactory factory)
+        public Menu(ViewContext viewContext, IClientSideObjectWriterFactory clientSideObjectWriterFactory, IUrlGenerator urlGenerator, INavigationItemAuthorization authorization, INavigationComponentHtmlBuilderFactory<Menu, MenuItem> factory)
             : base(viewContext, clientSideObjectWriterFactory)
         {
             Guard.IsNotNull(urlGenerator, "urlGenerator");
@@ -131,10 +130,10 @@ namespace Telerik.Web.Mvc.UI
                 objectWriter.Append("openOnClick", true);
             }
 
-            objectWriter.Append("onOpen", ClientEvents.OnOpen);
-            objectWriter.Append("onClose", ClientEvents.OnClose);
-            objectWriter.Append("onSelect", ClientEvents.OnSelect);
-            objectWriter.Append("onLoad", ClientEvents.OnLoad);
+            objectWriter.AppendClientEvent("onOpen", ClientEvents.OnOpen);
+            objectWriter.AppendClientEvent("onClose", ClientEvents.OnClose);
+            objectWriter.AppendClientEvent("onSelect", ClientEvents.OnSelect);
+            objectWriter.AppendClientEvent("onLoad", ClientEvents.OnLoad);
 
             objectWriter.Complete();
 
@@ -157,42 +156,16 @@ namespace Telerik.Web.Mvc.UI
                     Items.Each(HighlightSelectedItem);
                 }
 
-                IMenuHtmlBuilder builder = rendererFactory.Create(this);
+                INavigationComponentHtmlBuilder<MenuItem> builder = rendererFactory.Create(this);
 
-                IHtmlNode menuTag = builder.MenuTag();
+                IHtmlNode menuTag = builder.Build();
 
-                Items.Each(item => WriteItem(item, menuTag, builder));
+                Items.Each(item => item.WriteItem<Menu, MenuItem>(this, menuTag, builder));
 
                 menuTag.WriteTo(writer);
             }
             
             base.WriteHtml(writer);
-        }
-
-        private void WriteItem(MenuItem item, IHtmlNode parentTag, IMenuHtmlBuilder builder)
-        {
-            if (ItemAction != null)
-            {
-                ItemAction(item);
-            }
-
-            if (item.Visible && item.IsAccessible(Authorization, ViewContext))
-            {
-                IHtmlNode itemTag = builder.ItemTag(item).AppendTo(parentTag);
-
-                builder.ItemInnerContentTag(item).AppendTo(itemTag);
-
-                if (item.Content != null)
-                {
-                    builder.ItemContentTag(item).AppendTo(itemTag);
-                }
-                else if (!item.Items.IsEmpty() && item.Items.IsAccessible(Authorization, ViewContext))
-                {
-                    IHtmlNode ul = builder.ChildrenTag().AppendTo(itemTag);
-
-                    item.Items.Each(child => WriteItem(child, ul, builder));
-                }
-            }
         }
 
         private void HighlightSelectedItem(MenuItem item)
@@ -215,7 +188,7 @@ namespace Telerik.Web.Mvc.UI
                 {
                     if (!tmpItem.Selected)
                     {
-                        tmpItem.HtmlAttributes.Add("class", "t-highlighted");
+                        tmpItem.HtmlAttributes.AppendInValue("class", " ", "t-highlighted");
                     }
                     tmpItem = tmpItem.Parent;
                 }

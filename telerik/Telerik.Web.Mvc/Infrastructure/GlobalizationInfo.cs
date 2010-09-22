@@ -19,6 +19,8 @@ namespace Telerik.Web.Mvc.Infrastructure
 
             globalization["shortDate"] = dateTimeFormats.ShortDatePattern;
             globalization["longDate"] = dateTimeFormats.LongDatePattern;
+            globalization["longTime"] = dateTimeFormats.LongTimePattern;
+            globalization["shortTime"] = dateTimeFormats.ShortTimePattern;
             globalization["fullDateTime"] = dateTimeFormats.FullDateTimePattern;
             globalization["sortableDateTime"] = dateTimeFormats.SortableDateTimePattern;
             globalization["universalSortableDateTime"] = dateTimeFormats.UniversalSortableDateTimePattern;

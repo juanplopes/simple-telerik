@@ -48,6 +48,8 @@ namespace Telerik.Web.Mvc.UI
 
             DefaultGroup = new WebAssetItemGroup("default", false) { DefaultPath = WebAssetDefaultSettings.StyleSheetFilesPath };
             StyleSheets = styleSheets;
+            styleSheets.Insert(0, DefaultGroup);
+
             ViewContext = viewContext;
             AssetMerger = assetItemMerger;
 
@@ -125,12 +127,18 @@ namespace Telerik.Web.Mvc.UI
                 throw new InvalidOperationException(Resources.TextResource.YouCannotCallRenderMoreThanOnce);
             }
 
-            if (ViewContext.HttpContext.Request.Browser.SupportsCss)
-            {
-                Write(ViewContext.HttpContext.Response.Output);
-            }
-
+            Write(ViewContext.HttpContext.Response.Output);
+ 
             hasRendered = true;
+        }
+
+        public string ToHtmlString()
+        {
+            using (var output = new StringWriter())
+            {
+                Write(output);
+                return output.ToString();
+            }
         }
 
         /// <summary>
@@ -153,11 +161,6 @@ namespace Telerik.Web.Mvc.UI
                                                             mergedList.AddRange(result);
                                                         }
                                                     };
-
-            if (!DefaultGroup.Items.IsEmpty())
-            {
-                append(new WebAssetItemCollection(DefaultGroup.DefaultPath) { DefaultGroup });
-            }
 
             if (!StyleSheets.IsEmpty())
             {

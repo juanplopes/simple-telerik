@@ -13,6 +13,7 @@ namespace Telerik.Web.Mvc.Extensions
     using System.Linq.Expressions;
     using Infrastructure.Implementation.Expressions;
     using Telerik.Web.Mvc;
+    using Telerik.Web.Mvc.Infrastructure;
     using Telerik.Web.Mvc.Infrastructure.Implementation;
 
     public static class QueryableExtensions
@@ -44,7 +45,6 @@ namespace Telerik.Web.Mvc.Extensions
             result.Data = data;
             return result;
         }
-
         public static GridModel ToGridModel(this IQueryable queryable, int page, int pageSize, IList<SortDescriptor> sortDescriptors, IEnumerable<IFilterDescriptor> filterDescriptors,
             IEnumerable<GroupDescriptor> groupDescriptors)
         {
@@ -318,11 +318,12 @@ namespace Telerik.Web.Mvc.Extensions
         /// </returns>
         public static IQueryable Where(this IQueryable source, IEnumerable<IFilterDescriptor> filterDescriptors)
         {
-            if (filterDescriptors.Count() > 0)
+            if (filterDescriptors.Any())
             {
                 var parameterExpression = Expression.Parameter(source.ElementType, "item");
 
                 var expressionBuilder = new FilterDescriptorCollectionExpressionBuilder(parameterExpression, filterDescriptors);
+                expressionBuilder.Options.LiftMemberAccessToNull = source.Provider.IsLinqToObjectsProvider();
                 var predicate = expressionBuilder.CreateFilterExpression();
                 return source.Where(predicate);
             }

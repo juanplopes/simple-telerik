@@ -68,6 +68,8 @@ namespace Telerik.Web.Mvc.Infrastructure.Implementation
 
                         IAuthorizeAttribute subclassedAttribute = isDefaultAttribute ?
                                                                   new InternalAuthorizeAttribute() : // No need to use Reflection.Emit if it is the asp.net mvc built-in attribute
+                                                                  authorizeAttribute is IAuthorizeAttribute ?
+                                                                  authorizeAttribute as IAuthorizeAttribute :
                                                                   reflectedAuthorizeAttributeCache.GetAttribute(currentAuthorizationAttributeType);
 
                         subclassedAttribute.Order = authorizeAttribute.Order;

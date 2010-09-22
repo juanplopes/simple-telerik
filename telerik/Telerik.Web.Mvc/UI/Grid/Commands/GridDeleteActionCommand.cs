@@ -8,29 +8,29 @@ namespace Telerik.Web.Mvc.UI
     using Extensions;
     using Infrastructure;
 
-    public class GridDeleteActionCommand<T> : GridActionCommandBase<T> where T : class
+    public class GridDeleteActionCommand : GridActionCommandBase
     {
         public override string Name
         {
             get { return "delete"; }
         }
 
-        public override void EditModeHtml(IHtmlNode parent, GridCell<T> context)
+        public override void EditModeHtml<T>(IHtmlNode parent, IGridRenderingContext<T> context)
         {
             //Nothing in edit mode
         }
 
-        public override void InsertModeHtml(IHtmlNode parent, GridCell<T> context)
+        public override void InsertModeHtml<T>(IHtmlNode parent, IGridRenderingContext<T> context)
         {
             //Nothing in insert mode
         }
 
-        public override void BoundModeHtml(IHtmlNode parent, GridCell<T> context)
+        public override void BoundModeHtml<T>(IHtmlNode parent, IGridRenderingContext<T> context)
         {
             #if MVC2
 
-            Grid<T> grid = context.Column.Grid;
-            GridUrlBuilder<T> urlBuilder = new GridUrlBuilder<T>(grid);
+            Grid<T> grid = context.Grid;
+            GridUrlBuilder urlBuilder = new GridUrlBuilder(grid);
 
             IHtmlNode form = new HtmlTag("form")
                                  .AddClass(UIPrimitives.Grid.ActionForm)
@@ -47,7 +47,7 @@ namespace Telerik.Web.Mvc.UI
                 .Attributes(HtmlAttributes)
                 .AddClass(UIPrimitives.Grid.Action, UIPrimitives.Button, UIPrimitives.DefaultState, UIPrimitives.Grid.Delete)
                 .Attribute("type", "submit")
-                .Text(grid.Localization.Delete)
+                .Html(this.ButtonContent(grid.Localization.Delete, UIPrimitives.Icons.Delete))
                 .AppendTo(div);
 
             #endif

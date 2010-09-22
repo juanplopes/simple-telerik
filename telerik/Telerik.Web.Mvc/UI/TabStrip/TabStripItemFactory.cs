@@ -5,8 +5,8 @@
 
 namespace Telerik.Web.Mvc.UI
 {
-    using Infrastructure;
     using System.Web.Mvc;
+    using Infrastructure;
 
     public class TabStripItemFactory : IHideObjectMembers
     {

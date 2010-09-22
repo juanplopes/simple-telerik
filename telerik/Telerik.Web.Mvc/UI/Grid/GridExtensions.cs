@@ -6,19 +6,21 @@ namespace Telerik.Web.Mvc.UI
 {
     using System.Linq;
     using System.Web.Mvc;
-    using System.Web.Mvc.Html;
-    
+
     using Extensions;
-    using Infrastructure;
 
     public static class GridExtensions
     {
-        public static string GroupTitle<T>(this Grid<T> grid, GroupDescriptor group)
-            where T : class
+        public static string GroupTitle(this IGrid grid, GroupDescriptor group)
         {
-            GridColumnBase<T> column = grid.Columns.Where(c => c.Member == group.Member).FirstOrDefault();
+            var column = grid.Columns.OfType<IGridBoundColumn>().FirstOrDefault(c => c.Member == group.Member);
             if (column != null)
             {
+                if (!column.Title.HasValue())
+                {
+                    return column.Member.AsTitle();
+                }
+
                 return column.Title;
             }
 

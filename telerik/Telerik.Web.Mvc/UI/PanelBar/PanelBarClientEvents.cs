@@ -9,34 +9,23 @@ namespace Telerik.Web.Mvc.UI
 
     public class PanelBarClientEvents
     {
-        public Action OnExpand
-        { 
-            get; 
-            set;
-        }
-
-        public Action OnCollapse
+        public PanelBarClientEvents()
         {
-            get;
-            set;
+            OnExpand = new ClientEvent();
+            OnCollapse = new ClientEvent();
+            OnSelect = new ClientEvent();
+            OnLoad = new ClientEvent();
+            OnError = new ClientEvent();
         }
 
-        public Action OnSelect
-        { 
-            get; 
-            set; 
-        }
+        public ClientEvent OnExpand { get; private set; }
 
-        public Action OnLoad
-        {
-            get;
-            set;
-        }
+        public ClientEvent OnCollapse { get; private set; }
 
-        public Action OnError
-        {
-            get;
-            set;
-        }
+        public ClientEvent OnSelect { get; private set; }
+
+        public ClientEvent OnLoad { get; private set; }
+
+        public ClientEvent OnError { get; private set; }
     }
 }

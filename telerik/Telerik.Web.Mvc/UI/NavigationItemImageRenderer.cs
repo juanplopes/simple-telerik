@@ -5,9 +5,8 @@
 
 namespace Telerik.Web.Mvc.UI
 {
-    using System.Web.UI;
     using System.Web.Mvc;
-
+    using System.Web.UI;
     using Extensions;
     using Infrastructure;
 

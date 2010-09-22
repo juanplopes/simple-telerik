@@ -5,9 +5,8 @@
 
 namespace Telerik.Web.Mvc
 {
-    using System.Diagnostics;
     using System.ComponentModel;
-
+    using System.Diagnostics;
     using Infrastructure;
 
     /// <summary>
@@ -15,7 +14,7 @@ namespace Telerik.Web.Mvc
     /// </summary>
     public abstract class SiteMapBase
     {
-        private static float defaultCacheDurationInMinutes = 60;
+        private static float defaultCacheDurationInMinutes = 0;
         private static bool defaultCompress = true;
         private static bool defaultGenerateSearchEngineMap = true;
 

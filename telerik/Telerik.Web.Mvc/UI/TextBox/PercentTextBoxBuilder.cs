@@ -5,16 +5,13 @@
 
 namespace Telerik.Web.Mvc.UI
 {
-    using System;
-    using System.Collections.Generic;
 
     using Infrastructure;
-    using Telerik.Web.Mvc.Resources;
 
     /// <summary>
     /// Defines the fluent interface for configuring the <see cref="PercentTextBox"/> component.
     /// </summary>
-    public class PercentTextBoxBuilder : TextBoxBaseBuilder<double, PercentTextBoxBuilder>
+    public class PercentTextBoxBuilder : TextBoxBuilderBase<double, PercentTextBox, PercentTextBoxBuilder>
     {
         /// Initializes a new instance of the <see cref="PercentTextBoxBuilder"/> class.
         /// </summary>
