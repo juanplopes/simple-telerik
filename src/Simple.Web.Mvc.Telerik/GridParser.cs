@@ -43,7 +43,7 @@ namespace Simple.Web.Mvc.Telerik
 
         private static List<IDescriptor> GetSortDescriptors(GridCommand command)
         {
-            var hashSet = new HashSet<string>(command.GroupDescriptors.Select(x => x.Member));
+            var hashSet = new HashSet<string>(command.GroupDescriptors.Select(x => x.Member), StringComparer.InvariantCultureIgnoreCase);
             var sorts = command.SortDescriptors.Where(x => !hashSet.Contains(x.Member)).OfType<IDescriptor>();
             var sortDescriptors = command.GroupDescriptors.OfType<IDescriptor>().Union(sorts).ToList();
             return sortDescriptors;

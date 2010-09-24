@@ -66,5 +66,18 @@ namespace Simple.Web.Mvc.Telerik.Tests
             Assert.AreEqual("q => q.OrderByDescending(x => x.PropB.PropDateTimeNullable).ThenBy(x => x.PropInt)", expr.Map.ToString());
             Assert.AreEqual("q => q.Take(50)", expr.Reduce.ToString());
         }
+
+        [Test]
+        public void CanGenerateExpresionWithSortAndGroupOnTheSameFieldWithDifferentCasing()
+        {
+            var sort = "PropInt-asc~propb.PropDateTimeNullable-desc";
+            var grouping = "propb.propdatetimenullable-desc";
+
+            var cmd = GridCommand.Parse(0, 0, sort, grouping, null);
+            var expr = GridParser.Parse<ClassA>(cmd, 50);
+
+            Assert.AreEqual("q => q.OrderByDescending(x => x.PropB.PropDateTimeNullable).ThenBy(x => x.PropInt)", expr.Map.ToString());
+            Assert.AreEqual("q => q.Take(50)", expr.Reduce.ToString());
+        }
     }
 }
