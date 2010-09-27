@@ -24,21 +24,21 @@ namespace Simple.Web.Mvc.Telerik
 
         private static Expression<Func<IQueryable<T>, IQueryable<T>>> CreateReduceExpression<T>(ParameterExpression param, int pageSize, int pageNumber)
         {
-            var reduce = param as Expression;
-            reduce = new SkipAndTakeVisitor<T>().Visit(param, pageNumber, pageSize);
-            var reduceLambda = Expression.Lambda<Func<IQueryable<T>, IQueryable<T>>>(reduce, param);
-            return reduceLambda;
+            Expression reduce = param;
+            reduce = new SkipAndTakeVisitor<T>().Visit(reduce, pageNumber, pageSize);
+
+            return Expression.Lambda<Func<IQueryable<T>, IQueryable<T>>>(reduce, param);
         }
 
         private static Expression<Func<IQueryable<T>, IQueryable<T>>> CreateMapExpression<T>(ParameterExpression param, GridCommand command)
         {
             var sortDescriptors = GetSortDescriptors(command);
 
-            var map = param as Expression;
+            Expression map = param;
             map = new FilterVisitor<T>().Visit(map, command.FilterDescriptors);
             map = new SortVisitor<T, IDescriptor>().Visit(map, sortDescriptors);
-            var mapLambda = Expression.Lambda<Func<IQueryable<T>, IQueryable<T>>>(map, param);
-            return mapLambda;
+            
+            return Expression.Lambda<Func<IQueryable<T>, IQueryable<T>>>(map, param);
         }
 
         private static List<IDescriptor> GetSortDescriptors(GridCommand command)
