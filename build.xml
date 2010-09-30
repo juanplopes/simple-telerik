@@ -124,7 +124,7 @@
       Password="$(GCPassword)"
       ProjectName="$(GCProjectName)"
       LocalFile="$(PackageDir)\$(PackageSrcZipFile)"
-      TargetFileName="$(PackageSrcZipFile)"
+      TargetFileName="$(PackageSrcZipFile)-$(ProductVersion).$(BuildTag)"
       Summary="Simple.Net Telerik Extensions v$(ProductVersion).$(BuildTag) (Source)"
       Labels="Nightly;Type-Package"
               />
