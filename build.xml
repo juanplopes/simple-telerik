@@ -102,7 +102,7 @@
 
     <MakeDir Directories="$(PackageDir)"/>
 
-    <Delete Files="$(PackageDir)\$(PackageSrcZipFile)"/>
+    <Delete Files="$(PackageDir)\$(PackageSrcZipFile).zip"/>
     <Zip Files="@(ZipSrcDir)" ZipFileName="$(PackageDir)\$(PackageSrcZipFile).zip" WorkingDirectory="$(MSBuildProjectDirectory)"/>
   </Target>
 
