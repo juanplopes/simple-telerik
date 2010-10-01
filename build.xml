@@ -9,8 +9,8 @@
     <KeyFilePath>$(SourceDir)\Simple.Web.Mvc.Telerik.snk</KeyFilePath>
 
     <PackageDir>pkg\</PackageDir>
-    <PackageBinZipFile>TelerikExtensions-Bin.zip</PackageBinZipFile>
-    <PackageSrcZipFile>TelerikExtensions-Src.zip</PackageSrcZipFile>
+    <PackageBinZipFile>TelerikExtensions-Bin</PackageBinZipFile>
+    <PackageSrcZipFile>TelerikExtensions-Src</PackageSrcZipFile>
 
     <ProductVersion>1.0</ProductVersion>
 
@@ -81,11 +81,11 @@
 
     <MakeDir Directories="$(PackageDir)"/>
 
-    <Delete Files="$(PackageDir)\$(PackageBinZipFile)"/>
-    <Zip Files="@(PackageItems)" ZipFileName="$(PackageDir)\$(PackageBinZipFile)" WorkingDirectory="$(BuildDir)"/>
+    <Delete Files="$(PackageDir)\$(PackageBinZipFile).zip"/>
+    <Zip Files="@(PackageItems)" ZipFileName="$(PackageDir)\$(PackageBinZipFile).zip" WorkingDirectory="$(BuildDir)"/>
   </Target>
 
-  <Target Name="PackageSource">
+  <Target Name="PackageSource" DependsOnTargets="GenerateAssemblyInfo">
     <ItemGroup>
       <ExcludeSrcDir Include=".\**\pkg\**"/>
       <ExcludeSrcDir Include=".\**\bin\**"/>
@@ -103,7 +103,7 @@
     <MakeDir Directories="$(PackageDir)"/>
 
     <Delete Files="$(PackageDir)\$(PackageSrcZipFile)"/>
-    <Zip Files="@(ZipSrcDir)" ZipFileName="$(PackageDir)\$(PackageSrcZipFile)" WorkingDirectory="$(MSBuildProjectDirectory)"/>
+    <Zip Files="@(ZipSrcDir)" ZipFileName="$(PackageDir)\$(PackageSrcZipFile).zip" WorkingDirectory="$(MSBuildProjectDirectory)"/>
   </Target>
 
   <Target Name="Publish" DependsOnTargets="Test;Package">
@@ -111,8 +111,8 @@
      UserName="$(GCUsername)"
      Password="$(GCPassword)"
      ProjectName="$(GCProjectName)"
-     LocalFile="$(PackageDir)\$(PackageBinZipFile)"
-     TargetFileName="$(PackageBinZipFile)"
+     LocalFile="$(PackageDir)\$(PackageBinZipFile).zip"
+     TargetFileName="$(PackageBinZipFile)-$(ProductVersion).$(BuildTag).zip"
      Summary="Simple.Net Telerik Extensions v$(ProductVersion).$(BuildTag)"
      Labels="Nightly;Type-Package"
       />
@@ -124,7 +124,7 @@
       Password="$(GCPassword)"
       ProjectName="$(GCProjectName)"
       LocalFile="$(PackageDir)\$(PackageSrcZipFile)"
-      TargetFileName="$(PackageSrcZipFile)-$(ProductVersion).$(BuildTag)"
+      TargetFileName="$(PackageSrcZipFile)-$(ProductVersion).$(BuildTag).zip"
       Summary="Simple.Net Telerik Extensions v$(ProductVersion).$(BuildTag) (Source)"
       Labels="Nightly;Type-Package"
               />
