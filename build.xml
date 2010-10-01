@@ -123,7 +123,7 @@
       UserName="$(GCUsername)"
       Password="$(GCPassword)"
       ProjectName="$(GCProjectName)"
-      LocalFile="$(PackageDir)\$(PackageSrcZipFile)"
+      LocalFile="$(PackageDir)\$(PackageSrcZipFile).zip"
       TargetFileName="$(PackageSrcZipFile)-$(ProductVersion).$(BuildTag).zip"
       Summary="Simple.Net Telerik Extensions v$(ProductVersion).$(BuildTag) (Source)"
       Labels="Nightly;Type-Package"
