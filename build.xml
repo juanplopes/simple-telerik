@@ -116,6 +116,7 @@
      TargetFileName="$(PackageBinZipFile)-$(ProductVersion).$(Revision).zip"
      Summary="Simple.Net Telerik Extensions v$(ProductVersion).$(Revision)"
      Labels="Nightly;Type-Package"
+     ContinueOnError="true"
       />
   </Target>
 
@@ -128,6 +129,7 @@
       TargetFileName="$(PackageSrcZipFile)-$(ProductVersion).$(Revision).zip"
       Summary="Simple.Net Telerik Extensions v$(ProductVersion).$(Revision) (Source)"
       Labels="Nightly;Type-Package"
+      ContinueOnError="true"
               />
 
   </Target>
