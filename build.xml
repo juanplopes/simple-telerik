@@ -33,12 +33,13 @@
     <DeleteTree Directories="$(PackageDir)" ContinueOnError="true"/>
   </Target>
 
-  <Target Name="GenerateTag">
-    <Time Format="yMM.dhh">
-      <Output TaskParameter="FormattedTime" PropertyName="BuildTag" />
-    </Time>
+   <Target Name="GenerateTag">
+    <SvnVersion LocalPath="." ToolPath="util\svn">
+      <Output TaskParameter="Revision" PropertyName="Revision" />
+    </SvnVersion>
+    <Message Text="Revision: $(Revision)"/>
 
-    <Message Text="Build tag: $(BuildTag)"/>
+	<Message Text="##teamcity[buildNumber '$(ProductVersion).$(Revision)']"/>
   </Target>
 
   <Target Name="GenerateAssemblyInfo" DependsOnTargets="GenerateTag">
@@ -50,8 +51,8 @@
                AssemblyTrademark=""
                ComVisible="false"
                CLSCompliant="false"
-               AssemblyVersion="$(ProductVersion).$(BuildTag)"
-               AssemblyFileVersion="$(ProductVersion).$(BuildTag)" />
+               AssemblyVersion="$(ProductVersion).$(Revision)"
+               AssemblyFileVersion="$(ProductVersion).$(Revision)" />
   </Target>
 
   <Target Name="Build" DependsOnTargets ="GenerateAssemblyInfo">
@@ -112,8 +113,8 @@
      Password="$(GCPassword)"
      ProjectName="$(GCProjectName)"
      LocalFile="$(PackageDir)\$(PackageBinZipFile).zip"
-     TargetFileName="$(PackageBinZipFile)-$(ProductVersion).$(BuildTag).zip"
-     Summary="Simple.Net Telerik Extensions v$(ProductVersion).$(BuildTag)"
+     TargetFileName="$(PackageBinZipFile)-$(ProductVersion).$(Revision).zip"
+     Summary="Simple.Net Telerik Extensions v$(ProductVersion).$(Revision)"
      Labels="Nightly;Type-Package"
       />
   </Target>
@@ -124,8 +125,8 @@
       Password="$(GCPassword)"
       ProjectName="$(GCProjectName)"
       LocalFile="$(PackageDir)\$(PackageSrcZipFile).zip"
-      TargetFileName="$(PackageSrcZipFile)-$(ProductVersion).$(BuildTag).zip"
-      Summary="Simple.Net Telerik Extensions v$(ProductVersion).$(BuildTag) (Source)"
+      TargetFileName="$(PackageSrcZipFile)-$(ProductVersion).$(Revision).zip"
+      Summary="Simple.Net Telerik Extensions v$(ProductVersion).$(Revision) (Source)"
       Labels="Nightly;Type-Package"
               />
 
