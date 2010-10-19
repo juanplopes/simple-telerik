@@ -72,7 +72,11 @@
     <Nunit Assemblies="$(TestAssembly)" ToolPath="util\nunit"/>
   </Target>
 
-  <Target Name="Package" DependsOnTargets="Build;Test">
+  <Target Name="Package"> 
+	<CallTarget Targets="PackageSource;PackageBinaries" />
+  </Target>
+  
+  <Target Name="PackageBinaries" DependsOnTargets="Build;Test">
     <ItemGroup>
       <PackageItems Include="$(BuildDir)\Simple.Web.Mvc.Telerik.dll"/>
       <PackageItems Include="$(BuildDir)\Telerik.Web.Mvc.dll"/>
@@ -95,6 +99,7 @@
       <ExcludeSrcDir Include=".\**\.svn\**"/>
       <ExcludeSrcDir Include=".\**\_svn\**"/>
       <ExcludeSrcDir Include=".\**\*.zip"/>
+	  <ExcludeSrcDir Include=".\.git\**"/>
     </ItemGroup>
 
     <ItemGroup>
