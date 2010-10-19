@@ -1,0 +1,13 @@
+bin/
+obj/
+*.suo
+*.user
+
+*.cache 
+*.sln.cache
+
+/build/
+/pkg/
+/src/GlobalInfo.cs
+
+/TestResult.xml

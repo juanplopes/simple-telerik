@@ -9,10 +9,11 @@
     <KeyFilePath>$(SourceDir)\Simple.Web.Mvc.Telerik.snk</KeyFilePath>
 
     <PackageDir>pkg\</PackageDir>
-    <PackageBinZipFile>TelerikExtensions-Bin</PackageBinZipFile>
-    <PackageSrcZipFile>TelerikExtensions-Src</PackageSrcZipFile>
-
     <ProductVersion>1.0</ProductVersion>
+
+    <PackageBinZipFile>simple-telerik-$(ProductVersion)-bin</PackageBinZipFile>
+    <PackageSrcZipFile>simple-telerik-$(ProductVersion)-src</PackageSrcZipFile>
+
 
     <TestAssembly>$(BuildDir)\Simple.Web.Mvc.Telerik.Tests.dll</TestAssembly>
     <Configuration>Release</Configuration>
@@ -34,12 +35,11 @@
   </Target>
 
    <Target Name="GenerateTag">
-    <SvnVersion LocalPath="." ToolPath="util\svn">
-      <Output TaskParameter="Revision" PropertyName="Revision" />
-    </SvnVersion>
-    <Message Text="Revision: $(Revision)"/>
-
-	<Message Text="##teamcity[buildNumber '$(ProductVersion).$(Revision)']"/>
+    <DaysSince StartDate='2008-10-17'>
+		<Output TaskParameter="Output" PropertyName="NumberOfDays"/>
+	</DaysSince>
+  
+	<Message Text="##teamcity[buildNumber '$(ProductVersion).$(NumberOfDays)']"/>
   </Target>
 
   <Target Name="GenerateAssemblyInfo" DependsOnTargets="GenerateTag">
@@ -51,8 +51,8 @@
                AssemblyTrademark=""
                ComVisible="false"
                CLSCompliant="false"
-               AssemblyVersion="$(ProductVersion).$(Revision)"
-               AssemblyFileVersion="$(ProductVersion).$(Revision)" />
+               AssemblyVersion="$(ProductVersion).$(NumberOfDays)"
+               AssemblyFileVersion="$(ProductVersion).$(NumberOfDays)" />
   </Target>
 
   <Target Name="Build" DependsOnTargets ="GenerateAssemblyInfo">
@@ -105,32 +105,5 @@
 
     <Delete Files="$(PackageDir)\$(PackageSrcZipFile).zip"/>
     <Zip Files="@(ZipSrcDir)" ZipFileName="$(PackageDir)\$(PackageSrcZipFile).zip" WorkingDirectory="$(MSBuildProjectDirectory)"/>
-  </Target>
-
-  <Target Name="Publish" DependsOnTargets="Test;Package">
-    <UploadToGoogleCode
-     UserName="$(GCUsername)"
-     Password="$(GCPassword)"
-     ProjectName="$(GCProjectName)"
-     LocalFile="$(PackageDir)\$(PackageBinZipFile).zip"
-     TargetFileName="$(PackageBinZipFile)-$(ProductVersion).$(Revision).zip"
-     Summary="Simple.Net Telerik Extensions v$(ProductVersion).$(Revision)"
-     Labels="Nightly;Type-Package"
-     ContinueOnError="true"
-      />
-  </Target>
-
-  <Target Name="PublishSource" DependsOnTargets="PackageSource">
-    <UploadToGoogleCode
-      UserName="$(GCUsername)"
-      Password="$(GCPassword)"
-      ProjectName="$(GCProjectName)"
-      LocalFile="$(PackageDir)\$(PackageSrcZipFile).zip"
-      TargetFileName="$(PackageSrcZipFile)-$(ProductVersion).$(Revision).zip"
-      Summary="Simple.Net Telerik Extensions v$(ProductVersion).$(Revision) (Source)"
-      Labels="Nightly;Type-Package"
-      ContinueOnError="true"
-              />
-
   </Target>
 </Project>
