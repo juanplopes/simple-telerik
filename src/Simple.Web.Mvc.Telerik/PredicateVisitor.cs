@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Linq.Expressions;
 using Telerik.Web.Mvc;
+using System.Reflection;
 
 namespace Simple.Web.Mvc.Telerik
 {
@@ -87,6 +88,14 @@ namespace Simple.Web.Mvc.Telerik
             };
 
             return Expression.Call(expr, method, parameters);
+        }
+
+        protected virtual Expression VisitEnumerableMethod(FilterDescriptor filter, Expression property, MethodInfo method)
+        {
+            var expr = Expression.Constant(filter.Value, typeof(IEnumerable<>).MakeGenericType(property.Type));
+            var parameters = new[] { expr, property };
+
+            return Expression.Call(null, method, parameters);
         }
 
         protected virtual Expression VisitContains(FilterDescriptor filter, Expression property)
@@ -178,7 +187,7 @@ namespace Simple.Web.Mvc.Telerik
 
         protected virtual Expression VisitIsContainedIn(FilterDescriptor filter, Expression property)
         {
-            throw new NotImplementedException();
+            return VisitEnumerableMethod(filter, property, LinqHelpers.Contains.GetFor(property.Type));
         }
 
         protected virtual Expression VisitComposite(CompositeFilterDescriptor filter)

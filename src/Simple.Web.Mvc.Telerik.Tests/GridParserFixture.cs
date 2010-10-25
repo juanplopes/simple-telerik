@@ -5,6 +5,9 @@ using System.Text;
 using Telerik.Web.Mvc;
 using Simple.Web.Mvc.Telerik.Tests.Samples;
 using NUnit.Framework;
+using System.Xml.Serialization;
+using System.IO;
+using Telerik.Web.Mvc.Infrastructure.Implementation;
 
 namespace Simple.Web.Mvc.Telerik.Tests
 {
@@ -20,6 +23,19 @@ namespace Simple.Web.Mvc.Telerik.Tests
             Assert.AreEqual("q => q.Where(x => (x.PropString.ToUpper().StartsWith(\"A\") && (x.PropB.PropDateTimeNullable > 12/6/1984 12:00:00 PM)))", expr.Map.ToString());
             Assert.AreEqual("q => q.Take(50)", expr.Reduce.ToString());
         }
+    
+        private static object RoundTrip(object cmd)
+        {
+            var mem = new MemoryStream();
+            var serializer = new XmlSerializer(cmd.GetType());
+            serializer.Serialize(mem, cmd);
+
+            mem.Seek(0, SeekOrigin.Begin);
+
+            var cmd2 = serializer.Deserialize(mem);
+            return cmd2;
+        }
+
 
         [Test]
         public void CanGenerateExpresionWithEmptyFilter()

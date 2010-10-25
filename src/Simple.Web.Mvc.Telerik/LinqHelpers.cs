@@ -9,11 +9,13 @@ namespace Simple.Web.Mvc.Telerik
 {
     public static class LinqHelpers
     {
-        public static MethodInfo OrderBy {get; private set;}
-        public static MethodInfo OrderByDesc {get; private set;}
-        public static MethodInfo ThenBy {get; private set;}
-        public static MethodInfo ThenByDesc {get; private set;}
+        public static MethodInfo OrderBy { get; private set; }
+        public static MethodInfo OrderByDesc { get; private set; }
+        public static MethodInfo ThenBy { get; private set; }
+        public static MethodInfo ThenByDesc { get; private set; }
         public static MethodInfo Where { get; private set; }
+
+        public static MethodInfo Contains { get; private set; }
 
         public static MethodInfo Skip { get; private set; }
         public static MethodInfo Take { get; private set; }
@@ -25,6 +27,7 @@ namespace Simple.Web.Mvc.Telerik
             ThenBy = GetMethod("ThenBy");
             ThenByDesc = GetMethod("ThenByDescending");
             Where = GetMethod("Where");
+            Contains = GetMethod("Contains", typeof(Enumerable));
 
             Skip = GetMethod("Skip");
             Take = GetMethod("Take");
@@ -32,16 +35,21 @@ namespace Simple.Web.Mvc.Telerik
 
         private static MethodInfo GetMethod(string name)
         {
-            var methods = typeof(Queryable).GetMember(name);
+            return GetMethod(name, typeof(Queryable));
+        }
+
+        private static MethodInfo GetMethod(string name, Type type)
+        {
+            var methods = type.GetMember(name);
             return methods.OfType<MethodInfo>().Where(x => x.GetParameters().Length == 2).First();
         }
 
-        public static MethodInfo GetFor(MethodInfo method, Type entityType)
+        public static MethodInfo GetFor(this MethodInfo method, Type entityType)
         {
             return method.MakeGenericMethod(entityType);
         }
 
-        public static MethodInfo GetFor(MethodInfo method, Type entityType, Type returnType)
+        public static MethodInfo GetFor(this MethodInfo method, Type entityType, Type returnType)
         {
             return method.MakeGenericMethod(entityType, returnType);
         }

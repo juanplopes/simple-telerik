@@ -22,6 +22,19 @@ namespace Simple.Web.Mvc.Telerik.Tests
         }
 
         [Test]
+        public void CanCreateSampleIsContainedInFilterWithIntList()
+        {
+            var list = new[] { 1, 2, 3 };
+            var filter = new FilterDescriptor("PropInt", FilterOperator.IsContainedIn, list);
+
+            Expression<Func<int, bool>> ex = x => list.Contains(x);
+
+            var expr = new FilterVisitor<ClassA>().MakePredicate(filter);
+
+            Assert.AreEqual("x => value(System.Int32[]).Contains(x.PropInt)", expr.ToString());
+        }
+
+        [Test]
         public void CanCreateSampleEqualsFilterToIntWithQueryableVersion()
         {
             var filter = new FilterDescriptor("PropInt", FilterOperator.IsEqualTo, 42);
