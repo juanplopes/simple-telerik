@@ -15,7 +15,7 @@ namespace Simple.Web.Mvc.Telerik.Tests
 {
     public class GridParserFixture
     {
-        [TestFixtureSetUp]
+        [SetUp]
         public void FixtureSetup()
         {
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
