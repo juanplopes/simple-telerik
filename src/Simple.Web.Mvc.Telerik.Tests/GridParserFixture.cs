@@ -8,11 +8,19 @@ using NUnit.Framework;
 using System.Xml.Serialization;
 using System.IO;
 using Telerik.Web.Mvc.Infrastructure.Implementation;
+using System.Threading;
+using System.Globalization;
 
 namespace Simple.Web.Mvc.Telerik.Tests
 {
     public class GridParserFixture
     {
+        [TestFixtureSetUp]
+        public void FixtureSetup()
+        {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
+        }
+
         [Test]
         public void CanGenerateExpresionWithFilterOnly()
         {
