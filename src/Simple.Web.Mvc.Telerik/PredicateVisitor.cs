@@ -126,7 +126,7 @@ namespace Simple.Web.Mvc.Telerik
                 }
                 else if (type.IsEnum)
                 {
-                    value = Enum.ToObject(type, int.Parse(value.ToString()));
+                    value = Enum.ToObject(type, Convert.ToInt64(value));
                 }
                 else
                 {

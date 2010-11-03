@@ -31,7 +31,18 @@ namespace Simple.Web.Mvc.Telerik.Tests
             Assert.AreEqual("q => q.Where(x => (x.PropString.ToUpper().StartsWith(\"A\") && (x.PropB.PropDateTimeNullable > 12/6/1984 12:00:00 PM)))", expr.Map.ToString());
             Assert.AreEqual("q => q.Take(50)", expr.Reduce.ToString());
         }
-    
+
+        [Test]
+        public void CanGenerateExpresionWithFilterOnlyAndEnumProperty()
+        {
+            var filter = "PropEnum~eq~1~or~PropEnum~eq~2";
+            var cmd = GridCommand.Parse(0, 0, null, null, filter);
+            var expr = GridParser.Parse<ClassA>(cmd, 50);
+
+            Assert.AreEqual("q => q.Where(x => ((x.PropEnum = Value1) || (x.PropEnum = Value3)))", expr.Map.ToString());
+            Assert.AreEqual("q => q.Take(50)", expr.Reduce.ToString());
+        }
+
         private static object RoundTrip(object cmd)
         {
             var mem = new MemoryStream();
